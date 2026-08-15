@@ -1,0 +1,135 @@
+site_name: Tài liệu LangChain (Bản dịch Tiếng Việt)
+site_description: Bản dịch tiếng Việt của tài liệu LangChain Python (mục langchain), dịch từ docs.langchain.com
+site_url: https://docs.langchain.local/
+docs_dir: docs
+
+theme:
+  name: material
+  language: vi
+  palette:
+    - scheme: default
+      primary: teal
+      accent: teal
+      toggle:
+        icon: material/weather-night
+        name: Chuyển sang giao diện tối
+    - scheme: slate
+      primary: teal
+      accent: teal
+      toggle:
+        icon: material/weather-sunny
+        name: Chuyển sang giao diện sáng
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.indexes
+    - toc.follow
+    - content.code.copy
+    - content.code.annotate
+    - search.suggest
+    - search.highlight
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+      toc_depth: 3
+  - tables
+
+nav:
+  - Trang chủ: index.md
+  - LangChain (Python):
+      - Tổng quan: oss/python/langchain/overview.md
+      - Triết lý thiết kế: oss/python/langchain/philosophy.md
+      - Cài đặt: oss/python/langchain/install.md
+      - Bắt đầu nhanh: oss/python/langchain/quickstart.md
+      - Kiến trúc thành phần: oss/python/langchain/component-architecture.md
+      - Context Engineering: oss/python/langchain/context-engineering.md
+      - Học viện (Academy): oss/python/langchain/academy.md
+      - Xây dựng Deep Agent từ đầu: oss/python/langchain/deep-agent-from-scratch.md
+      - Nhận trợ giúp: oss/python/langchain/get-help.md
+      - Changelog Python: oss/python/langchain/changelog-py.md
+      - Changelog JS: oss/python/langchain/changelog-js.md
+      - Cốt lõi:
+          - Agents: oss/python/langchain/agents.md
+          - Models: oss/python/langchain/models.md
+          - Messages: oss/python/langchain/messages.md
+          - Tools: oss/python/langchain/tools.md
+          - Structured Output: oss/python/langchain/structured-output.md
+          - Streaming: oss/python/langchain/streaming.md
+          - Event Streaming: oss/python/langchain/event-streaming.md
+          - Runtime: oss/python/langchain/runtime.md
+          - Short-term Memory: oss/python/langchain/short-term-memory.md
+          - Long-term Memory: oss/python/langchain/long-term-memory.md
+          - Human-in-the-loop: oss/python/langchain/human-in-the-loop.md
+          - Guardrails: oss/python/langchain/guardrails.md
+          - Retrieval: oss/python/langchain/retrieval.md
+          - Knowledge Base: oss/python/langchain/knowledge-base.md
+          - MCP: oss/python/langchain/mcp.md
+          - Observability: oss/python/langchain/observability.md
+          - Deploy: oss/python/langchain/deploy.md
+          - Studio: oss/python/langchain/studio.md
+          - UI: oss/python/langchain/ui.md
+          - Voice Agent: oss/python/langchain/voice-agent.md
+          - SQL Agent: oss/python/langchain/sql-agent.md
+      - Middleware:
+          - Tổng quan: oss/python/langchain/middleware/overview.md
+          - Middleware có sẵn: oss/python/langchain/middleware/built-in.md
+          - Middleware tuỳ chỉnh: oss/python/langchain/middleware/custom.md
+      - Multi-agent:
+          - Tổng quan: oss/python/langchain/multi-agent/index.md
+          - Handoffs: oss/python/langchain/multi-agent/handoffs.md
+          - Handoffs - Customer Support: oss/python/langchain/multi-agent/handoffs-customer-support.md
+          - Router: oss/python/langchain/multi-agent/router.md
+          - Router - Knowledge Base: oss/python/langchain/multi-agent/router-knowledge-base.md
+          - Skills: oss/python/langchain/multi-agent/skills.md
+          - Skills - SQL Assistant: oss/python/langchain/multi-agent/skills-sql-assistant.md
+          - Subagents: oss/python/langchain/multi-agent/subagents.md
+          - Subagents - Personal Assistant: oss/python/langchain/multi-agent/subagents-personal-assistant.md
+          - Custom Workflow: oss/python/langchain/multi-agent/custom-workflow.md
+      - Frontend:
+          - Tổng quan: oss/python/langchain/frontend/overview.md
+          - Generative UI - Tổng quan: oss/python/langchain/frontend/generative-ui-overview.md
+          - Declarative Generative UI: oss/python/langchain/frontend/declarative-generative-ui.md
+          - Controlled Generative UI: oss/python/langchain/frontend/controlled-generative-ui.md
+          - Open-ended Generative UI: oss/python/langchain/frontend/open-ended-generative-ui.md
+          - Headless Tools: oss/python/langchain/frontend/headless-tools.md
+          - Tool Calling: oss/python/langchain/frontend/tool-calling.md
+          - Human-in-the-loop: oss/python/langchain/frontend/human-in-the-loop.md
+          - Structured Output: oss/python/langchain/frontend/structured-output.md
+          - Streaming Reasoning Tokens: oss/python/langchain/frontend/reasoning-tokens.md
+          - Markdown Messages: oss/python/langchain/frontend/markdown-messages.md
+          - Message Queues: oss/python/langchain/frontend/message-queues.md
+          - Branching Chat: oss/python/langchain/frontend/branching-chat.md
+          - Join / Rejoin: oss/python/langchain/frontend/join-rejoin.md
+          - Time Travel: oss/python/langchain/frontend/time-travel.md
+          - Tích hợp:
+              - Tổng quan: oss/python/langchain/frontend/integrations/overview.md
+              - Assistant UI: oss/python/langchain/frontend/integrations/assistant-ui.md
+              - CopilotKit: oss/python/langchain/frontend/integrations/copilotkit.md
+              - AI Elements: oss/python/langchain/frontend/integrations/ai-elements.md
+              - OpenUI: oss/python/langchain/frontend/integrations/openui.md
+      - Kiểm thử (Test):
+          - Tổng quan: oss/python/langchain/test/index.md
+          - Unit Testing: oss/python/langchain/test/unit-testing.md
+          - Integration Testing: oss/python/langchain/test/integration-testing.md
+          - Evals: oss/python/langchain/test/evals.md
+      - Mã lỗi (Errors):
+          - INVALID_PROMPT_INPUT: oss/python/langchain/errors/INVALID_PROMPT_INPUT.md
+          - INVALID_TOOL_RESULTS: oss/python/langchain/errors/INVALID_TOOL_RESULTS.md
+          - MESSAGE_COERCION_FAILURE: oss/python/langchain/errors/MESSAGE_COERCION_FAILURE.md
+          - MODEL_AUTHENTICATION: oss/python/langchain/errors/MODEL_AUTHENTICATION.md
+          - MODEL_NOT_FOUND: oss/python/langchain/errors/MODEL_NOT_FOUND.md
+          - MODEL_RATE_LIMIT: oss/python/langchain/errors/MODEL_RATE_LIMIT.md
+          - OUTPUT_PARSING_FAILURE: oss/python/langchain/errors/OUTPUT_PARSING_FAILURE.md
