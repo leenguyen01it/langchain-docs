@@ -1,5 +1,5 @@
 site_name: Tài liệu LangChain (Bản dịch Tiếng Việt)
-site_description: Bản dịch tiếng Việt của tài liệu LangChain Python (mục langchain), dịch từ docs.langchain.com
+site_description: Bản dịch tiếng Việt của tài liệu LangChain và LangGraph Python (mục langchain, langgraph), dịch từ docs.langchain.com
 site_url: https://docs.langchain.local/
 docs_dir: docs
 
@@ -133,3 +133,52 @@ nav:
           - MODEL_NOT_FOUND: oss/python/langchain/errors/MODEL_NOT_FOUND.md
           - MODEL_RATE_LIMIT: oss/python/langchain/errors/MODEL_RATE_LIMIT.md
           - OUTPUT_PARSING_FAILURE: oss/python/langchain/errors/OUTPUT_PARSING_FAILURE.md
+  - LangGraph (Python):
+      - Tổng quan: oss/python/langgraph/overview.md
+      - Cài đặt: oss/python/langgraph/install.md
+      - Bắt đầu nhanh: oss/python/langgraph/quickstart.md
+      - Tư duy LangGraph: oss/python/langgraph/thinking-in-langgraph.md
+      - So sánh Graph API và Functional API: oss/python/langgraph/choosing-apis.md
+      - Workflows và Agents: oss/python/langgraph/workflows-agents.md
+      - Case studies: oss/python/langgraph/case-studies.md
+      - Changelog Python: oss/python/langgraph/changelog-py.md
+      - Changelog JS: oss/python/langgraph/changelog-js.md
+      - Cốt lõi:
+          - Graph API: oss/python/langgraph/graph-api.md
+          - Sử dụng Graph API: oss/python/langgraph/use-graph-api.md
+          - Functional API: oss/python/langgraph/functional-api.md
+          - Sử dụng Functional API: oss/python/langgraph/use-functional-api.md
+          - Subgraphs: oss/python/langgraph/use-subgraphs.md
+          - LangGraph runtime (Pregel): oss/python/langgraph/pregel.md
+          - Streaming: oss/python/langgraph/streaming.md
+          - Event Streaming: oss/python/langgraph/event-streaming.md
+          - Persistence: oss/python/langgraph/persistence.md
+          - Checkpointers: oss/python/langgraph/checkpointers.md
+          - Stores: oss/python/langgraph/stores.md
+          - Memory: oss/python/langgraph/add-memory.md
+          - Interrupts (Human-in-the-loop): oss/python/langgraph/interrupts.md
+          - Time Travel: oss/python/langgraph/use-time-travel.md
+          - Fault Tolerance: oss/python/langgraph/fault-tolerance.md
+          - Cấu trúc ứng dụng: oss/python/langgraph/application-structure.md
+          - Tương thích ngược: oss/python/langgraph/backward-compatibility.md
+      - Xây dựng agent:
+          - Custom RAG Agent: oss/python/langgraph/agentic-rag.md
+          - Custom SQL Agent: oss/python/langgraph/sql-agent.md
+      - Frontend:
+          - Tổng quan: oss/python/langgraph/frontend/overview.md
+          - Graph Execution: oss/python/langgraph/frontend/graph-execution.md
+          - Custom Stream Channels: oss/python/langgraph/frontend/custom-stream-channels.md
+      - Deploy & Vận hành:
+          - Deploy: oss/python/langgraph/deploy.md
+          - Chạy local server: oss/python/langgraph/local-server.md
+          - LangSmith Observability: oss/python/langgraph/observability.md
+          - LangSmith Studio: oss/python/langgraph/studio.md
+          - Agent Chat UI: oss/python/langgraph/ui.md
+          - Test: oss/python/langgraph/test.md
+      - Mã lỗi (Errors):
+          - GRAPH_RECURSION_LIMIT: oss/python/langgraph/errors/GRAPH_RECURSION_LIMIT.md
+          - INVALID_CHAT_HISTORY: oss/python/langgraph/errors/INVALID_CHAT_HISTORY.md
+          - INVALID_CONCURRENT_GRAPH_UPDATE: oss/python/langgraph/errors/INVALID_CONCURRENT_GRAPH_UPDATE.md
+          - INVALID_GRAPH_NODE_RETURN_VALUE: oss/python/langgraph/errors/INVALID_GRAPH_NODE_RETURN_VALUE.md
+          - MISSING_CHECKPOINTER: oss/python/langgraph/errors/MISSING_CHECKPOINTER.md
+          - MULTIPLE_SUBGRAPHS: oss/python/langgraph/errors/MULTIPLE_SUBGRAPHS.md

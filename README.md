@@ -1,6 +1,6 @@
 # LangChain Docs (Tiếng Việt)
 
-Dự án tài liệu MkDocs Material chứa bản dịch tiếng Việt của mục `oss/python/langchain` từ [docs.langchain.com](https://docs.langchain.com/oss/python/langchain/overview).
+Dự án tài liệu MkDocs Material chứa bản dịch tiếng Việt của hai mục `oss/python/langchain` và `oss/python/langgraph` từ [docs.langchain.com](https://docs.langchain.com/oss/python/langchain/overview).
 
 ## Chạy thử local
 
@@ -21,4 +21,4 @@ Output nằm ở thư mục `site/`.
 
 ## Cấu trúc
 
-Nội dung nằm trong `docs/oss/python/langchain/`, mirror đúng cấu trúc URL của bản gốc (ví dụ `docs/oss/python/langchain/frontend/integrations/ai-elements.md` tương ứng `/oss/python/langchain/frontend/integrations/ai-elements` trên bản gốc).
+Nội dung nằm trong `docs/oss/python/langchain/` và `docs/oss/python/langgraph/`, mirror đúng cấu trúc URL của bản gốc (ví dụ `docs/oss/python/langchain/frontend/integrations/ai-elements.md` tương ứng `/oss/python/langchain/frontend/integrations/ai-elements` trên bản gốc).
