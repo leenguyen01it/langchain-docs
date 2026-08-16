@@ -1,0 +1,6328 @@
+
+<!doctype html>
+<html lang="vi" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Bản dịch tiếng Việt của tài liệu LangChain và LangGraph Python (mục langchain, langgraph), dịch từ docs.langchain.com">
+      
+      
+      
+        <link rel="canonical" href="https://docs.langchain.local/oss/python/langgraph/fault-tolerance/">
+      
+      
+        <link rel="prev" href="../use-time-travel/">
+      
+      
+        <link rel="next" href="../application-structure/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Fault Tolerance - Tài liệu LangChain (Bản dịch Tiếng Việt)</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#fault-tolerance-kha-nang-chiu-loi" class="md-skip">
+          Bỏ qua
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Đầu trang">
+    <a href="../../../.." title="Tài liệu LangChain (Bản dịch Tiếng Việt)" class="md-header__button md-logo" aria-label="Tài liệu LangChain (Bản dịch Tiếng Việt)" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Tài liệu LangChain (Bản dịch Tiếng Việt)
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Fault Tolerance
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="Chuyển sang giao diện tối"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Chuyển sang giao diện tối" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="Chuyển sang giao diện sáng"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Chuyển sang giao diện sáng" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Tìm kiếm" placeholder="Tìm kiếm" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Tìm kiếm">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Xoá" aria-label="Xoá" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Trang chủ
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../langchain/overview/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  LangChain (Python)
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../overview/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  LangGraph (Python)
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Thanh điều hướng" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../.." title="Tài liệu LangChain (Bản dịch Tiếng Việt)" class="md-nav__button md-logo" aria-label="Tài liệu LangChain (Bản dịch Tiếng Việt)" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Tài liệu LangChain (Bản dịch Tiếng Việt)
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trang chủ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LangChain (Python)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    LangChain (Python)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tổng quan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/philosophy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Triết lý thiết kế
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/install/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cài đặt
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bắt đầu nhanh
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/component-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kiến trúc thành phần
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/context-engineering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Context Engineering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/academy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Học viện (Academy)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/deep-agent-from-scratch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Xây dựng Deep Agent từ đầu
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/get-help/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nhận trợ giúp
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/changelog-py/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog Python
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/changelog-js/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog JS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_12" id="__nav_2_12_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cốt lõi
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Cốt lõi
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/agents/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agents
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/messages/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Messages
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/structured-output/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Structured Output
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/streaming/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Streaming
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/event-streaming/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Event Streaming
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/runtime/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Runtime
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/short-term-memory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Short-term Memory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/long-term-memory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Long-term Memory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/human-in-the-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Human-in-the-loop
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/guardrails/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guardrails
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/retrieval/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Retrieval
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/knowledge-base/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Knowledge Base
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/mcp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/deploy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/studio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Studio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/ui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    UI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/voice-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Voice Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/sql-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SQL Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_13" id="__nav_2_13_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Middleware
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Middleware
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/middleware/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tổng quan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/middleware/built-in/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Middleware có sẵn
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/middleware/custom/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Middleware tuỳ chỉnh
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_14" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../langchain/multi-agent/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multi-agent
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_14" id="__nav_2_14_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Multi-agent
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/multi-agent/handoffs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handoffs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/multi-agent/handoffs-customer-support/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handoffs - Customer Support
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/multi-agent/router/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Router
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/multi-agent/router-knowledge-base/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Router - Knowledge Base
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/multi-agent/skills/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Skills
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/multi-agent/skills-sql-assistant/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Skills - SQL Assistant
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/multi-agent/subagents/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Subagents
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/multi-agent/subagents-personal-assistant/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Subagents - Personal Assistant
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/multi-agent/custom-workflow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Custom Workflow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_15" id="__nav_2_15_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frontend
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Frontend
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tổng quan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/generative-ui-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Generative UI - Tổng quan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/declarative-generative-ui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Declarative Generative UI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/controlled-generative-ui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controlled Generative UI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/open-ended-generative-ui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Open-ended Generative UI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/headless-tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headless Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/tool-calling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tool Calling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/human-in-the-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Human-in-the-loop
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/structured-output/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Structured Output
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/reasoning-tokens/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Streaming Reasoning Tokens
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/markdown-messages/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Markdown Messages
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/message-queues/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Message Queues
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/branching-chat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Branching Chat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/join-rejoin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Join / Rejoin
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/time-travel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Time Travel
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_15_16" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_15_16" id="__nav_2_15_16_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tích hợp
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_15_16_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_15_16">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tích hợp
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/integrations/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tổng quan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/integrations/assistant-ui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Assistant UI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/integrations/copilotkit/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CopilotKit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/integrations/ai-elements/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Elements
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/integrations/openui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenUI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_16" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../langchain/test/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kiểm thử (Test)
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_16" id="__nav_2_16_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_16_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_16">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Kiểm thử (Test)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/test/unit-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Unit Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/test/integration-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integration Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/test/evals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Evals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_17" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_17" id="__nav_2_17_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mã lỗi (Errors)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_17_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_17">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Mã lỗi (Errors)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/errors/INVALID_PROMPT_INPUT/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    INVALID_PROMPT_INPUT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/errors/INVALID_TOOL_RESULTS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    INVALID_TOOL_RESULTS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/errors/MESSAGE_COERCION_FAILURE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MESSAGE_COERCION_FAILURE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/errors/MODEL_AUTHENTICATION/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MODEL_AUTHENTICATION
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/errors/MODEL_NOT_FOUND/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MODEL_NOT_FOUND
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/errors/MODEL_RATE_LIMIT/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MODEL_RATE_LIMIT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/errors/OUTPUT_PARSING_FAILURE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OUTPUT_PARSING_FAILURE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LangGraph (Python)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    LangGraph (Python)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tổng quan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../install/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cài đặt
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bắt đầu nhanh
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../thinking-in-langgraph/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tư duy LangGraph
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../choosing-apis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    So sánh Graph API và Functional API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../workflows-agents/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workflows và Agents
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../case-studies/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Case studies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog-py/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog Python
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog-js/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog JS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_10" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_10" id="__nav_3_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cốt lõi
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_10_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Cốt lõi
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../graph-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../use-graph-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sử dụng Graph API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../functional-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Functional API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../use-functional-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sử dụng Functional API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../use-subgraphs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Subgraphs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pregel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LangGraph runtime (Pregel)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../streaming/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Streaming
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../event-streaming/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Event Streaming
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../persistence/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Persistence
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../checkpointers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Checkpointers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stores/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stores
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../add-memory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Memory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../interrupts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interrupts (Human-in-the-loop)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../use-time-travel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Time Travel
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fault Tolerance
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fault Tolerance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Mục lục">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Mục lục
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#retries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Retries
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Retries">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hanh-vi-mac-inh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hành vi mặc định
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tham-so" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tham số
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#logic-retry-tuy-chinh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logic retry tuỳ chỉnh
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kiem-tra-trang-thai-retry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kiểm tra trạng thái retry
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#timeouts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Timeouts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Timeouts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#run-timeout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Run timeout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#idle-timeout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Idle timeout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodetimeouterror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NodeTimeoutError
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#timeout-ong-voi-send" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Timeout động với Send
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error handling
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Error handling">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nodeerror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NodeError
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inh-tuyen-voi-command" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Định tuyến với Command
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cac-loi-an-toan-khi-resume" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Các lỗi an toàn khi resume
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hanh-vi-voi-interrupt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hành vi với interrupt()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loi-trong-subgraph" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lỗi trong subgraph
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#graph-defaults" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Graph defaults
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Graph defaults">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#thu-tu-uu-tien" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Thứ tự ưu tiên
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#error-handler-mac-inh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error handler mặc định
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bang-kha-nang-ap-dung" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bảng khả năng áp dụng
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pham-vi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phạm vi
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#functional-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Functional API
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#graceful-shutdown" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Graceful shutdown
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Graceful shutdown">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ngu-nghia-semantics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ngữ nghĩa (semantics)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resume-sau-khi-drain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resume sau khi drain
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#oc-trang-thai-drain-ben-trong-mot-node" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Đọc trạng thái drain bên trong một node
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pattern-hook-sigterm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pattern hook SIGTERM
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gioi-han" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Giới hạn
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../application-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cấu trúc ứng dụng
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../backward-compatibility/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tương thích ngược
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_11" id="__nav_3_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Xây dựng agent
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Xây dựng agent
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../agentic-rag/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Custom RAG Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sql-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Custom SQL Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_12" id="__nav_3_12_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frontend
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Frontend
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../frontend/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tổng quan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../frontend/graph-execution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph Execution
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../frontend/custom-stream-channels/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Custom Stream Channels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_13" id="__nav_3_13_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy & Vận hành
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Deploy & Vận hành
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deploy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../local-server/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chạy local server
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LangSmith Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../studio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LangSmith Studio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent Chat UI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_14" id="__nav_3_14_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mã lỗi (Errors)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Mã lỗi (Errors)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../errors/GRAPH_RECURSION_LIMIT/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GRAPH_RECURSION_LIMIT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../errors/INVALID_CHAT_HISTORY/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    INVALID_CHAT_HISTORY
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../errors/INVALID_CONCURRENT_GRAPH_UPDATE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    INVALID_CONCURRENT_GRAPH_UPDATE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../errors/INVALID_GRAPH_NODE_RETURN_VALUE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    INVALID_GRAPH_NODE_RETURN_VALUE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../errors/MISSING_CHECKPOINTER/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MISSING_CHECKPOINTER
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../errors/MULTIPLE_SUBGRAPHS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MULTIPLE_SUBGRAPHS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Mục lục">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Mục lục
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#retries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Retries
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Retries">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hanh-vi-mac-inh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hành vi mặc định
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tham-so" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tham số
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#logic-retry-tuy-chinh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logic retry tuỳ chỉnh
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kiem-tra-trang-thai-retry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kiểm tra trạng thái retry
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#timeouts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Timeouts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Timeouts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#run-timeout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Run timeout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#idle-timeout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Idle timeout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodetimeouterror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NodeTimeoutError
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#timeout-ong-voi-send" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Timeout động với Send
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error handling
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Error handling">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nodeerror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NodeError
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inh-tuyen-voi-command" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Định tuyến với Command
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cac-loi-an-toan-khi-resume" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Các lỗi an toàn khi resume
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hanh-vi-voi-interrupt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hành vi với interrupt()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loi-trong-subgraph" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lỗi trong subgraph
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#graph-defaults" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Graph defaults
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Graph defaults">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#thu-tu-uu-tien" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Thứ tự ưu tiên
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#error-handler-mac-inh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error handler mặc định
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bang-kha-nang-ap-dung" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bảng khả năng áp dụng
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pham-vi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phạm vi
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#functional-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Functional API
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#graceful-shutdown" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Graceful shutdown
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Graceful shutdown">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ngu-nghia-semantics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ngữ nghĩa (semantics)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resume-sau-khi-drain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resume sau khi drain
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#oc-trang-thai-drain-ben-trong-mot-node" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Đọc trạng thái drain bên trong một node
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pattern-hook-sigterm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pattern hook SIGTERM
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gioi-han" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Giới hạn
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="fault-tolerance-kha-nang-chiu-loi">Fault tolerance (khả năng chịu lỗi)<a class="headerlink" href="#fault-tolerance-kha-nang-chiu-loi" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>Cấu hình timeout, retry theo từng node, và error handler trong LangGraph.</p>
+</blockquote>
+<p>Khi một node thất bại, do một API bên ngoài chậm, một lỗi mạng thoáng qua, hay một exception không được xử lý, LangGraph cung cấp cho bạn ba cơ chế có thể kết hợp để phản ứng:</p>
+<ul>
+<li><a href="#retries"><strong>Retry</strong></a>: tự động chạy lại các lần thử thất bại dựa trên loại exception và cấu hình backoff</li>
+<li><a href="#timeouts"><strong>Timeout</strong></a>: giới hạn thời gian một lần thử được phép chạy</li>
+<li><a href="#error-handling"><strong>Xử lý lỗi (error handling)</strong></a>: chạy một hàm khôi phục sau khi mọi lần retry đã cạn</li>
+</ul>
+<p>Dùng <a href="#graph-defaults"><strong><code>set_node_defaults</code></strong></a> để cấu hình các cơ chế này một lần cho toàn bộ node, thay vì lặp lại chúng ở mỗi lệnh gọi <code>add_node</code>.</p>
+<p>Các cơ chế này kết hợp theo một thứ tự cố định: khi một lần thử node phát sinh bất kỳ exception nào (bao gồm cả <a href="https://reference.langchain.com/python/langgraph/errors/NodeTimeoutError"><code>NodeTimeoutError</code></a> từ timeout), retry policy sẽ quyết định có retry hay không. Chỉ sau khi retry đã cạn thì error handler mới chạy.</p>
+<p>Để dừng một lượt chạy một cách gọn gàng tại ranh giới superstep và tiếp tục sau đó, xem <a href="#graceful-shutdown">Graceful shutdown</a>.</p>
+<div class="admonition note">
+<p>Timeout theo từng node và error handler cấp node yêu cầu <code>langgraph&gt;=1.2</code>.</p>
+</div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>%%{init:{&#39;theme&#39;:&#39;base&#39;,&#39;themeVariables&#39;:{&#39;lineColor&#39;:&#39;#40668D&#39;,&#39;primaryColor&#39;:&#39;#E5F4FF&#39;,&#39;primaryTextColor&#39;:&#39;#030710&#39;,&#39;primaryBorderColor&#39;:&#39;#006DDD&#39;}}}%%
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>flowchart LR
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    start([Bắt đầu lần thử]) --&gt; exec[Chạy node]
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    exec --&gt;|&quot;thành công&quot;| done([Tiếp tục graph])
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    exec --&gt;|&quot;bất kỳ exception nào&lt;br/&gt;kể cả NodeTimeoutError&quot;| retry{retry_policy&lt;br/&gt;có khớp?}
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    retry --&gt;|&quot;có, còn lượt thử&quot;| exec
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    retry --&gt;|&quot;đã cạn hoặc không có&quot;| handler{error_handler?}
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    handler --&gt;|&quot;có&quot;| run_handler[&quot;Gọi handler&lt;br/&gt;với NodeError&quot;]
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    run_handler --&gt; route([Cập nhật state +&lt;br/&gt;Command goto])
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    handler --&gt;|&quot;không&quot;| bubble([Exception&lt;br/&gt;lan truyền lên])
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    classDef process fill:#E5F4FF,stroke:#006DDD,stroke-width:2px,color:#030710
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    classDef decision fill:#FDF3FF,stroke:#7E65AE,stroke-width:2px,color:#504B5F
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>    classDef alert fill:#F8E8E6,stroke:#B27D75,stroke-width:2px,color:#634643
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    classDef output fill:#EBD0F0,stroke:#885270,stroke-width:2px,color:#441E33
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>    class exec,run_handler process
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    class retry,handler decision
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>    class bubble alert
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>    class done,route,start output
+</code></pre></div>
+<h2 id="retries">Retries<a class="headerlink" href="#retries" title="Permanent link">&para;</a></h2>
+<p>Một retry policy tự động chạy lại một lần thử node thất bại, dựa trên loại exception và cấu hình backoff.</p>
+<p>Truyền <code>retry_policy=</code> vào <a href="https://reference.langchain.com/python/langgraph/graph/state/StateGraph/add_node"><code>add_node</code></a>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">RetryPolicy</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="s2">&quot;call_api&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="n">call_api</span><span class="p">,</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="n">retry_policy</span><span class="o">=</span><span class="n">RetryPolicy</span><span class="p">(</span><span class="n">max_attempts</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="p">)</span>
+</code></pre></div>
+<h3 id="hanh-vi-mac-inh">Hành vi mặc định<a class="headerlink" href="#hanh-vi-mac-inh" title="Permanent link">&para;</a></h3>
+<p>Theo mặc định, <code>retry_on</code> dùng <code>default_retry_on</code>, sẽ retry trên <strong>mọi</strong> exception ngoại trừ các loại sau (và các lớp con của chúng):</p>
+<ul>
+<li><code>ValueError</code></li>
+<li><code>TypeError</code></li>
+<li><code>ArithmeticError</code></li>
+<li><code>ImportError</code></li>
+<li><code>LookupError</code></li>
+<li><code>NameError</code></li>
+<li><code>SyntaxError</code></li>
+<li><code>RuntimeError</code></li>
+<li><code>ReferenceError</code></li>
+<li><code>StopIteration</code></li>
+<li><code>StopAsyncIteration</code></li>
+<li><code>OSError</code></li>
+</ul>
+<p>Đối với các exception từ các thư viện HTTP phổ biến như <code>requests</code> và <code>httpx</code>, nó chỉ retry trên mã trạng thái 5xx. <a href="https://reference.langchain.com/python/langgraph/errors/NodeTimeoutError"><code>NodeTimeoutError</code></a> mặc định có thể retry.</p>
+<h3 id="tham-so">Tham số<a class="headerlink" href="#tham-so" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Tham số</th>
+<th>Kiểu</th>
+<th>Mặc định</th>
+<th>Mô tả</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>max_attempts</code></td>
+<td><code>int</code></td>
+<td><code>3</code></td>
+<td>Số lần thử tối đa, bao gồm cả lần đầu.</td>
+</tr>
+<tr>
+<td><code>initial_interval</code></td>
+<td><code>float</code></td>
+<td><code>0.5</code></td>
+<td>Số giây trước lần retry đầu tiên.</td>
+</tr>
+<tr>
+<td><code>backoff_factor</code></td>
+<td><code>float</code></td>
+<td><code>2.0</code></td>
+<td>Hệ số nhân áp dụng cho khoảng thời gian sau mỗi lần retry.</td>
+</tr>
+<tr>
+<td><code>max_interval</code></td>
+<td><code>float</code></td>
+<td><code>128.0</code></td>
+<td>Số giây tối đa giữa các lần retry.</td>
+</tr>
+<tr>
+<td><code>jitter</code></td>
+<td><code>bool</code></td>
+<td><code>True</code></td>
+<td>Thêm độ trễ ngẫu nhiên (jitter) vào khoảng thời gian.</td>
+</tr>
+<tr>
+<td><code>retry_on</code></td>
+<td><code>type[Exception] \| Sequence[type[Exception]] \| Callable[[Exception], bool]</code></td>
+<td><code>default_retry_on</code></td>
+<td>Các exception cần retry, hoặc một callable trả về <code>True</code> cho exception có thể retry.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="logic-retry-tuy-chinh">Logic retry tuỳ chỉnh<a class="headerlink" href="#logic-retry-tuy-chinh" title="Permanent link">&para;</a></h3>
+<p>Truyền một callable hoặc loại exception vào <code>retry_on</code>. Import <code>default_retry_on</code> để mở rộng hành vi mặc định:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">RetryPolicy</span><span class="p">,</span> <span class="n">default_retry_on</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">custom_retry_on</span><span class="p">(</span><span class="n">exc</span><span class="p">:</span> <span class="ne">BaseException</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">exc</span><span class="p">,</span> <span class="n">MyCustomError</span><span class="p">):</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>        <span class="k">return</span> <span class="kc">False</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    <span class="k">return</span> <span class="n">default_retry_on</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    <span class="s2">&quot;call_api&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    <span class="n">call_api</span><span class="p">,</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>    <span class="n">retry_policy</span><span class="o">=</span><span class="n">RetryPolicy</span><span class="p">(</span><span class="n">max_attempts</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">retry_on</span><span class="o">=</span><span class="n">custom_retry_on</span><span class="p">),</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="p">)</span>
+</code></pre></div>
+<h3 id="kiem-tra-trang-thai-retry">Kiểm tra trạng thái retry<a class="headerlink" href="#kiem-tra-trang-thai-retry" title="Permanent link">&para;</a></h3>
+<p>Dùng thông tin thực thi bên trong một node để kiểm tra số lần thử hiện tại. Điều này hữu ích khi chuyển sang phương án dự phòng nếu lệnh gọi chính liên tục thất bại:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.graph</span><span class="w"> </span><span class="kn">import</span> <span class="n">StateGraph</span><span class="p">,</span> <span class="n">START</span><span class="p">,</span> <span class="n">END</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.runtime</span><span class="w"> </span><span class="kn">import</span> <span class="n">Runtime</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">RetryPolicy</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing_extensions</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypedDict</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="k">class</span><span class="w"> </span><span class="nc">State</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    <span class="n">result</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="k">def</span><span class="w"> </span><span class="nf">my_node</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">State</span><span class="p">,</span> <span class="n">runtime</span><span class="p">:</span> <span class="n">Runtime</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">State</span><span class="p">:</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>    <span class="k">if</span> <span class="n">runtime</span><span class="o">.</span><span class="n">execution_info</span><span class="o">.</span><span class="n">node_attempt</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># [!code highlight]</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;result&quot;</span><span class="p">:</span> <span class="n">call_fallback_api</span><span class="p">()}</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;result&quot;</span><span class="p">:</span> <span class="n">call_primary_api</span><span class="p">()}</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="n">builder</span> <span class="o">=</span> <span class="n">StateGraph</span><span class="p">(</span><span class="n">State</span><span class="p">)</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;my_node&quot;</span><span class="p">,</span> <span class="n">my_node</span><span class="p">,</span> <span class="n">retry_policy</span><span class="o">=</span><span class="n">RetryPolicy</span><span class="p">(</span><span class="n">max_attempts</span><span class="o">=</span><span class="mi">3</span><span class="p">))</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">START</span><span class="p">,</span> <span class="s2">&quot;my_node&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;my_node&quot;</span><span class="p">,</span> <span class="n">END</span><span class="p">)</span>
+</code></pre></div>
+<p><code>execution_info</code> cung cấp các trường sau:</p>
+<table>
+<thead>
+<tr>
+<th>Thuộc tính</th>
+<th>Kiểu</th>
+<th>Mô tả</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>node_attempt</code></td>
+<td><code>int</code></td>
+<td>Số lần thử hiện tại (đánh số từ 1). <code>1</code> ở lần đầu, <code>2</code> ở lần retry đầu, v.v.</td>
+</tr>
+<tr>
+<td><code>node_first_attempt_time</code></td>
+<td><code>float \| None</code></td>
+<td>Unix timestamp thời điểm lần thử đầu tiên bắt đầu. Không đổi qua các lần retry.</td>
+</tr>
+<tr>
+<td><code>thread_id</code></td>
+<td><code>str \| None</code></td>
+<td>Thread ID cho lần thực thi hiện tại. <code>None</code> nếu không có checkpointer.</td>
+</tr>
+<tr>
+<td><code>run_id</code></td>
+<td><code>str \| None</code></td>
+<td>Run ID cho lần thực thi hiện tại. <code>None</code> nếu không được cung cấp trong config.</td>
+</tr>
+<tr>
+<td><code>checkpoint_id</code></td>
+<td><code>str</code></td>
+<td>Checkpoint ID cho lần thực thi hiện tại.</td>
+</tr>
+<tr>
+<td><code>task_id</code></td>
+<td><code>str</code></td>
+<td>Task ID cho lần thực thi hiện tại.</td>
+</tr>
+</tbody>
+</table>
+<p><code>execution_info</code> luôn có sẵn ngay cả khi không có retry policy, <code>node_attempt</code> mặc định là <code>1</code>.</p>
+<h2 id="timeouts">Timeouts<a class="headerlink" href="#timeouts" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p>Yêu cầu <code>langgraph&gt;=1.2</code>.</p>
+</div>
+<p>Tham số <code>timeout=</code> trên <a href="https://reference.langchain.com/python/langgraph/graph/state/StateGraph/add_node"><code>add_node</code></a> giới hạn thời gian một lần thử node được phép chạy. Truyền một số (giây), một <code>timedelta</code>, hoặc một <a href="https://reference.langchain.com/python/langgraph/types/TimeoutPolicy"><code>TimeoutPolicy</code></a> để tách riêng giới hạn run và idle:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">timedelta</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">TimeoutPolicy</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># Giới hạn wall-clock đơn giản</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;call_model&quot;</span><span class="p">,</span> <span class="n">call_model</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;call_model&quot;</span><span class="p">,</span> <span class="n">call_model</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="c1"># Tách riêng giới hạn run và idle</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>    <span class="s2">&quot;call_model&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>    <span class="n">call_model</span><span class="p">,</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>    <span class="n">timeout</span><span class="o">=</span><span class="n">TimeoutPolicy</span><span class="p">(</span><span class="n">run_timeout</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span> <span class="n">idle_timeout</span><span class="o">=</span><span class="mi">30</span><span class="p">),</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="p">)</span>
+</code></pre></div>
+<div class="admonition warning">
+<p>Timeout của node chỉ áp dụng cho node <strong>async</strong>. Node đồng bộ (sync) có <code>timeout</code> sẽ bị từ chối ngay tại thời điểm compile. Để bọc I/O blocking, hãy dùng <code>asyncio.to_thread</code> bên trong một node async.</p>
+</div>
+<h3 id="run-timeout">Run timeout<a class="headerlink" href="#run-timeout" title="Permanent link">&para;</a></h3>
+<p><code>run_timeout</code> là một giới hạn wall-clock cứng cho một lần thử. Nó không bao giờ được làm mới, bất kể node có hoạt động hay không:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">TimeoutPolicy</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    <span class="s2">&quot;call_model&quot;</span><span class="p">,</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>    <span class="n">call_model</span><span class="p">,</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>    <span class="n">timeout</span><span class="o">=</span><span class="n">TimeoutPolicy</span><span class="p">(</span><span class="n">run_timeout</span><span class="o">=</span><span class="mi">120</span><span class="p">),</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="p">)</span>
+</code></pre></div>
+<p>Khi vượt quá giới hạn, LangGraph phát sinh <a href="https://reference.langchain.com/python/langgraph/errors/NodeTimeoutError"><code>NodeTimeoutError</code></a>, xoá mọi write của lần thử thất bại, và để retry policy quyết định có retry hay không.</p>
+<h3 id="idle-timeout">Idle timeout<a class="headerlink" href="#idle-timeout" title="Permanent link">&para;</a></h3>
+<p><code>idle_timeout</code> là giới hạn được đặt lại theo tiến độ. Nó chỉ kích hoạt khi node ngừng tạo ra tiến độ có thể quan sát được trong khoảng thời gian đã chỉ định, khác với <code>run_timeout</code>, đồng hồ sẽ đặt lại bất cứ khi nào node phát ra tín hiệu tiến độ:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>    <span class="s2">&quot;call_model&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>    <span class="n">call_model</span><span class="p">,</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    <span class="n">timeout</span><span class="o">=</span><span class="n">TimeoutPolicy</span><span class="p">(</span><span class="n">idle_timeout</span><span class="o">=</span><span class="mi">30</span><span class="p">),</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="p">)</span>
+</code></pre></div>
+<p>Bạn có thể đặt <code>run_timeout</code> và <code>idle_timeout</code> cùng lúc. Cái nào kích hoạt trước sẽ huỷ lần thử đó.</p>
+<h4 id="tin-hieu-tien-o">Tín hiệu tiến độ<a class="headerlink" href="#tin-hieu-tien-o" title="Permanent link">&para;</a></h4>
+<p>Với <code>refresh_on="auto"</code> mặc định, đồng hồ idle được đặt lại bởi bất kỳ điều nào sau đây:</p>
+<ul>
+<li>State write qua <code>CONFIG_KEY_SEND</code></li>
+<li>Output stream (các chunk stream async được yield ra)</li>
+<li>Lên lịch child-task</li>
+<li>Các lệnh gọi runtime stream-writer</li>
+<li>Bất kỳ sự kiện callback LangChain nào từ node hoặc các node con của nó (token LLM, tool call, chain start/end, v.v.)</li>
+</ul>
+<h4 id="che-o-heartbeat">Chế độ Heartbeat<a class="headerlink" href="#che-o-heartbeat" title="Permanent link">&para;</a></h4>
+<p>Đặt <code>refresh_on="heartbeat"</code> để thu hẹp nguồn refresh chỉ còn các lệnh gọi <code>runtime.heartbeat()</code> tường minh. Điều này hữu ích khi bạn muốn một định nghĩa idle nghiêm ngặt, không bị đặt lại bởi các thành phần con "ồn ào":</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>    <span class="s2">&quot;call_model&quot;</span><span class="p">,</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    <span class="n">call_model</span><span class="p">,</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>    <span class="n">timeout</span><span class="o">=</span><span class="n">TimeoutPolicy</span><span class="p">(</span><span class="n">idle_timeout</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">refresh_on</span><span class="o">=</span><span class="s2">&quot;heartbeat&quot;</span><span class="p">),</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="p">)</span>
+</code></pre></div>
+<h4 id="heartbeat-thu-cong">Heartbeat thủ công<a class="headerlink" href="#heartbeat-thu-cong" title="Permanent link">&para;</a></h4>
+<p>Với công việc chạy dài mà không tự nhiên phát ra tín hiệu tiến độ, hãy gọi <code>runtime.heartbeat()</code> để đặt lại đồng hồ idle theo cách thủ công:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.graph</span><span class="w"> </span><span class="kn">import</span> <span class="n">StateGraph</span><span class="p">,</span> <span class="n">START</span><span class="p">,</span> <span class="n">END</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.runtime</span><span class="w"> </span><span class="kn">import</span> <span class="n">Runtime</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">TimeoutPolicy</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing_extensions</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypedDict</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="k">class</span><span class="w"> </span><span class="nc">State</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>    <span class="n">result</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">long_running_node</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">State</span><span class="p">,</span> <span class="n">runtime</span><span class="p">:</span> <span class="n">Runtime</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">State</span><span class="p">:</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>    <span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">fetch_batches</span><span class="p">():</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>        <span class="n">process</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>        <span class="n">runtime</span><span class="o">.</span><span class="n">heartbeat</span><span class="p">()</span>  <span class="c1"># [!code highlight]</span>
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;result&quot;</span><span class="p">:</span> <span class="s2">&quot;done&quot;</span><span class="p">}</span>
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>
+<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="n">builder</span> <span class="o">=</span> <span class="n">StateGraph</span><span class="p">(</span><span class="n">State</span><span class="p">)</span>
+<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span>
+<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a>    <span class="s2">&quot;long_running_node&quot;</span><span class="p">,</span>
+<a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a>    <span class="n">long_running_node</span><span class="p">,</span>
+<a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a>    <span class="n">timeout</span><span class="o">=</span><span class="n">TimeoutPolicy</span><span class="p">(</span><span class="n">idle_timeout</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">refresh_on</span><span class="o">=</span><span class="s2">&quot;heartbeat&quot;</span><span class="p">),</span>
+<a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a><span class="p">)</span>
+<a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">START</span><span class="p">,</span> <span class="s2">&quot;long_running_node&quot;</span><span class="p">)</span>
+<a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;long_running_node&quot;</span><span class="p">,</span> <span class="n">END</span><span class="p">)</span>
+</code></pre></div>
+<p><code>runtime.heartbeat()</code> không làm gì (no-op) bên ngoài một lần thử có idle-timeout, nên bạn có thể gọi nó vô điều kiện.</p>
+<h3 id="nodetimeouterror">NodeTimeoutError<a class="headerlink" href="#nodetimeouterror" title="Permanent link">&para;</a></h3>
+<p>Khi một timeout kích hoạt, LangGraph phát sinh <a href="https://reference.langchain.com/python/langgraph/errors/NodeTimeoutError"><code>NodeTimeoutError</code></a> kèm ngữ cảnh có cấu trúc về giới hạn nào đã bị chạm:</p>
+<table>
+<thead>
+<tr>
+<th>Thuộc tính</th>
+<th>Kiểu</th>
+<th>Mô tả</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>node</code></td>
+<td><code>str</code></td>
+<td>Tên của node có lần thực thi bị timeout.</td>
+</tr>
+<tr>
+<td><code>elapsed</code></td>
+<td><code>float</code></td>
+<td>Số giây đã trôi qua trước khi timeout kích hoạt.</td>
+</tr>
+<tr>
+<td><code>kind</code></td>
+<td><code>Literal["idle", "run"]</code></td>
+<td>Timeout nào đã kích hoạt.</td>
+</tr>
+<tr>
+<td><code>idle_timeout</code></td>
+<td><code>float \| None</code></td>
+<td>Idle timeout đã cấu hình (giây), nếu có.</td>
+</tr>
+<tr>
+<td><code>run_timeout</code></td>
+<td><code>float \| None</code></td>
+<td>Run timeout đã cấu hình (giây), nếu có.</td>
+</tr>
+</tbody>
+</table>
+<p><code>NodeTimeoutError</code> mặc định có thể retry. Kết hợp <code>timeout</code> với một retry policy hoạt động ngay lập tức, đồng hồ timeout đặt lại ở mỗi lần thử mới, và các write từ một lần thử bị timeout sẽ bị xoá trước lần retry tiếp theo:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">RetryPolicy</span><span class="p">,</span> <span class="n">TimeoutPolicy</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="n">builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>    <span class="s2">&quot;call_model&quot;</span><span class="p">,</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>    <span class="n">call_model</span><span class="p">,</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>    <span class="n">timeout</span><span class="o">=</span><span class="n">TimeoutPolicy</span><span class="p">(</span><span class="n">idle_timeout</span><span class="o">=</span><span class="mi">30</span><span class="p">),</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>    <span class="n">retry_policy</span><span class="o">=</span><span class="n">RetryPolicy</span><span class="p">(</span><span class="n">max_attempts</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="p">)</span>
+</code></pre></div>
+<h3 id="timeout-ong-voi-send">Timeout động với Send<a class="headerlink" href="#timeout-ong-voi-send" title="Permanent link">&para;</a></h3>
+<p>Khi dùng <a href="https://reference.langchain.com/python/langgraph/types/Send"><code>Send</code></a> để phân phối node một cách động (ví dụ, trong các pattern map-reduce), bạn có thể truyền một timeout trực tiếp trên <code>Send</code> để ghi đè timeout tĩnh của node đích cho riêng lần đẩy (push) đó:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">Send</span><span class="p">,</span> <span class="n">TimeoutPolicy</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">fan_out</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">OverallState</span><span class="p">):</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>    <span class="k">return</span> <span class="p">[</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>        <span class="n">Send</span><span class="p">(</span><span class="s2">&quot;process_item&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;item&quot;</span><span class="p">:</span> <span class="n">item</span><span class="p">},</span> <span class="n">timeout</span><span class="o">=</span><span class="n">TimeoutPolicy</span><span class="p">(</span><span class="n">idle_timeout</span><span class="o">=</span><span class="mi">15</span><span class="p">))</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;items&quot;</span><span class="p">]</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>    <span class="p">]</span>
+</code></pre></div>
+<p>Nếu bỏ trống timeout trên <code>Send</code>, timeout của node đích (được đặt tại thời điểm <a href="https://reference.langchain.com/python/langgraph/graph/state/StateGraph/add_node"><code>add_node</code></a>) sẽ được áp dụng. Điều này cho phép bạn đặt một timeout mặc định trên node và siết chặt hơn cho từng lệnh gọi riêng lẻ.</p>
+<h2 id="error-handling">Error handling<a class="headerlink" href="#error-handling" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p>Yêu cầu <code>langgraph&gt;=1.2</code>.</p>
+</div>
+<p>Một error handler chạy sau khi một node thất bại và mọi lần retry đã cạn. Nó nhận state hiện tại và có thể cập nhật state đó hoặc định tuyến tới một node khác bằng <a href="https://reference.langchain.com/python/langgraph/types/Command"><code>Command</code></a>. Điều này hữu ích cho các luồng bù trừ (compensation flow, kiểu Saga pattern) khi bạn muốn khôi phục một cách gọn gàng thay vì huỷ toàn bộ graph.</p>
+<p>Truyền <code>error_handler=</code> vào <a href="https://reference.langchain.com/python/langgraph/graph/state/StateGraph/add_node"><code>add_node</code></a>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.errors</span><span class="w"> </span><span class="kn">import</span> <span class="n">NodeError</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">Command</span><span class="p">,</span> <span class="n">RetryPolicy</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.graph</span><span class="w"> </span><span class="kn">import</span> <span class="n">StateGraph</span><span class="p">,</span> <span class="n">START</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing_extensions</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypedDict</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="k">class</span><span class="w"> </span><span class="nc">State</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>    <span class="n">status</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="k">def</span><span class="w"> </span><span class="nf">charge_payment</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">State</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">State</span><span class="p">:</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;payment gateway timeout&quot;</span><span class="p">)</span>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="k">def</span><span class="w"> </span><span class="nf">payment_error_handler</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">State</span><span class="p">,</span> <span class="n">error</span><span class="p">:</span> <span class="n">NodeError</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Command</span><span class="p">:</span>
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a>    <span class="k">return</span> <span class="n">Command</span><span class="p">(</span>
+<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a>        <span class="n">update</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;compensated: </span><span class="si">{</span><span class="n">error</span><span class="o">.</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">},</span>
+<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a>        <span class="n">goto</span><span class="o">=</span><span class="s2">&quot;finalize&quot;</span><span class="p">,</span>
+<a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a>    <span class="p">)</span>
+<a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a>
+<a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a><span class="k">def</span><span class="w"> </span><span class="nf">finalize</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">State</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">State</span><span class="p">:</span>
+<a id="__codelineno-11-19" name="__codelineno-11-19" href="#__codelineno-11-19"></a>    <span class="k">return</span> <span class="n">state</span>
+<a id="__codelineno-11-20" name="__codelineno-11-20" href="#__codelineno-11-20"></a>
+<a id="__codelineno-11-21" name="__codelineno-11-21" href="#__codelineno-11-21"></a><span class="n">graph</span> <span class="o">=</span> <span class="p">(</span>
+<a id="__codelineno-11-22" name="__codelineno-11-22" href="#__codelineno-11-22"></a>    <span class="n">StateGraph</span><span class="p">(</span><span class="n">State</span><span class="p">)</span>
+<a id="__codelineno-11-23" name="__codelineno-11-23" href="#__codelineno-11-23"></a>    <span class="o">.</span><span class="n">add_node</span><span class="p">(</span>
+<a id="__codelineno-11-24" name="__codelineno-11-24" href="#__codelineno-11-24"></a>        <span class="s2">&quot;charge_payment&quot;</span><span class="p">,</span>
+<a id="__codelineno-11-25" name="__codelineno-11-25" href="#__codelineno-11-25"></a>        <span class="n">charge_payment</span><span class="p">,</span>
+<a id="__codelineno-11-26" name="__codelineno-11-26" href="#__codelineno-11-26"></a>        <span class="n">retry_policy</span><span class="o">=</span><span class="n">RetryPolicy</span><span class="p">(</span><span class="n">max_attempts</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">retry_on</span><span class="o">=</span><span class="ne">ConnectionError</span><span class="p">),</span>
+<a id="__codelineno-11-27" name="__codelineno-11-27" href="#__codelineno-11-27"></a>        <span class="n">error_handler</span><span class="o">=</span><span class="n">payment_error_handler</span><span class="p">,</span>
+<a id="__codelineno-11-28" name="__codelineno-11-28" href="#__codelineno-11-28"></a>    <span class="p">)</span>
+<a id="__codelineno-11-29" name="__codelineno-11-29" href="#__codelineno-11-29"></a>    <span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;finalize&quot;</span><span class="p">,</span> <span class="n">finalize</span><span class="p">)</span>
+<a id="__codelineno-11-30" name="__codelineno-11-30" href="#__codelineno-11-30"></a>    <span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">START</span><span class="p">,</span> <span class="s2">&quot;charge_payment&quot;</span><span class="p">)</span>
+<a id="__codelineno-11-31" name="__codelineno-11-31" href="#__codelineno-11-31"></a>    <span class="o">.</span><span class="n">compile</span><span class="p">()</span>
+<a id="__codelineno-11-32" name="__codelineno-11-32" href="#__codelineno-11-32"></a><span class="p">)</span>
+</code></pre></div>
+<p>Handler chỉ kích hoạt sau khi retry policy đã cạn, hoặc ngay lập tức nếu không có retry policy nào được cấu hình. Retry policy và error handler được tách rời nhau: cấu hình khi nào cần retry và khi nào cần bù trừ một cách độc lập.</p>
+<h3 id="nodeerror">NodeError<a class="headerlink" href="#nodeerror" title="Permanent link">&para;</a></h3>
+<p>Error handler nhận ngữ cảnh lỗi thông qua một tham số <code>error: NodeError</code> có kiểu, được inject qua type annotation (cùng pattern với <code>runtime: Runtime</code>):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.errors</span><span class="w"> </span><span class="kn">import</span> <span class="n">NodeError</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">my_handler</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">State</span><span class="p">,</span> <span class="n">error</span><span class="p">:</span> <span class="n">NodeError</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Command</span><span class="p">:</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Node </span><span class="si">{</span><span class="n">error</span><span class="o">.</span><span class="n">node</span><span class="si">}</span><span class="s2"> failed with: </span><span class="si">{</span><span class="n">error</span><span class="o">.</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>    <span class="k">return</span> <span class="n">Command</span><span class="p">(</span><span class="n">update</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;recovered&quot;</span><span class="p">},</span> <span class="n">goto</span><span class="o">=</span><span class="s2">&quot;next_step&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><a href="https://reference.langchain.com/python/langgraph/errors/NodeError"><code>NodeError</code></a> là một frozen dataclass với hai trường:</p>
+<table>
+<thead>
+<tr>
+<th>Thuộc tính</th>
+<th>Kiểu</th>
+<th>Mô tả</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>node</code></td>
+<td><code>str</code></td>
+<td>Tên của node có lần thực thi thất bại.</td>
+</tr>
+<tr>
+<td><code>error</code></td>
+<td><code>BaseException</code></td>
+<td>Exception mà node thất bại đã phát sinh.</td>
+</tr>
+</tbody>
+</table>
+<p>Tham số <code>error: NodeError</code> là tuỳ chọn (opt-in). Các handler không cần ngữ cảnh lỗi có thể dùng chữ ký đơn giản hơn như <code>(state)</code> hoặc <code>(state, runtime)</code>.</p>
+<h3 id="inh-tuyen-voi-command">Định tuyến với Command<a class="headerlink" href="#inh-tuyen-voi-command" title="Permanent link">&para;</a></h3>
+<p>Error handler có thể trả về một <a href="https://reference.langchain.com/python/langgraph/types/Command"><code>Command</code></a> để cập nhật state và định tuyến tới một node cụ thể, cho phép các pattern Saga / bù trừ:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.errors</span><span class="w"> </span><span class="kn">import</span> <span class="n">NodeError</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">Command</span><span class="p">,</span> <span class="n">RetryPolicy</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.graph</span><span class="w"> </span><span class="kn">import</span> <span class="n">StateGraph</span><span class="p">,</span> <span class="n">START</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing_extensions</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypedDict</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="k">class</span><span class="w"> </span><span class="nc">State</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>    <span class="n">status</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="k">def</span><span class="w"> </span><span class="nf">reserve_inventory</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">State</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">State</span><span class="p">:</span>
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a>    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;reserved&quot;</span><span class="p">}</span>
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a>
+<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a><span class="k">def</span><span class="w"> </span><span class="nf">charge_payment</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">State</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">State</span><span class="p">:</span>
+<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a>    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;payment timeout&quot;</span><span class="p">)</span>
+<a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a>
+<a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a><span class="k">def</span><span class="w"> </span><span class="nf">payment_error_handler</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">State</span><span class="p">,</span> <span class="n">error</span><span class="p">:</span> <span class="n">NodeError</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Command</span><span class="p">:</span>
+<a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a>    <span class="k">return</span> <span class="n">Command</span><span class="p">(</span>
+<a id="__codelineno-13-17" name="__codelineno-13-17" href="#__codelineno-13-17"></a>        <span class="n">update</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;compensated_after_</span><span class="si">{</span><span class="n">error</span><span class="o">.</span><span class="n">node</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">error</span><span class="o">.</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">},</span>
+<a id="__codelineno-13-18" name="__codelineno-13-18" href="#__codelineno-13-18"></a>        <span class="n">goto</span><span class="o">=</span><span class="s2">&quot;finalize&quot;</span><span class="p">,</span>
+<a id="__codelineno-13-19" name="__codelineno-13-19" href="#__codelineno-13-19"></a>    <span class="p">)</span>
+<a id="__codelineno-13-20" name="__codelineno-13-20" href="#__codelineno-13-20"></a>
+<a id="__codelineno-13-21" name="__codelineno-13-21" href="#__codelineno-13-21"></a><span class="k">def</span><span class="w"> </span><span class="nf">finalize</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">State</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">State</span><span class="p">:</span>
+<a id="__codelineno-13-22" name="__codelineno-13-22" href="#__codelineno-13-22"></a>    <span class="k">return</span> <span class="n">state</span>
+<a id="__codelineno-13-23" name="__codelineno-13-23" href="#__codelineno-13-23"></a>
+<a id="__codelineno-13-24" name="__codelineno-13-24" href="#__codelineno-13-24"></a><span class="n">graph</span> <span class="o">=</span> <span class="p">(</span>
+<a id="__codelineno-13-25" name="__codelineno-13-25" href="#__codelineno-13-25"></a>    <span class="n">StateGraph</span><span class="p">(</span><span class="n">State</span><span class="p">)</span>
+<a id="__codelineno-13-26" name="__codelineno-13-26" href="#__codelineno-13-26"></a>    <span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;reserve_inventory&quot;</span><span class="p">,</span> <span class="n">reserve_inventory</span><span class="p">)</span>
+<a id="__codelineno-13-27" name="__codelineno-13-27" href="#__codelineno-13-27"></a>    <span class="o">.</span><span class="n">add_node</span><span class="p">(</span>
+<a id="__codelineno-13-28" name="__codelineno-13-28" href="#__codelineno-13-28"></a>        <span class="s2">&quot;charge_payment&quot;</span><span class="p">,</span>
+<a id="__codelineno-13-29" name="__codelineno-13-29" href="#__codelineno-13-29"></a>        <span class="n">charge_payment</span><span class="p">,</span>
+<a id="__codelineno-13-30" name="__codelineno-13-30" href="#__codelineno-13-30"></a>        <span class="n">retry_policy</span><span class="o">=</span><span class="n">RetryPolicy</span><span class="p">(</span><span class="n">max_attempts</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">retry_on</span><span class="o">=</span><span class="ne">ConnectionError</span><span class="p">),</span>
+<a id="__codelineno-13-31" name="__codelineno-13-31" href="#__codelineno-13-31"></a>        <span class="n">error_handler</span><span class="o">=</span><span class="n">payment_error_handler</span><span class="p">,</span>
+<a id="__codelineno-13-32" name="__codelineno-13-32" href="#__codelineno-13-32"></a>    <span class="p">)</span>
+<a id="__codelineno-13-33" name="__codelineno-13-33" href="#__codelineno-13-33"></a>    <span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;finalize&quot;</span><span class="p">,</span> <span class="n">finalize</span><span class="p">)</span>
+<a id="__codelineno-13-34" name="__codelineno-13-34" href="#__codelineno-13-34"></a>    <span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">START</span><span class="p">,</span> <span class="s2">&quot;reserve_inventory&quot;</span><span class="p">)</span>
+<a id="__codelineno-13-35" name="__codelineno-13-35" href="#__codelineno-13-35"></a>    <span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;reserve_inventory&quot;</span><span class="p">,</span> <span class="s2">&quot;charge_payment&quot;</span><span class="p">)</span>
+<a id="__codelineno-13-36" name="__codelineno-13-36" href="#__codelineno-13-36"></a>    <span class="o">.</span><span class="n">compile</span><span class="p">()</span>
+<a id="__codelineno-13-37" name="__codelineno-13-37" href="#__codelineno-13-37"></a><span class="p">)</span>
+</code></pre></div>
+<p><code>charge_payment</code> retry trên <code>ConnectionError</code> tối đa 3 lần. Nếu retry đã cạn (hoặc lỗi không phải <code>ConnectionError</code>), handler sẽ bù trừ bằng cách cập nhật state và định tuyến tới <code>finalize</code> thay vì huỷ toàn bộ graph.</p>
+<h3 id="cac-loi-an-toan-khi-resume">Các lỗi an toàn khi resume<a class="headerlink" href="#cac-loi-an-toan-khi-resume" title="Permanent link">&para;</a></h3>
+<div class="admonition note">
+<p>Nguồn gốc lỗi (failure provenance) được checkpoint. Nếu graph bị gián đoạn hoặc tiến trình crash sau khi một node thất bại nhưng trước khi handler hoàn tất, handler sẽ thấy đúng ngữ cảnh <code>NodeError</code> khi graph resume từ checkpoint của nó.</p>
+</div>
+<h3 id="hanh-vi-voi-interrupt">Hành vi với <code>interrupt()</code><a class="headerlink" href="#hanh-vi-voi-interrupt" title="Permanent link">&para;</a></h3>
+<div class="admonition warning">
+<p><code>interrupt()</code> được phát sinh bên trong một node <strong>không</strong> được định tuyến tới error handler. Interrupt dùng cơ chế <code>GraphBubbleUp</code> để tạm dừng việc thực thi graph cho các workflow human-in-the-loop, bỏ qua cả retry policy lẫn error handler. Graph tạm dừng như bình thường.</p>
+</div>
+<h3 id="loi-trong-subgraph">Lỗi trong subgraph<a class="headerlink" href="#loi-trong-subgraph" title="Permanent link">&para;</a></h3>
+<p>Nếu một node bọc một subgraph và subgraph đó phát sinh một exception không được xử lý, exception đó sẽ nổi lên node cha. Nếu node cha có một error handler, handler sẽ kích hoạt với exception của subgraph nằm trong <code>error.error</code>.</p>
+<h2 id="graph-defaults">Graph defaults<a class="headerlink" href="#graph-defaults" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p>Yêu cầu <code>langgraph&gt;=1.2</code>.</p>
+</div>
+<p>Thay vì lặp lại cùng <code>retry_policy=</code>, <code>error_handler=</code>, <code>timeout=</code>, hoặc <code>cache_policy=</code> ở mỗi lệnh gọi <code>add_node</code>, hãy dùng <a href="https://reference.langchain.com/python/langgraph/graph/state/StateGraph/set_node_defaults"><code>set_node_defaults</code></a> để cấu hình giá trị mặc định cho toàn graph tại một nơi duy nhất:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.errors</span><span class="w"> </span><span class="kn">import</span> <span class="n">NodeError</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">RetryPolicy</span><span class="p">,</span> <span class="n">TimeoutPolicy</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.graph</span><span class="w"> </span><span class="kn">import</span> <span class="n">StateGraph</span><span class="p">,</span> <span class="n">START</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing_extensions</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypedDict</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="k">class</span><span class="w"> </span><span class="nc">State</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>    <span class="n">status</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="k">def</span><span class="w"> </span><span class="nf">default_error_handler</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">State</span><span class="p">,</span> <span class="n">error</span><span class="p">:</span> <span class="n">NodeError</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">State</span><span class="p">:</span>
+<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a>    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;handled: </span><span class="si">{</span><span class="n">error</span><span class="o">.</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}</span>
+<a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a>
+<a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a><span class="n">graph</span> <span class="o">=</span> <span class="p">(</span>
+<a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a>    <span class="n">StateGraph</span><span class="p">(</span><span class="n">State</span><span class="p">)</span>
+<a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a>    <span class="o">.</span><span class="n">set_node_defaults</span><span class="p">(</span>
+<a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a>        <span class="n">retry_policy</span><span class="o">=</span><span class="n">RetryPolicy</span><span class="p">(</span><span class="n">max_attempts</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>
+<a id="__codelineno-14-16" name="__codelineno-14-16" href="#__codelineno-14-16"></a>        <span class="n">error_handler</span><span class="o">=</span><span class="n">default_error_handler</span><span class="p">,</span>
+<a id="__codelineno-14-17" name="__codelineno-14-17" href="#__codelineno-14-17"></a>        <span class="n">timeout</span><span class="o">=</span><span class="n">TimeoutPolicy</span><span class="p">(</span><span class="n">run_timeout</span><span class="o">=</span><span class="mi">30</span><span class="p">),</span>
+<a id="__codelineno-14-18" name="__codelineno-14-18" href="#__codelineno-14-18"></a>    <span class="p">)</span>
+<a id="__codelineno-14-19" name="__codelineno-14-19" href="#__codelineno-14-19"></a>    <span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;step_a&quot;</span><span class="p">,</span> <span class="n">step_a</span><span class="p">)</span>
+<a id="__codelineno-14-20" name="__codelineno-14-20" href="#__codelineno-14-20"></a>    <span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;step_b&quot;</span><span class="p">,</span> <span class="n">step_b</span><span class="p">)</span>
+<a id="__codelineno-14-21" name="__codelineno-14-21" href="#__codelineno-14-21"></a>    <span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">START</span><span class="p">,</span> <span class="s2">&quot;step_a&quot;</span><span class="p">)</span>
+<a id="__codelineno-14-22" name="__codelineno-14-22" href="#__codelineno-14-22"></a>    <span class="o">.</span><span class="n">compile</span><span class="p">()</span>
+<a id="__codelineno-14-23" name="__codelineno-14-23" href="#__codelineno-14-23"></a><span class="p">)</span>
+</code></pre></div>
+<p>Giờ cả <code>step_a</code> và <code>step_b</code> đều dùng chung retry policy, error handler, và timeout mà không cần lặp lại.</p>
+<h3 id="thu-tu-uu-tien">Thứ tự ưu tiên<a class="headerlink" href="#thu-tu-uu-tien" title="Permanent link">&para;</a></h3>
+<p>Giá trị truyền trực tiếp cho từng node trong <code>add_node()</code> luôn ghi đè giá trị mặc định được đặt bởi <code>set_node_defaults()</code>. Giá trị mặc định được phân giải tại thời điểm <code>compile()</code>, nên bạn có thể gọi <code>set_node_defaults()</code> trước hoặc sau <code>add_node()</code> theo bất kỳ thứ tự nào:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="n">graph</span> <span class="o">=</span> <span class="p">(</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>    <span class="n">StateGraph</span><span class="p">(</span><span class="n">State</span><span class="p">)</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>    <span class="o">.</span><span class="n">set_node_defaults</span><span class="p">(</span><span class="n">error_handler</span><span class="o">=</span><span class="n">default_error_handler</span><span class="p">)</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>    <span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;step_a&quot;</span><span class="p">,</span> <span class="n">step_a</span><span class="p">)</span>                                     <span class="c1"># dùng default_error_handler</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>    <span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;step_b&quot;</span><span class="p">,</span> <span class="n">step_b</span><span class="p">,</span> <span class="n">error_handler</span><span class="o">=</span><span class="n">custom_error_handler</span><span class="p">)</span> <span class="c1"># dùng custom_error_handler</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>    <span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">START</span><span class="p">,</span> <span class="s2">&quot;step_a&quot;</span><span class="p">)</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a>    <span class="o">.</span><span class="n">compile</span><span class="p">()</span>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="p">)</span>
+</code></pre></div>
+<h3 id="error-handler-mac-inh">Error handler mặc định<a class="headerlink" href="#error-handler-mac-inh" title="Permanent link">&para;</a></h3>
+<p>Giá trị mặc định <code>error_handler</code> đặc biệt hữu ích khi mỗi lượt chạy graph tương ứng với một tiến trình bên ngoài (ví dụ một dòng job nền), và bất kỳ lỗi node nào không được xử lý cũng cần đánh dấu tiến trình đó là thất bại, mà không cần lặp lại <code>error_handler=</code> ở mỗi <code>add_node</code>. Handler cấp từng node vẫn được ưu tiên khi một bước cần logic riêng:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.errors</span><span class="w"> </span><span class="kn">import</span> <span class="n">NodeError</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.graph</span><span class="w"> </span><span class="kn">import</span> <span class="n">StateGraph</span><span class="p">,</span> <span class="n">START</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">Command</span><span class="p">,</span> <span class="n">RetryPolicy</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing_extensions</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypedDict</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="k">class</span><span class="w"> </span><span class="nc">State</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a>    <span class="n">process_id</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a>    <span class="n">status</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a>
+<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a><span class="k">def</span><span class="w"> </span><span class="nf">fetch_data</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">State</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">State</span><span class="p">:</span>
+<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a>    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;fetched&quot;</span><span class="p">}</span>
+<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a>
+<a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a><span class="k">def</span><span class="w"> </span><span class="nf">charge_payment</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">State</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">State</span><span class="p">:</span>
+<a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a>    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;payment timeout&quot;</span><span class="p">)</span>
+<a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a>
+<a id="__codelineno-16-16" name="__codelineno-16-16" href="#__codelineno-16-16"></a><span class="k">def</span><span class="w"> </span><span class="nf">finalize</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">State</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">State</span><span class="p">:</span>
+<a id="__codelineno-16-17" name="__codelineno-16-17" href="#__codelineno-16-17"></a>    <span class="k">return</span> <span class="n">state</span>
+<a id="__codelineno-16-18" name="__codelineno-16-18" href="#__codelineno-16-18"></a>
+<a id="__codelineno-16-19" name="__codelineno-16-19" href="#__codelineno-16-19"></a><span class="k">def</span><span class="w"> </span><span class="nf">mark_process_failed</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">State</span><span class="p">,</span> <span class="n">error</span><span class="p">:</span> <span class="n">NodeError</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">State</span><span class="p">:</span>
+<a id="__codelineno-16-20" name="__codelineno-16-20" href="#__codelineno-16-20"></a>    <span class="c1"># Lưu lại trạng thái thất bại vào dòng tiến trình bên ngoài theo process_id.</span>
+<a id="__codelineno-16-21" name="__codelineno-16-21" href="#__codelineno-16-21"></a>    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;failed at </span><span class="si">{</span><span class="n">error</span><span class="o">.</span><span class="n">node</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">error</span><span class="o">.</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}</span>
+<a id="__codelineno-16-22" name="__codelineno-16-22" href="#__codelineno-16-22"></a>
+<a id="__codelineno-16-23" name="__codelineno-16-23" href="#__codelineno-16-23"></a><span class="k">def</span><span class="w"> </span><span class="nf">refund_payment</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">State</span><span class="p">,</span> <span class="n">error</span><span class="p">:</span> <span class="n">NodeError</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Command</span><span class="p">:</span>
+<a id="__codelineno-16-24" name="__codelineno-16-24" href="#__codelineno-16-24"></a>    <span class="k">return</span> <span class="n">Command</span><span class="p">(</span>
+<a id="__codelineno-16-25" name="__codelineno-16-25" href="#__codelineno-16-25"></a>        <span class="n">update</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;compensated after </span><span class="si">{</span><span class="n">error</span><span class="o">.</span><span class="n">node</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">},</span>
+<a id="__codelineno-16-26" name="__codelineno-16-26" href="#__codelineno-16-26"></a>        <span class="n">goto</span><span class="o">=</span><span class="s2">&quot;finalize&quot;</span><span class="p">,</span>
+<a id="__codelineno-16-27" name="__codelineno-16-27" href="#__codelineno-16-27"></a>    <span class="p">)</span>
+<a id="__codelineno-16-28" name="__codelineno-16-28" href="#__codelineno-16-28"></a>
+<a id="__codelineno-16-29" name="__codelineno-16-29" href="#__codelineno-16-29"></a><span class="n">graph</span> <span class="o">=</span> <span class="p">(</span>
+<a id="__codelineno-16-30" name="__codelineno-16-30" href="#__codelineno-16-30"></a>    <span class="n">StateGraph</span><span class="p">(</span><span class="n">State</span><span class="p">)</span>
+<a id="__codelineno-16-31" name="__codelineno-16-31" href="#__codelineno-16-31"></a>    <span class="o">.</span><span class="n">set_node_defaults</span><span class="p">(</span>
+<a id="__codelineno-16-32" name="__codelineno-16-32" href="#__codelineno-16-32"></a>        <span class="n">retry_policy</span><span class="o">=</span><span class="n">RetryPolicy</span><span class="p">(</span><span class="n">max_attempts</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>
+<a id="__codelineno-16-33" name="__codelineno-16-33" href="#__codelineno-16-33"></a>        <span class="n">error_handler</span><span class="o">=</span><span class="n">mark_process_failed</span><span class="p">,</span>
+<a id="__codelineno-16-34" name="__codelineno-16-34" href="#__codelineno-16-34"></a>    <span class="p">)</span>
+<a id="__codelineno-16-35" name="__codelineno-16-35" href="#__codelineno-16-35"></a>    <span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;fetch_data&quot;</span><span class="p">,</span> <span class="n">fetch_data</span><span class="p">)</span>  <span class="c1"># dùng mark_process_failed</span>
+<a id="__codelineno-16-36" name="__codelineno-16-36" href="#__codelineno-16-36"></a>    <span class="o">.</span><span class="n">add_node</span><span class="p">(</span>
+<a id="__codelineno-16-37" name="__codelineno-16-37" href="#__codelineno-16-37"></a>        <span class="s2">&quot;charge_payment&quot;</span><span class="p">,</span>
+<a id="__codelineno-16-38" name="__codelineno-16-38" href="#__codelineno-16-38"></a>        <span class="n">charge_payment</span><span class="p">,</span>
+<a id="__codelineno-16-39" name="__codelineno-16-39" href="#__codelineno-16-39"></a>        <span class="n">error_handler</span><span class="o">=</span><span class="n">refund_payment</span><span class="p">,</span>  <span class="c1"># ghi đè giá trị mặc định của graph</span>
+<a id="__codelineno-16-40" name="__codelineno-16-40" href="#__codelineno-16-40"></a>    <span class="p">)</span>
+<a id="__codelineno-16-41" name="__codelineno-16-41" href="#__codelineno-16-41"></a>    <span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;finalize&quot;</span><span class="p">,</span> <span class="n">finalize</span><span class="p">)</span>
+<a id="__codelineno-16-42" name="__codelineno-16-42" href="#__codelineno-16-42"></a>    <span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">START</span><span class="p">,</span> <span class="s2">&quot;fetch_data&quot;</span><span class="p">)</span>
+<a id="__codelineno-16-43" name="__codelineno-16-43" href="#__codelineno-16-43"></a>    <span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;fetch_data&quot;</span><span class="p">,</span> <span class="s2">&quot;charge_payment&quot;</span><span class="p">)</span>
+<a id="__codelineno-16-44" name="__codelineno-16-44" href="#__codelineno-16-44"></a>    <span class="o">.</span><span class="n">compile</span><span class="p">()</span>
+<a id="__codelineno-16-45" name="__codelineno-16-45" href="#__codelineno-16-45"></a><span class="p">)</span>
+</code></pre></div>
+<p>Nếu <code>fetch_data</code> thất bại sau khi retry, <code>mark_process_failed</code> sẽ chạy. Nếu <code>charge_payment</code> thất bại sau khi retry, <code>refund_payment</code> sẽ chạy thay thế, vì handler cấp node ghi đè giá trị mặc định.</p>
+<p>Handler chấp nhận cùng chữ ký <code>(state, error: NodeError)</code> đã mô tả trong <a href="#error-handling">Error handling</a>. Nó cũng chấp nhận <code>RunnableConfig</code> như một tham số thứ ba tuỳ chọn nếu bạn cần truy cập các giá trị config như <code>thread_id</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langchain_core.runnables</span><span class="w"> </span><span class="kn">import</span> <span class="n">RunnableConfig</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">mark_process_failed</span><span class="p">(</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>    <span class="n">state</span><span class="p">:</span> <span class="n">State</span><span class="p">,</span> <span class="n">error</span><span class="p">:</span> <span class="n">NodeError</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">RunnableConfig</span>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">State</span><span class="p">:</span>
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>    <span class="n">thread_id</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;configurable&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;thread_id&quot;</span><span class="p">)</span>
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a>    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;failed on thread </span><span class="si">{</span><span class="n">thread_id</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">error</span><span class="o">.</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}</span>
+</code></pre></div>
+<h3 id="bang-kha-nang-ap-dung">Bảng khả năng áp dụng<a class="headerlink" href="#bang-kha-nang-ap-dung" title="Permanent link">&para;</a></h3>
+<p>Không phải mọi giá trị mặc định đều áp dụng cho mọi loại node. Các node error-handler (được đăng ký qua <code>add_node(error_handler=...)</code>) bị loại trừ khỏi một số giá trị mặc định để tránh hành vi không an toàn:</p>
+<table>
+<thead>
+<tr>
+<th>Tham số <code>set_node_defaults</code></th>
+<th>Áp dụng cho node thông thường</th>
+<th>Áp dụng cho node error-handler</th>
+<th>Lý do</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>retry_policy</code></td>
+<td>✅</td>
+<td>✅</td>
+<td>Handler cũng nên được retry khi có lỗi thoáng qua</td>
+</tr>
+<tr>
+<td><code>timeout</code></td>
+<td>✅</td>
+<td>✅</td>
+<td>Handler bị treo cũng nên bị huỷ như node thông thường bị treo</td>
+</tr>
+<tr>
+<td><code>error_handler</code></td>
+<td>✅</td>
+<td>❌</td>
+<td>Handler không bao giờ được tự bắt lỗi của chính nó</td>
+</tr>
+<tr>
+<td><code>cache_policy</code></td>
+<td>✅</td>
+<td>❌</td>
+<td>Cache kết quả handler là không an toàn</td>
+</tr>
+</tbody>
+</table>
+<h3 id="pham-vi">Phạm vi<a class="headerlink" href="#pham-vi" title="Permanent link">&para;</a></h3>
+<p>Giá trị mặc định được đặt trên graph cha <strong>không</strong> được kế thừa bởi subgraph. Mỗi graph tự duy trì giá trị mặc định riêng của mình.</p>
+<h2 id="functional-api">Functional API<a class="headerlink" href="#functional-api" title="Permanent link">&para;</a></h2>
+<p>Cùng các tham số <code>timeout=</code> và <code>retry_policy=</code> cũng có sẵn trên <code>@task</code> và <code>@entrypoint</code> trong Functional API:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.func</span><span class="w"> </span><span class="kn">import</span> <span class="n">entrypoint</span><span class="p">,</span> <span class="n">task</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">RetryPolicy</span><span class="p">,</span> <span class="n">TimeoutPolicy</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="nd">@task</span><span class="p">(</span>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>    <span class="n">timeout</span><span class="o">=</span><span class="n">TimeoutPolicy</span><span class="p">(</span><span class="n">idle_timeout</span><span class="o">=</span><span class="mi">30</span><span class="p">),</span>
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>    <span class="n">retry_policy</span><span class="o">=</span><span class="n">RetryPolicy</span><span class="p">(</span><span class="n">max_attempts</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="p">)</span>
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">call_api</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a>    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">fetch</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a>    <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span>
+<a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a>
+<a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a><span class="nd">@entrypoint</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+<a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">my_workflow</span><span class="p">(</span><span class="n">inputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a>    <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">call_api</span><span class="p">(</span><span class="s2">&quot;https://api.example.com/data&quot;</span><span class="p">)</span>
+<a id="__codelineno-18-15" name="__codelineno-18-15" href="#__codelineno-18-15"></a>    <span class="k">return</span> <span class="n">result</span>
+</code></pre></div>
+<p>Hành vi giống hệt <code>add_node</code>: <code>NodeTimeoutError</code> được phát sinh khi timeout, các write đã buffer bị xoá, và retry policy quyết định có retry hay không.</p>
+<h2 id="graceful-shutdown">Graceful shutdown<a class="headerlink" href="#graceful-shutdown" title="Permanent link">&para;</a></h2>
+<p>Cooperative shutdown (tắt hợp tác) cho phép bạn dừng một lượt chạy graph đang thực thi sau khi superstep hiện tại hoàn tất, và lưu một checkpoint có thể resume. Điều này hữu ích khi xử lý tín hiệu SIGTERM hoặc bất kỳ supervisor bên ngoài nào cần thu hồi tài nguyên mà không làm mất công việc đang dang dở.</p>
+<div class="admonition note">
+<p>Yêu cầu <code>langgraph&gt;=1.2</code>.</p>
+</div>
+<p>Tạo một <a href="https://reference.langchain.com/python/langgraph/runtime/RunControl"><code>RunControl</code></a> và truyền nó dưới dạng <code>control=</code> vào <code>invoke</code> hoặc <code>stream</code>. Gọi <code>request_drain()</code> từ bất kỳ thread nào để báo hiệu lượt chạy nên dừng:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.runtime</span><span class="w"> </span><span class="kn">import</span> <span class="n">RunControl</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.errors</span><span class="w"> </span><span class="kn">import</span> <span class="n">GraphDrained</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="n">control</span> <span class="o">=</span> <span class="n">RunControl</span><span class="p">()</span>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="c1"># Trong một signal handler hoặc supervisor:</span>
+<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="c1"># control.request_drain(&quot;sigterm&quot;)</span>
+<a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a>
+<a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a><span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a>    <span class="n">result</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="n">control</span><span class="p">)</span>
+<a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a><span class="k">except</span> <span class="n">GraphDrained</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a>    <span class="c1"># Graph đã dừng sớm và lưu một checkpoint.</span>
+<a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a>    <span class="c1"># Resume sau đó với cùng config.</span>
+<a id="__codelineno-19-14" name="__codelineno-19-14" href="#__codelineno-19-14"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Drained: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">reason</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="ngu-nghia-semantics">Ngữ nghĩa (semantics)<a class="headerlink" href="#ngu-nghia-semantics" title="Permanent link">&para;</a></h3>
+<p>Drain mang tính hợp tác và hoạt động giữa các superstep, không bao giờ chiếm quyền của công việc đang chạy:</p>
+<table>
+<thead>
+<tr>
+<th>Tình huống</th>
+<th>Hành vi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Node đang giữa chừng thực thi</td>
+<td>Chạy tới khi hoàn tất. Drain có hiệu lực ở superstep tiếp theo.</td>
+</tr>
+<tr>
+<td>Node có retry policy đang retry</td>
+<td>Vòng lặp retry chạy tới khi cạn hoặc thành công. Drain có hiệu lực sau đó.</td>
+</tr>
+<tr>
+<td>Graph hoàn tất tự nhiên cùng lúc với drain</td>
+<td>Trả về bình thường. Kiểm tra <code>control.drain_requested</code> để phân biệt với một lượt chạy thông thường.</td>
+</tr>
+<tr>
+<td>Còn nhiều superstep phía trước</td>
+<td>Phát sinh <code>GraphDrained(reason)</code>. Checkpoint được lưu và có thể resume.</td>
+</tr>
+<tr>
+<td>Subgraph yêu cầu drain</td>
+<td><code>GraphDrained</code> lan lên qua graph cha và dừng nó tại ranh giới superstep tiếp theo của chính nó.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="resume-sau-khi-drain">Resume sau khi drain<a class="headerlink" href="#resume-sau-khi-drain" title="Permanent link">&para;</a></h3>
+<p>Resume một lượt chạy đã drain bằng <code>invoke(None, config)</code> dùng cùng <code>thread_id</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="n">result</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="oc-trang-thai-drain-ben-trong-mot-node">Đọc trạng thái drain bên trong một node<a class="headerlink" href="#oc-trang-thai-drain-ben-trong-mot-node" title="Permanent link">&para;</a></h3>
+<p>Truy cập trạng thái drain qua tham số <code>runtime</code> để điều chỉnh hành vi node trước khi tới ranh giới superstep:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.runtime</span><span class="w"> </span><span class="kn">import</span> <span class="n">Runtime</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">my_node</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">State</span><span class="p">,</span> <span class="n">runtime</span><span class="p">:</span> <span class="n">Runtime</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">State</span><span class="p">:</span>
+<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a>    <span class="k">if</span> <span class="n">runtime</span><span class="o">.</span><span class="n">drain_requested</span><span class="p">:</span>
+<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a>        <span class="c1"># Bỏ qua công việc tốn kém và trả về kết quả tối thiểu</span>
+<a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a>        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;skipped&quot;</span><span class="p">,</span> <span class="s2">&quot;reason&quot;</span><span class="p">:</span> <span class="n">runtime</span><span class="o">.</span><span class="n">drain_reason</span><span class="p">}</span>
+<a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a>    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="k">await</span> <span class="n">do_work</span><span class="p">()}</span>
+</code></pre></div>
+<h3 id="pattern-hook-sigterm">Pattern hook SIGTERM<a class="headerlink" href="#pattern-hook-sigterm" title="Permanent link">&para;</a></h3>
+<p>Pattern được khuyến nghị để xử lý việc tắt tiến trình:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">signal</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.runtime</span><span class="w"> </span><span class="kn">import</span> <span class="n">RunControl</span>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.errors</span><span class="w"> </span><span class="kn">import</span> <span class="n">GraphDrained</span>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a>
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="n">control</span> <span class="o">=</span> <span class="n">RunControl</span><span class="p">()</span>
+<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="n">signal</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">SIGTERM</span><span class="p">,</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">_</span><span class="p">:</span> <span class="n">control</span><span class="o">.</span><span class="n">request_drain</span><span class="p">(</span><span class="s2">&quot;sigterm&quot;</span><span class="p">))</span>
+<a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a>
+<a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a><span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-22-9" name="__codelineno-22-9" href="#__codelineno-22-9"></a>    <span class="n">result</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">control</span><span class="o">=</span><span class="n">control</span><span class="p">)</span>
+<a id="__codelineno-22-10" name="__codelineno-22-10" href="#__codelineno-22-10"></a><span class="k">except</span> <span class="n">GraphDrained</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<a id="__codelineno-22-11" name="__codelineno-22-11" href="#__codelineno-22-11"></a>    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;graph drained: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">reason</span><span class="p">)</span>
+<a id="__codelineno-22-12" name="__codelineno-22-12" href="#__codelineno-22-12"></a>    <span class="c1"># Resume ở lần khởi động tiếp theo với cùng config</span>
+</code></pre></div>
+<div class="admonition note">
+<p><code>request_drain()</code> không huỷ các asyncio task đang chạy hay kill thread. Để có một giới hạn cứng, hãy kết hợp drain với một timeout gọn gàng và việc huỷ task.</p>
+</div>
+<h2 id="gioi-han">Giới hạn<a class="headerlink" href="#gioi-han" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Timeout chỉ dành cho async</strong>: node đồng bộ (sync) có <code>timeout</code> sẽ bị từ chối tại thời điểm compile.</li>
+<li><strong>Mỗi node chỉ có một handler</strong>: mỗi node có thể có tối đa một <code>error_handler</code>.</li>
+<li><strong>Lỗi trong handler sẽ lan truyền lên</strong>: nếu chính error handler phát sinh lỗi, exception đó sẽ lan truyền như thể node không có handler.</li>
+<li><strong><code>set_node_defaults</code> không được subgraph kế thừa</strong>: mỗi graph tự quản lý giá trị mặc định của riêng mình.</li>
+</ul>
+<hr />
+<div class="admonition info">
+<p class="admonition-title">Kết nối tài liệu này</p>
+<p><a href="https://docs.langchain.com/use-these-docs">Kết nối tài liệu này</a> với Claude, VSCode, và nhiều công cụ khác qua MCP để có câu trả lời theo thời gian thực.</p>
+</div>
+<div class="admonition info">
+<p class="admonition-title">Đóng góp</p>
+<p><a href="https://github.com/langchain-ai/docs/edit/main/src/oss/langgraph/fault-tolerance.mdx">Chỉnh sửa trang này trên GitHub</a> hoặc <a href="https://github.com/langchain-ai/docs/issues/new/choose">báo lỗi</a>.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Trở lại mục lục
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "toc.follow", "content.code.copy", "content.code.annotate", "search.suggest", "search.highlight"], "search": "../../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u0110\u00e3 sao ch\u00e9p", "clipboard.copy": "Sao ch\u00e9p v\u00e0o b\u1ed9 nh\u1edb t\u1ea1m", "search.result.more.one": "1 t\u1eeb kh\u00e1c trong trang", "search.result.more.other": "# t\u1eeb kh\u00e1c trong trang", "search.result.none": "Kh\u00f4ng t\u00ecm th\u1ea5y t\u00e0i li\u1ec7u li\u00ean quan", "search.result.one": "1 t\u00e0i li\u1ec7u li\u00ean quan", "search.result.other": "# t\u00e0i li\u1ec7u li\u00ean quan", "search.result.placeholder": "Nh\u1eadp \u0111\u1ec3 b\u1eaft \u0111\u1ea7u t\u00ecm ki\u1ebfm", "search.result.term.missing": "Kh\u00f4ng", "select.version": "Ch\u1ecdn phi\u00ean b\u1ea3n"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

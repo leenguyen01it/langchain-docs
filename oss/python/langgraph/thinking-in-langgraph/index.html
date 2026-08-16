@@ -1,0 +1,6132 @@
+
+<!doctype html>
+<html lang="vi" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Bản dịch tiếng Việt của tài liệu LangChain và LangGraph Python (mục langchain, langgraph), dịch từ docs.langchain.com">
+      
+      
+      
+        <link rel="canonical" href="https://docs.langchain.local/oss/python/langgraph/thinking-in-langgraph/">
+      
+      
+        <link rel="prev" href="../quickstart/">
+      
+      
+        <link rel="next" href="../choosing-apis/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Tư duy LangGraph - Tài liệu LangChain (Bản dịch Tiếng Việt)</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#thinking-in-langgraph" class="md-skip">
+          Bỏ qua
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Đầu trang">
+    <a href="../../../.." title="Tài liệu LangChain (Bản dịch Tiếng Việt)" class="md-header__button md-logo" aria-label="Tài liệu LangChain (Bản dịch Tiếng Việt)" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Tài liệu LangChain (Bản dịch Tiếng Việt)
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Tư duy LangGraph
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="Chuyển sang giao diện tối"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Chuyển sang giao diện tối" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="Chuyển sang giao diện sáng"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Chuyển sang giao diện sáng" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Tìm kiếm" placeholder="Tìm kiếm" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Tìm kiếm">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Xoá" aria-label="Xoá" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Trang chủ
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../langchain/overview/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  LangChain (Python)
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../overview/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  LangGraph (Python)
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Thanh điều hướng" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../.." title="Tài liệu LangChain (Bản dịch Tiếng Việt)" class="md-nav__button md-logo" aria-label="Tài liệu LangChain (Bản dịch Tiếng Việt)" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Tài liệu LangChain (Bản dịch Tiếng Việt)
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trang chủ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LangChain (Python)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    LangChain (Python)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tổng quan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/philosophy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Triết lý thiết kế
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/install/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cài đặt
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bắt đầu nhanh
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/component-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kiến trúc thành phần
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/context-engineering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Context Engineering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/academy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Học viện (Academy)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/deep-agent-from-scratch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Xây dựng Deep Agent từ đầu
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/get-help/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nhận trợ giúp
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/changelog-py/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog Python
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/changelog-js/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog JS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_12" id="__nav_2_12_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cốt lõi
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Cốt lõi
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/agents/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agents
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/messages/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Messages
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/structured-output/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Structured Output
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/streaming/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Streaming
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/event-streaming/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Event Streaming
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/runtime/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Runtime
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/short-term-memory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Short-term Memory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/long-term-memory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Long-term Memory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/human-in-the-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Human-in-the-loop
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/guardrails/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guardrails
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/retrieval/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Retrieval
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/knowledge-base/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Knowledge Base
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/mcp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/deploy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/studio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Studio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/ui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    UI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/voice-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Voice Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/sql-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SQL Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_13" id="__nav_2_13_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Middleware
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Middleware
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/middleware/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tổng quan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/middleware/built-in/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Middleware có sẵn
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/middleware/custom/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Middleware tuỳ chỉnh
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_14" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../langchain/multi-agent/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multi-agent
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_14" id="__nav_2_14_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Multi-agent
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/multi-agent/handoffs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handoffs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/multi-agent/handoffs-customer-support/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handoffs - Customer Support
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/multi-agent/router/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Router
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/multi-agent/router-knowledge-base/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Router - Knowledge Base
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/multi-agent/skills/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Skills
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/multi-agent/skills-sql-assistant/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Skills - SQL Assistant
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/multi-agent/subagents/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Subagents
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/multi-agent/subagents-personal-assistant/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Subagents - Personal Assistant
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/multi-agent/custom-workflow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Custom Workflow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_15" id="__nav_2_15_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frontend
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Frontend
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tổng quan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/generative-ui-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Generative UI - Tổng quan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/declarative-generative-ui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Declarative Generative UI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/controlled-generative-ui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controlled Generative UI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/open-ended-generative-ui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Open-ended Generative UI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/headless-tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headless Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/tool-calling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tool Calling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/human-in-the-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Human-in-the-loop
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/structured-output/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Structured Output
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/reasoning-tokens/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Streaming Reasoning Tokens
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/markdown-messages/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Markdown Messages
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/message-queues/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Message Queues
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/branching-chat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Branching Chat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/join-rejoin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Join / Rejoin
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/time-travel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Time Travel
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_15_16" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_15_16" id="__nav_2_15_16_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tích hợp
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_15_16_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_15_16">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tích hợp
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/integrations/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tổng quan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/integrations/assistant-ui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Assistant UI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/integrations/copilotkit/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CopilotKit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/integrations/ai-elements/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Elements
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/frontend/integrations/openui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenUI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_16" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../langchain/test/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kiểm thử (Test)
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_16" id="__nav_2_16_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_16_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_16">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Kiểm thử (Test)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/test/unit-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Unit Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/test/integration-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integration Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/test/evals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Evals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_17" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_17" id="__nav_2_17_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mã lỗi (Errors)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_17_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_17">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Mã lỗi (Errors)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/errors/INVALID_PROMPT_INPUT/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    INVALID_PROMPT_INPUT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/errors/INVALID_TOOL_RESULTS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    INVALID_TOOL_RESULTS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/errors/MESSAGE_COERCION_FAILURE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MESSAGE_COERCION_FAILURE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/errors/MODEL_AUTHENTICATION/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MODEL_AUTHENTICATION
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/errors/MODEL_NOT_FOUND/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MODEL_NOT_FOUND
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/errors/MODEL_RATE_LIMIT/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MODEL_RATE_LIMIT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../langchain/errors/OUTPUT_PARSING_FAILURE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OUTPUT_PARSING_FAILURE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LangGraph (Python)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    LangGraph (Python)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tổng quan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../install/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cài đặt
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bắt đầu nhanh
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tư duy LangGraph
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tư duy LangGraph
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Mục lục">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Mục lục
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#bat-au-voi-quy-trinh-ban-muon-tu-ong-hoa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bắt đầu với quy trình bạn muốn tự động hoá
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-map-out-your-workflow-as-discrete-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bước 1: Vạch ra workflow của bạn thành các bước rời rạc
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#buoc-2-xac-inh-moi-buoc-can-lam-gi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bước 2: Xác định mỗi bước cần làm gì
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Bước 2: Xác định mỗi bước cần làm gì">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#llm-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LLM steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#action-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Action steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#user-input-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        User input steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-design-your-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bước 3: Thiết kế state của bạn
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Bước 3: Thiết kế state của bạn">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cai-gi-thuoc-ve-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cái gì thuộc về state?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#giu-state-o-dang-tho-format-prompt-theo-yeu-cau" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Giữ state ở dạng thô, format prompt theo yêu cầu
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4-build-your-nodes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bước 4: Xây dựng các node của bạn
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Bước 4: Xây dựng các node của bạn">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#handle-errors-appropriately" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Xử lý lỗi phù hợp
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trien-khai-cac-node-cho-agent-email-cua-ta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Triển khai các node cho agent email của ta
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5-wire-it-together" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bước 5: Nối tất cả lại
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Bước 5: Nối tất cả lại">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#thu-nghiem-agent-cua-ban" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Thử nghiệm agent của bạn
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tom-tat-va-buoc-tiep-theo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tóm tắt và bước tiếp theo
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tóm tắt và bước tiếp theo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nhung-ieu-then-chot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Những điều then chốt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-nhac-nang-cao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cân nhắc nâng cao
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#buoc-tiep-theo-tu-ay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bước tiếp theo từ đây
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../choosing-apis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    So sánh Graph API và Functional API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../workflows-agents/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workflows và Agents
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../case-studies/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Case studies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog-py/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog Python
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog-js/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog JS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_10" id="__nav_3_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cốt lõi
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Cốt lõi
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../graph-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../use-graph-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sử dụng Graph API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../functional-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Functional API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../use-functional-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sử dụng Functional API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../use-subgraphs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Subgraphs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pregel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LangGraph runtime (Pregel)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../streaming/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Streaming
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../event-streaming/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Event Streaming
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../persistence/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Persistence
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../checkpointers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Checkpointers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stores/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stores
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../add-memory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Memory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../interrupts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interrupts (Human-in-the-loop)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../use-time-travel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Time Travel
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fault-tolerance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fault Tolerance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../application-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cấu trúc ứng dụng
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../backward-compatibility/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tương thích ngược
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_11" id="__nav_3_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Xây dựng agent
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Xây dựng agent
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../agentic-rag/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Custom RAG Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sql-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Custom SQL Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_12" id="__nav_3_12_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frontend
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Frontend
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../frontend/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tổng quan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../frontend/graph-execution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph Execution
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../frontend/custom-stream-channels/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Custom Stream Channels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_13" id="__nav_3_13_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy & Vận hành
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Deploy & Vận hành
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deploy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../local-server/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chạy local server
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LangSmith Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../studio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LangSmith Studio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent Chat UI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_14" id="__nav_3_14_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mã lỗi (Errors)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Mã lỗi (Errors)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../errors/GRAPH_RECURSION_LIMIT/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GRAPH_RECURSION_LIMIT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../errors/INVALID_CHAT_HISTORY/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    INVALID_CHAT_HISTORY
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../errors/INVALID_CONCURRENT_GRAPH_UPDATE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    INVALID_CONCURRENT_GRAPH_UPDATE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../errors/INVALID_GRAPH_NODE_RETURN_VALUE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    INVALID_GRAPH_NODE_RETURN_VALUE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../errors/MISSING_CHECKPOINTER/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MISSING_CHECKPOINTER
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../errors/MULTIPLE_SUBGRAPHS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MULTIPLE_SUBGRAPHS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Mục lục">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Mục lục
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#bat-au-voi-quy-trinh-ban-muon-tu-ong-hoa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bắt đầu với quy trình bạn muốn tự động hoá
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-map-out-your-workflow-as-discrete-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bước 1: Vạch ra workflow của bạn thành các bước rời rạc
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#buoc-2-xac-inh-moi-buoc-can-lam-gi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bước 2: Xác định mỗi bước cần làm gì
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Bước 2: Xác định mỗi bước cần làm gì">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#llm-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LLM steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#action-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Action steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#user-input-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        User input steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-design-your-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bước 3: Thiết kế state của bạn
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Bước 3: Thiết kế state của bạn">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cai-gi-thuoc-ve-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cái gì thuộc về state?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#giu-state-o-dang-tho-format-prompt-theo-yeu-cau" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Giữ state ở dạng thô, format prompt theo yêu cầu
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4-build-your-nodes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bước 4: Xây dựng các node của bạn
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Bước 4: Xây dựng các node của bạn">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#handle-errors-appropriately" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Xử lý lỗi phù hợp
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trien-khai-cac-node-cho-agent-email-cua-ta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Triển khai các node cho agent email của ta
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5-wire-it-together" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bước 5: Nối tất cả lại
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Bước 5: Nối tất cả lại">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#thu-nghiem-agent-cua-ban" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Thử nghiệm agent của bạn
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tom-tat-va-buoc-tiep-theo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tóm tắt và bước tiếp theo
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tóm tắt và bước tiếp theo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nhung-ieu-then-chot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Những điều then chốt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-nhac-nang-cao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cân nhắc nâng cao
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#buoc-tiep-theo-tu-ay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bước tiếp theo từ đây
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="thinking-in-langgraph">Thinking in LangGraph<a class="headerlink" href="#thinking-in-langgraph" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>Học cách tư duy khi xây dựng agent với LangGraph</p>
+</blockquote>
+<p>Khi bạn xây dựng một agent với LangGraph, trước tiên bạn sẽ chia nó thành các bước rời rạc gọi là <strong>node</strong>. Sau đó, bạn sẽ mô tả các quyết định và chuyển tiếp khác nhau từ mỗi node. Cuối cùng, bạn kết nối các node lại với nhau thông qua một <strong>state</strong> dùng chung mà mỗi node có thể đọc và ghi.</p>
+<p>Trong bài hướng dẫn này, ta sẽ đi qua quá trình tư duy khi xây dựng một agent email hỗ trợ khách hàng với LangGraph.</p>
+<h2 id="bat-au-voi-quy-trinh-ban-muon-tu-ong-hoa">Bắt đầu với quy trình bạn muốn tự động hoá<a class="headerlink" href="#bat-au-voi-quy-trinh-ban-muon-tu-ong-hoa" title="Permanent link">&para;</a></h2>
+<p>Hãy tưởng tượng bạn cần xây dựng một AI agent xử lý email hỗ trợ khách hàng. Đội sản phẩm đã đưa ra các yêu cầu sau:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>The agent should:
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>- Read incoming customer emails
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>- Classify them by urgency and topic
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>- Search relevant documentation to answer questions
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>- Draft appropriate responses
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>- Escalate complex issues to human agents
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>- Schedule follow-ups when needed
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>Example scenarios to handle:
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>1. Simple product question: &quot;How do I reset my password?&quot;
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>2. Bug report: &quot;The export feature crashes when I select PDF format&quot;
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>3. Urgent billing issue: &quot;I was charged twice for my subscription!&quot;
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>4. Feature request: &quot;Can you add dark mode to the mobile app?&quot;
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>5. Complex technical issue: &quot;Our API integration fails intermittently with 504 errors&quot;
+</code></pre></div>
+<p>Để triển khai một agent trong LangGraph, bạn thường sẽ theo cùng năm bước sau.</p>
+<h2 id="step-1-map-out-your-workflow-as-discrete-steps">Bước 1: Vạch ra workflow của bạn thành các bước rời rạc<a class="headerlink" href="#step-1-map-out-your-workflow-as-discrete-steps" title="Permanent link">&para;</a></h2>
+<p>Bắt đầu bằng cách xác định các bước riêng biệt trong quy trình của bạn. Mỗi bước sẽ trở thành một <strong>node</strong> (một hàm làm đúng một việc cụ thể). Sau đó, phác thảo cách các bước này kết nối với nhau.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>flowchart TD
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    A[START] --&gt; B[Read Email]
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    B --&gt; C[Classify Intent]
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    C -.-&gt; D[Doc Search]
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    C -.-&gt; E[Bug Track]
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    C -.-&gt; F[Human Review]
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    D --&gt; G[Draft Reply]
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    E --&gt; G
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>    F --&gt; G
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>    G -.-&gt; H[Human Review]
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>    G -.-&gt; I[Send Reply]
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>    H --&gt; J[END]
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>    I --&gt; J[END]
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>    classDef process fill:#E5F4FF,stroke:#006DDD,stroke-width:2px,color:#030710
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>    class A,B,C,D,E,F,G,H,I,J process
+</code></pre></div>
+<p>Các mũi tên trong sơ đồ này chỉ ra các đường đi có thể, nhưng quyết định thực tế về đường nào sẽ được chọn diễn ra bên trong mỗi node.</p>
+<p>Giờ khi đã xác định các thành phần trong workflow, hãy hiểu xem mỗi node cần làm gì:</p>
+<ul>
+<li><code>Read Email</code>: Trích xuất và phân tích nội dung email</li>
+<li><code>Classify Intent</code>: Dùng một LLM để phân loại mức độ khẩn cấp và chủ đề, sau đó định tuyến tới hành động phù hợp</li>
+<li><code>Doc Search</code>: Truy vấn knowledge base để tìm thông tin liên quan</li>
+<li><code>Bug Track</code>: Tạo hoặc cập nhật issue trong hệ thống theo dõi</li>
+<li><code>Draft Reply</code>: Tạo một phản hồi phù hợp</li>
+<li><code>Human Review</code>: Chuyển lên cho nhân viên hỗ trợ để phê duyệt hoặc xử lý</li>
+<li><code>Send Reply</code>: Gửi email phản hồi</li>
+</ul>
+<div class="admonition tip">
+<p>Chú ý rằng một số node đưa ra quyết định về nơi cần đi tiếp theo (<code>Classify Intent</code>, <code>Draft Reply</code>, <code>Human Review</code>), trong khi các node khác luôn tiến tới cùng một bước tiếp theo (<code>Read Email</code> luôn đi tới <code>Classify Intent</code>, <code>Doc Search</code> luôn đi tới <code>Draft Reply</code>).</p>
+</div>
+<h2 id="buoc-2-xac-inh-moi-buoc-can-lam-gi">Bước 2: Xác định mỗi bước cần làm gì<a class="headerlink" href="#buoc-2-xac-inh-moi-buoc-can-lam-gi" title="Permanent link">&para;</a></h2>
+<p>Với mỗi node trong graph, hãy xác định loại thao tác mà nó đại diện và ngữ cảnh nó cần để hoạt động đúng.</p>
+<div class="grid cards">
+<ul>
+<li>
+<p><strong>:material-brain: LLM steps</strong></p>
+<p>Dùng khi bạn cần hiểu, phân tích, tạo văn bản, hoặc đưa ra quyết định suy luận</p>
+</li>
+<li>
+<p><strong>:material-database: Data steps</strong></p>
+<p>Dùng khi bạn cần lấy thông tin từ nguồn bên ngoài</p>
+</li>
+<li>
+<p><strong>:material-lightning-bolt: Action steps</strong></p>
+<p>Dùng khi bạn cần thực hiện các hành động bên ngoài</p>
+</li>
+<li>
+<p><strong>:material-account: User input steps</strong></p>
+<p>Dùng khi bạn cần sự can thiệp của con người</p>
+</li>
+</ul>
+</div>
+<h3 id="llm-steps">LLM steps<a class="headerlink" href="#llm-steps" title="Permanent link">&para;</a></h3>
+<p>Khi một bước cần hiểu, phân tích, tạo văn bản, hoặc đưa ra quyết định suy luận:</p>
+<details class="note">
+<summary>Classify intent</summary>
+<ul>
+<li>Ngữ cảnh tĩnh (prompt): Các danh mục phân loại, định nghĩa mức độ khẩn cấp, định dạng phản hồi</li>
+<li>Ngữ cảnh động (từ state): Nội dung email, thông tin người gửi</li>
+<li>Kết quả mong muốn: Phân loại có cấu trúc để xác định định tuyến</li>
+</ul>
+</details>
+<details class="note">
+<summary>Draft reply</summary>
+<ul>
+<li>Ngữ cảnh tĩnh (prompt): Hướng dẫn về giọng văn, chính sách công ty, mẫu phản hồi</li>
+<li>Ngữ cảnh động (từ state): Kết quả phân loại, kết quả tìm kiếm, lịch sử khách hàng</li>
+<li>Kết quả mong muốn: Email phản hồi chuyên nghiệp, sẵn sàng để xem xét</li>
+</ul>
+</details>
+<h3 id="data-steps">Data steps<a class="headerlink" href="#data-steps" title="Permanent link">&para;</a></h3>
+<p>Khi một bước cần lấy thông tin từ nguồn bên ngoài:</p>
+<details class="note">
+<summary>Document search</summary>
+<ul>
+<li>Tham số: Query được xây dựng từ intent và topic</li>
+<li>Chiến lược retry: Có, với exponential backoff cho các lỗi tạm thời</li>
+<li>Caching: Có thể cache các query phổ biến để giảm số lời gọi API</li>
+</ul>
+</details>
+<details class="note">
+<summary>Customer history lookup</summary>
+<ul>
+<li>Tham số: Email hoặc ID khách hàng từ state</li>
+<li>Chiến lược retry: Có, nhưng với fallback về thông tin cơ bản nếu không có sẵn</li>
+<li>Caching: Có, với time-to-live để cân bằng giữa độ mới và hiệu năng</li>
+</ul>
+</details>
+<h3 id="action-steps">Action steps<a class="headerlink" href="#action-steps" title="Permanent link">&para;</a></h3>
+<p>Khi một bước cần thực hiện một hành động bên ngoài:</p>
+<details class="note">
+<summary>Send reply</summary>
+<ul>
+<li>Khi nào thực thi node: Sau khi được phê duyệt (bởi con người hoặc tự động)</li>
+<li>Chiến lược retry: Có, với exponential backoff cho các vấn đề mạng</li>
+<li>Không nên cache: Mỗi lần gửi là một hành động duy nhất</li>
+</ul>
+</details>
+<details class="note">
+<summary>Bug track</summary>
+<ul>
+<li>Khi nào thực thi node: Luôn luôn khi intent là "bug"</li>
+<li>Chiến lược retry: Có, quan trọng để không mất báo cáo lỗi</li>
+<li>Trả về: Ticket ID để đưa vào phản hồi</li>
+</ul>
+</details>
+<h3 id="user-input-steps">User input steps<a class="headerlink" href="#user-input-steps" title="Permanent link">&para;</a></h3>
+<p>Khi một bước cần sự can thiệp của con người:</p>
+<details class="note">
+<summary>Human review node</summary>
+<ul>
+<li>Ngữ cảnh cho quyết định: Email gốc, phản hồi nháp, mức độ khẩn cấp, phân loại</li>
+<li>Định dạng input mong đợi: Boolean phê duyệt cùng phản hồi đã chỉnh sửa (tuỳ chọn)</li>
+<li>Khi nào được kích hoạt: Mức độ khẩn cấp cao, vấn đề phức tạp, hoặc lo ngại về chất lượng</li>
+</ul>
+</details>
+<h2 id="step-3-design-your-state">Bước 3: Thiết kế state của bạn<a class="headerlink" href="#step-3-design-your-state" title="Permanent link">&para;</a></h2>
+<p>State là bộ nhớ dùng chung mà tất cả node trong agent của bạn có thể truy cập. Hãy nghĩ về nó như cuốn sổ tay mà agent dùng để theo dõi mọi thứ nó học được và quyết định trong suốt quá trình.</p>
+<h3 id="cai-gi-thuoc-ve-state">Cái gì thuộc về state?<a class="headerlink" href="#cai-gi-thuoc-ve-state" title="Permanent link">&para;</a></h3>
+<p>Hãy tự hỏi những câu hỏi sau về mỗi mẩu dữ liệu:</p>
+<div class="grid cards">
+<ul>
+<li>
+<p><strong>:material-check: Đưa vào state</strong></p>
+<p>Nó có cần tồn tại xuyên suốt các bước không? Nếu có, nó thuộc về state.</p>
+</li>
+<li>
+<p><strong>:material-code-tags: Đừng lưu trữ</strong></p>
+<p>Bạn có thể suy ra nó từ dữ liệu khác không? Nếu có, hãy tính toán nó khi cần thay vì lưu vào state.</p>
+</li>
+</ul>
+</div>
+<p>Với agent email của ta, ta cần theo dõi:</p>
+<ul>
+<li>Email gốc và thông tin người gửi (không thể tái tạo lại sau này)</li>
+<li>Kết quả phân loại (cần cho nhiều node phía sau/downstream)</li>
+<li>Kết quả tìm kiếm và dữ liệu khách hàng (tốn kém để lấy lại)</li>
+<li>Phản hồi nháp (cần tồn tại xuyên suốt quá trình xem xét)</li>
+<li>Metadata thực thi (để debug và khôi phục)</li>
+</ul>
+<h3 id="giu-state-o-dang-tho-format-prompt-theo-yeu-cau">Giữ state ở dạng thô, format prompt theo yêu cầu<a class="headerlink" href="#giu-state-o-dang-tho-format-prompt-theo-yeu-cau" title="Permanent link">&para;</a></h3>
+<div class="admonition tip">
+<p>Một nguyên tắc chính: state của bạn nên lưu dữ liệu thô, không phải văn bản đã được format. Hãy format prompt bên trong node khi bạn cần chúng.</p>
+</div>
+<p>Sự tách biệt này có nghĩa là:</p>
+<ul>
+<li>Các node khác nhau có thể format cùng một dữ liệu theo cách khác nhau tuỳ nhu cầu</li>
+<li>Bạn có thể thay đổi prompt template mà không cần sửa state schema</li>
+<li>Việc debug rõ ràng hơn, bạn thấy chính xác dữ liệu nào mỗi node nhận được</li>
+<li>Agent của bạn có thể phát triển mà không phá vỡ state hiện có</li>
+</ul>
+<p>Hãy định nghĩa state của ta:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypedDict</span><span class="p">,</span> <span class="n">Literal</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1"># Define the structure for email classification</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="k">class</span><span class="w"> </span><span class="nc">EmailClassification</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    <span class="n">intent</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;question&quot;</span><span class="p">,</span> <span class="s2">&quot;bug&quot;</span><span class="p">,</span> <span class="s2">&quot;billing&quot;</span><span class="p">,</span> <span class="s2">&quot;feature&quot;</span><span class="p">,</span> <span class="s2">&quot;complex&quot;</span><span class="p">]</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    <span class="n">urgency</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;low&quot;</span><span class="p">,</span> <span class="s2">&quot;medium&quot;</span><span class="p">,</span> <span class="s2">&quot;high&quot;</span><span class="p">,</span> <span class="s2">&quot;critical&quot;</span><span class="p">]</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    <span class="n">topic</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    <span class="n">summary</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="k">class</span><span class="w"> </span><span class="nc">EmailAgentState</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>    <span class="c1"># Raw email data</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>    <span class="n">email_content</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>    <span class="n">sender_email</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>    <span class="n">email_id</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>    <span class="c1"># Classification result</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>    <span class="n">classification</span><span class="p">:</span> <span class="n">EmailClassification</span> <span class="o">|</span> <span class="kc">None</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>    <span class="c1"># Raw search/API results</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>    <span class="n">search_results</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span>  <span class="c1"># List of raw document chunks</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>    <span class="n">customer_history</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span>  <span class="c1"># Raw customer data from CRM</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>    <span class="c1"># Generated content</span>
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>    <span class="n">draft_response</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>    <span class="n">messages</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span>
+</code></pre></div>
+<p>Chú ý rằng state chỉ chứa dữ liệu thô, không có prompt template, không có chuỗi đã format, không có hướng dẫn. Output phân loại được lưu dưới dạng một dictionary duy nhất, lấy trực tiếp từ LLM.</p>
+<h2 id="step-4-build-your-nodes">Bước 4: Xây dựng các node của bạn<a class="headerlink" href="#step-4-build-your-nodes" title="Permanent link">&para;</a></h2>
+<p>Giờ ta triển khai mỗi bước dưới dạng một hàm. Một node trong LangGraph chỉ đơn giản là một hàm Python nhận state hiện tại và trả về các cập nhật cho nó.</p>
+<h3 id="handle-errors-appropriately">Xử lý lỗi phù hợp<a class="headerlink" href="#handle-errors-appropriately" title="Permanent link">&para;</a></h3>
+<p>Các loại lỗi khác nhau cần chiến lược xử lý khác nhau:</p>
+<table>
+<thead>
+<tr>
+<th>Loại lỗi</th>
+<th>Ai khắc phục</th>
+<th>Chiến lược</th>
+<th>Khi nào dùng</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Lỗi tạm thời (vấn đề mạng, rate limit)</td>
+<td>Hệ thống (tự động)</td>
+<td>Retry policy</td>
+<td>Lỗi tạm thời thường tự khỏi khi retry</td>
+</tr>
+<tr>
+<td>Lỗi LLM có thể khắc phục (tool thất bại, vấn đề parsing)</td>
+<td>LLM</td>
+<td>Lưu lỗi vào state và loop lại</td>
+<td>LLM có thể thấy lỗi và điều chỉnh cách tiếp cận</td>
+</tr>
+<tr>
+<td>Lỗi người dùng có thể khắc phục (thiếu thông tin, hướng dẫn không rõ)</td>
+<td>Con người</td>
+<td>Tạm dừng với <code>interrupt()</code></td>
+<td>Cần input người dùng để tiếp tục</td>
+</tr>
+<tr>
+<td>Lỗi có thể khắc phục sau khi retry</td>
+<td>Developer (khai báo)</td>
+<td><code>error_handler</code></td>
+<td>Chạy một nhánh bù trừ/khôi phục sau khi hết lượt retry</td>
+</tr>
+<tr>
+<td>Lỗi bất ngờ</td>
+<td>Developer</td>
+<td>Để nó nổi lên</td>
+<td>Vấn đề chưa biết cần debug</td>
+</tr>
+</tbody>
+</table>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:5"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Lỗi tạm thời</label><label for="__tabbed_1_2">LLM có thể khắc phục</label><label for="__tabbed_1_3">Người dùng có thể khắc phục</label><label for="__tabbed_1_4">Bất ngờ</label><label for="__tabbed_1_5">Saga / bù trừ</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>Thêm một retry policy để tự động retry các vấn đề mạng và rate limit.</p>
+<p>Kết hợp với <code>timeout=</code> để giới hạn mỗi lần thử. Xem <a href="../fault-tolerance/">Fault tolerance</a> để biết toàn bộ vòng đời.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">RetryPolicy</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">workflow</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="s2">&quot;search_documentation&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    <span class="n">search_documentation</span><span class="p">,</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="n">retry_policy</span><span class="o">=</span><span class="n">RetryPolicy</span><span class="p">(</span><span class="n">max_attempts</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">initial_interval</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="p">)</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<p>Lưu lỗi vào state và loop lại để LLM có thể thấy điều gì sai và thử lại:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">Command</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="k">def</span><span class="w"> </span><span class="nf">execute_tool</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">State</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Command</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;agent&quot;</span><span class="p">,</span> <span class="s2">&quot;execute_tool&quot;</span><span class="p">]]:</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>    <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>        <span class="n">result</span> <span class="o">=</span> <span class="n">run_tool</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="s1">&#39;tool_call&#39;</span><span class="p">])</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>        <span class="k">return</span> <span class="n">Command</span><span class="p">(</span><span class="n">update</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;tool_result&quot;</span><span class="p">:</span> <span class="n">result</span><span class="p">},</span> <span class="n">goto</span><span class="o">=</span><span class="s2">&quot;agent&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>    <span class="k">except</span> <span class="n">ToolError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>        <span class="c1"># Let the LLM see what went wrong and try again</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>        <span class="k">return</span> <span class="n">Command</span><span class="p">(</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>            <span class="n">update</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;tool_result&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Tool error: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">},</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>            <span class="n">goto</span><span class="o">=</span><span class="s2">&quot;agent&quot;</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>        <span class="p">)</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<p>Tạm dừng và thu thập thông tin từ người dùng khi cần (như account ID, số order, hoặc làm rõ):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">Command</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="k">def</span><span class="w"> </span><span class="nf">lookup_customer_history</span><span class="p">(</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>    <span class="n">state</span><span class="p">:</span> <span class="n">State</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Command</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;lookup_customer_history&quot;</span><span class="p">,</span> <span class="s2">&quot;draft_response&quot;</span><span class="p">]]:</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;customer_id&#39;</span><span class="p">):</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>        <span class="n">user_input</span> <span class="o">=</span> <span class="n">interrupt</span><span class="p">({</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>            <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Customer ID needed&quot;</span><span class="p">,</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>            <span class="s2">&quot;request&quot;</span><span class="p">:</span> <span class="s2">&quot;Please provide the customer&#39;s account ID to look up their subscription history&quot;</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>        <span class="p">})</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>        <span class="k">return</span> <span class="n">Command</span><span class="p">(</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>            <span class="n">update</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;customer_id&quot;</span><span class="p">:</span> <span class="n">user_input</span><span class="p">[</span><span class="s1">&#39;customer_id&#39;</span><span class="p">]},</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>            <span class="n">goto</span><span class="o">=</span><span class="s2">&quot;lookup_customer_history&quot;</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>        <span class="p">)</span>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>    <span class="c1"># Now proceed with the lookup</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a>    <span class="n">customer_data</span> <span class="o">=</span> <span class="n">fetch_customer_history</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="s1">&#39;customer_id&#39;</span><span class="p">])</span>
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a>    <span class="k">return</span> <span class="n">Command</span><span class="p">(</span><span class="n">update</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;customer_history&quot;</span><span class="p">:</span> <span class="n">customer_data</span><span class="p">},</span> <span class="n">goto</span><span class="o">=</span><span class="s2">&quot;draft_response&quot;</span><span class="p">)</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<p>Để chúng nổi lên để debug. Đừng bắt những gì bạn không thể xử lý:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">send_reply</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">EmailAgentState</span><span class="p">):</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>    <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>        <span class="n">email_service</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="s2">&quot;draft_response&quot;</span><span class="p">])</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>        <span class="k">raise</span>  <span class="c1"># Surface unexpected errors</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<p>Sau khi hết lượt retry, chạy một hàm khôi phục để cập nhật state và định tuyến tới một nhánh bù trừ.</p>
+<p>Xem <a href="../fault-tolerance/#error-handling">Fault tolerance</a> để biết toàn bộ pattern.</p>
+<div class="admonition note">
+<p><code>error_handler</code> yêu cầu <code>langgraph&gt;=1.2</code>.</p>
+</div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.errors</span><span class="w"> </span><span class="kn">import</span> <span class="n">NodeError</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">Command</span><span class="p">,</span> <span class="n">RetryPolicy</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="k">def</span><span class="w"> </span><span class="nf">payment_error_handler</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">State</span><span class="p">,</span> <span class="n">error</span><span class="p">:</span> <span class="n">NodeError</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Command</span><span class="p">:</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    <span class="k">return</span> <span class="n">Command</span><span class="p">(</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>        <span class="n">update</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;compensated: </span><span class="si">{</span><span class="n">error</span><span class="o">.</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">},</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>        <span class="n">goto</span><span class="o">=</span><span class="s2">&quot;finalize&quot;</span><span class="p">,</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>    <span class="p">)</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="n">workflow</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>    <span class="s2">&quot;charge_payment&quot;</span><span class="p">,</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>    <span class="n">charge_payment</span><span class="p">,</span>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>    <span class="n">retry_policy</span><span class="o">=</span><span class="n">RetryPolicy</span><span class="p">(</span><span class="n">max_attempts</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">retry_on</span><span class="o">=</span><span class="ne">ConnectionError</span><span class="p">),</span>
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>    <span class="n">error_handler</span><span class="o">=</span><span class="n">payment_error_handler</span><span class="p">,</span>
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="p">)</span>
+</code></pre></div>
+<p>Để áp dụng cùng <code>retry_policy</code>, <code>timeout</code>, hoặc <code>error_handler</code> cho mọi node trong một graph mà không cần lặp lại chúng trên mỗi <code>add_node</code>, hãy dùng <code>StateGraph.set_node_defaults(...)</code>. Giá trị theo từng node vẫn được ưu tiên hơn. Xem <a href="../fault-tolerance/#graph-defaults">Fault tolerance</a>.</p>
+</div>
+</div>
+</div>
+<h3 id="trien-khai-cac-node-cho-agent-email-cua-ta">Triển khai các node cho agent email của ta<a class="headerlink" href="#trien-khai-cac-node-cho-agent-email-cua-ta" title="Permanent link">&para;</a></h3>
+<p>Ta sẽ triển khai mỗi node dưới dạng một hàm đơn giản. Ghi nhớ: node nhận state, làm việc, và trả về cập nhật.</p>
+<details class="note">
+<summary>Read and classify nodes</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.graph</span><span class="w"> </span><span class="kn">import</span> <span class="n">StateGraph</span><span class="p">,</span> <span class="n">START</span><span class="p">,</span> <span class="n">END</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">interrupt</span><span class="p">,</span> <span class="n">Command</span><span class="p">,</span> <span class="n">RetryPolicy</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langchain_openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChatOpenAI</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langchain.messages</span><span class="w"> </span><span class="kn">import</span> <span class="n">HumanMessage</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="n">llm</span> <span class="o">=</span> <span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-5-nano&quot;</span><span class="p">)</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="k">def</span><span class="w"> </span><span class="nf">read_email</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">EmailAgentState</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract and parse email content&quot;&quot;&quot;</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>    <span class="c1"># In production, this would connect to your email service</span>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>    <span class="k">return</span> <span class="p">{</span>
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>        <span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Processing email: </span><span class="si">{</span><span class="n">state</span><span class="p">[</span><span class="s1">&#39;email_content&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)]</span>
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>    <span class="p">}</span>
+<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a>
+<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a><span class="k">def</span><span class="w"> </span><span class="nf">classify_intent</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">EmailAgentState</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Command</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;search_documentation&quot;</span><span class="p">,</span> <span class="s2">&quot;human_review&quot;</span><span class="p">,</span> <span class="s2">&quot;draft_response&quot;</span><span class="p">,</span> <span class="s2">&quot;bug_tracking&quot;</span><span class="p">]]:</span>
+<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Use LLM to classify email intent and urgency, then route accordingly&quot;&quot;&quot;</span>
+<a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a>
+<a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a>    <span class="c1"># Create structured LLM that returns EmailClassification dict</span>
+<a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a>    <span class="n">structured_llm</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">with_structured_output</span><span class="p">(</span><span class="n">EmailClassification</span><span class="p">)</span>
+<a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a>
+<a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a>    <span class="c1"># Format the prompt on-demand, not stored in state</span>
+<a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a>    <span class="n">classification_prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<a id="__codelineno-8-24" name="__codelineno-8-24" href="#__codelineno-8-24"></a><span class="s2">    Analyze this customer email and classify it:</span>
+<a id="__codelineno-8-25" name="__codelineno-8-25" href="#__codelineno-8-25"></a>
+<a id="__codelineno-8-26" name="__codelineno-8-26" href="#__codelineno-8-26"></a><span class="s2">    Email: </span><span class="si">{</span><span class="n">state</span><span class="p">[</span><span class="s1">&#39;email_content&#39;</span><span class="p">]</span><span class="si">}</span>
+<a id="__codelineno-8-27" name="__codelineno-8-27" href="#__codelineno-8-27"></a><span class="s2">    From: </span><span class="si">{</span><span class="n">state</span><span class="p">[</span><span class="s1">&#39;sender_email&#39;</span><span class="p">]</span><span class="si">}</span>
+<a id="__codelineno-8-28" name="__codelineno-8-28" href="#__codelineno-8-28"></a>
+<a id="__codelineno-8-29" name="__codelineno-8-29" href="#__codelineno-8-29"></a><span class="s2">    Provide classification including intent, urgency, topic, and summary.</span>
+<a id="__codelineno-8-30" name="__codelineno-8-30" href="#__codelineno-8-30"></a><span class="s2">    &quot;&quot;&quot;</span>
+<a id="__codelineno-8-31" name="__codelineno-8-31" href="#__codelineno-8-31"></a>
+<a id="__codelineno-8-32" name="__codelineno-8-32" href="#__codelineno-8-32"></a>    <span class="c1"># Get structured response directly as dict</span>
+<a id="__codelineno-8-33" name="__codelineno-8-33" href="#__codelineno-8-33"></a>    <span class="n">classification</span> <span class="o">=</span> <span class="n">structured_llm</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="n">classification_prompt</span><span class="p">)</span>
+<a id="__codelineno-8-34" name="__codelineno-8-34" href="#__codelineno-8-34"></a>
+<a id="__codelineno-8-35" name="__codelineno-8-35" href="#__codelineno-8-35"></a>    <span class="c1"># Determine next node based on classification</span>
+<a id="__codelineno-8-36" name="__codelineno-8-36" href="#__codelineno-8-36"></a>    <span class="k">if</span> <span class="n">classification</span><span class="p">[</span><span class="s1">&#39;intent&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;billing&#39;</span> <span class="ow">or</span> <span class="n">classification</span><span class="p">[</span><span class="s1">&#39;urgency&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;critical&#39;</span><span class="p">:</span>
+<a id="__codelineno-8-37" name="__codelineno-8-37" href="#__codelineno-8-37"></a>        <span class="n">goto</span> <span class="o">=</span> <span class="s2">&quot;human_review&quot;</span>
+<a id="__codelineno-8-38" name="__codelineno-8-38" href="#__codelineno-8-38"></a>    <span class="k">elif</span> <span class="n">classification</span><span class="p">[</span><span class="s1">&#39;intent&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;question&#39;</span><span class="p">,</span> <span class="s1">&#39;feature&#39;</span><span class="p">]:</span>
+<a id="__codelineno-8-39" name="__codelineno-8-39" href="#__codelineno-8-39"></a>        <span class="n">goto</span> <span class="o">=</span> <span class="s2">&quot;search_documentation&quot;</span>
+<a id="__codelineno-8-40" name="__codelineno-8-40" href="#__codelineno-8-40"></a>    <span class="k">elif</span> <span class="n">classification</span><span class="p">[</span><span class="s1">&#39;intent&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;bug&#39;</span><span class="p">:</span>
+<a id="__codelineno-8-41" name="__codelineno-8-41" href="#__codelineno-8-41"></a>        <span class="n">goto</span> <span class="o">=</span> <span class="s2">&quot;bug_tracking&quot;</span>
+<a id="__codelineno-8-42" name="__codelineno-8-42" href="#__codelineno-8-42"></a>    <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-8-43" name="__codelineno-8-43" href="#__codelineno-8-43"></a>        <span class="n">goto</span> <span class="o">=</span> <span class="s2">&quot;draft_response&quot;</span>
+<a id="__codelineno-8-44" name="__codelineno-8-44" href="#__codelineno-8-44"></a>
+<a id="__codelineno-8-45" name="__codelineno-8-45" href="#__codelineno-8-45"></a>    <span class="c1"># Store classification as a single dict in state</span>
+<a id="__codelineno-8-46" name="__codelineno-8-46" href="#__codelineno-8-46"></a>    <span class="k">return</span> <span class="n">Command</span><span class="p">(</span>
+<a id="__codelineno-8-47" name="__codelineno-8-47" href="#__codelineno-8-47"></a>        <span class="n">update</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;classification&quot;</span><span class="p">:</span> <span class="n">classification</span><span class="p">},</span>
+<a id="__codelineno-8-48" name="__codelineno-8-48" href="#__codelineno-8-48"></a>        <span class="n">goto</span><span class="o">=</span><span class="n">goto</span>
+<a id="__codelineno-8-49" name="__codelineno-8-49" href="#__codelineno-8-49"></a>    <span class="p">)</span>
+</code></pre></div>
+</details>
+<details class="note">
+<summary>Search and tracking nodes</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">search_documentation</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">EmailAgentState</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Command</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;draft_response&quot;</span><span class="p">]]:</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Search knowledge base for relevant information&quot;&quot;&quot;</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>    <span class="c1"># Build search query from classification</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>    <span class="n">classification</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;classification&#39;</span><span class="p">,</span> <span class="p">{})</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>    <span class="n">query</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">classification</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;intent&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">classification</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;topic&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>    <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>        <span class="c1"># Implement your search logic here</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>        <span class="c1"># Store raw search results, not formatted text</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>        <span class="n">search_results</span> <span class="o">=</span> <span class="p">[</span>
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>            <span class="s2">&quot;Reset password via Settings &gt; Security &gt; Change Password&quot;</span><span class="p">,</span>
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>            <span class="s2">&quot;Password must be at least 12 characters&quot;</span><span class="p">,</span>
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>            <span class="s2">&quot;Include uppercase, lowercase, numbers, and symbols&quot;</span>
+<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>        <span class="p">]</span>
+<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a>    <span class="k">except</span> <span class="n">SearchAPIError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a>        <span class="c1"># For recoverable search errors, store error and continue</span>
+<a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a>        <span class="n">search_results</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Search temporarily unavailable: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
+<a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a>
+<a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a>    <span class="k">return</span> <span class="n">Command</span><span class="p">(</span>
+<a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a>        <span class="n">update</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;search_results&quot;</span><span class="p">:</span> <span class="n">search_results</span><span class="p">},</span>  <span class="c1"># Store raw results or error</span>
+<a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a>        <span class="n">goto</span><span class="o">=</span><span class="s2">&quot;draft_response&quot;</span>
+<a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a>    <span class="p">)</span>
+<a id="__codelineno-9-24" name="__codelineno-9-24" href="#__codelineno-9-24"></a>
+<a id="__codelineno-9-25" name="__codelineno-9-25" href="#__codelineno-9-25"></a><span class="k">def</span><span class="w"> </span><span class="nf">bug_tracking</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">EmailAgentState</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Command</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;draft_response&quot;</span><span class="p">]]:</span>
+<a id="__codelineno-9-26" name="__codelineno-9-26" href="#__codelineno-9-26"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Create or update bug tracking ticket&quot;&quot;&quot;</span>
+<a id="__codelineno-9-27" name="__codelineno-9-27" href="#__codelineno-9-27"></a>
+<a id="__codelineno-9-28" name="__codelineno-9-28" href="#__codelineno-9-28"></a>    <span class="c1"># Create ticket in your bug tracking system</span>
+<a id="__codelineno-9-29" name="__codelineno-9-29" href="#__codelineno-9-29"></a>    <span class="n">ticket_id</span> <span class="o">=</span> <span class="s2">&quot;BUG-12345&quot;</span>  <span class="c1"># Would be created via API</span>
+<a id="__codelineno-9-30" name="__codelineno-9-30" href="#__codelineno-9-30"></a>
+<a id="__codelineno-9-31" name="__codelineno-9-31" href="#__codelineno-9-31"></a>    <span class="k">return</span> <span class="n">Command</span><span class="p">(</span>
+<a id="__codelineno-9-32" name="__codelineno-9-32" href="#__codelineno-9-32"></a>        <span class="n">update</span><span class="o">=</span><span class="p">{</span>
+<a id="__codelineno-9-33" name="__codelineno-9-33" href="#__codelineno-9-33"></a>            <span class="s2">&quot;search_results&quot;</span><span class="p">:</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Bug ticket </span><span class="si">{</span><span class="n">ticket_id</span><span class="si">}</span><span class="s2"> created&quot;</span><span class="p">],</span>
+<a id="__codelineno-9-34" name="__codelineno-9-34" href="#__codelineno-9-34"></a>            <span class="s2">&quot;current_step&quot;</span><span class="p">:</span> <span class="s2">&quot;bug_tracked&quot;</span>
+<a id="__codelineno-9-35" name="__codelineno-9-35" href="#__codelineno-9-35"></a>        <span class="p">},</span>
+<a id="__codelineno-9-36" name="__codelineno-9-36" href="#__codelineno-9-36"></a>        <span class="n">goto</span><span class="o">=</span><span class="s2">&quot;draft_response&quot;</span>
+<a id="__codelineno-9-37" name="__codelineno-9-37" href="#__codelineno-9-37"></a>    <span class="p">)</span>
+</code></pre></div>
+</details>
+<details class="note">
+<summary>Response nodes</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">draft_response</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">EmailAgentState</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Command</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;human_review&quot;</span><span class="p">,</span> <span class="s2">&quot;send_reply&quot;</span><span class="p">]]:</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate response using context and route based on quality&quot;&quot;&quot;</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>    <span class="n">classification</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;classification&#39;</span><span class="p">,</span> <span class="p">{})</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>    <span class="c1"># Format context from raw state data on-demand</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>    <span class="n">context_sections</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>    <span class="k">if</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;search_results&#39;</span><span class="p">):</span>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>        <span class="c1"># Format search results for the prompt</span>
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>        <span class="n">formatted_docs</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;- </span><span class="si">{</span><span class="n">doc</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">state</span><span class="p">[</span><span class="s1">&#39;search_results&#39;</span><span class="p">]])</span>
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>        <span class="n">context_sections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Relevant documentation:</span><span class="se">\n</span><span class="si">{</span><span class="n">formatted_docs</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>    <span class="k">if</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;customer_history&#39;</span><span class="p">):</span>
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a>        <span class="c1"># Format customer data for the prompt</span>
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a>        <span class="n">context_sections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Customer tier: </span><span class="si">{</span><span class="n">state</span><span class="p">[</span><span class="s1">&#39;customer_history&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tier&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;standard&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a>
+<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a>    <span class="c1"># Build the prompt with formatted context</span>
+<a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a>    <span class="n">draft_prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a><span class="s2">    Draft a response to this customer email:</span>
+<a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a><span class="s2">    </span><span class="si">{</span><span class="n">state</span><span class="p">[</span><span class="s1">&#39;email_content&#39;</span><span class="p">]</span><span class="si">}</span>
+<a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a>
+<a id="__codelineno-10-23" name="__codelineno-10-23" href="#__codelineno-10-23"></a><span class="s2">    Email intent: </span><span class="si">{</span><span class="n">classification</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;intent&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;unknown&#39;</span><span class="p">)</span><span class="si">}</span>
+<a id="__codelineno-10-24" name="__codelineno-10-24" href="#__codelineno-10-24"></a><span class="s2">    Urgency level: </span><span class="si">{</span><span class="n">classification</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;urgency&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;medium&#39;</span><span class="p">)</span><span class="si">}</span>
+<a id="__codelineno-10-25" name="__codelineno-10-25" href="#__codelineno-10-25"></a>
+<a id="__codelineno-10-26" name="__codelineno-10-26" href="#__codelineno-10-26"></a><span class="s2">    </span><span class="si">{</span><span class="nb">chr</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">context_sections</span><span class="p">)</span><span class="si">}</span>
+<a id="__codelineno-10-27" name="__codelineno-10-27" href="#__codelineno-10-27"></a>
+<a id="__codelineno-10-28" name="__codelineno-10-28" href="#__codelineno-10-28"></a><span class="s2">    Guidelines:</span>
+<a id="__codelineno-10-29" name="__codelineno-10-29" href="#__codelineno-10-29"></a><span class="s2">    - Be professional and helpful</span>
+<a id="__codelineno-10-30" name="__codelineno-10-30" href="#__codelineno-10-30"></a><span class="s2">    - Address their specific concern</span>
+<a id="__codelineno-10-31" name="__codelineno-10-31" href="#__codelineno-10-31"></a><span class="s2">    - Use the provided documentation when relevant</span>
+<a id="__codelineno-10-32" name="__codelineno-10-32" href="#__codelineno-10-32"></a><span class="s2">    &quot;&quot;&quot;</span>
+<a id="__codelineno-10-33" name="__codelineno-10-33" href="#__codelineno-10-33"></a>
+<a id="__codelineno-10-34" name="__codelineno-10-34" href="#__codelineno-10-34"></a>    <span class="n">response</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="n">draft_prompt</span><span class="p">)</span>
+<a id="__codelineno-10-35" name="__codelineno-10-35" href="#__codelineno-10-35"></a>
+<a id="__codelineno-10-36" name="__codelineno-10-36" href="#__codelineno-10-36"></a>    <span class="c1"># Determine if human review needed based on urgency and intent</span>
+<a id="__codelineno-10-37" name="__codelineno-10-37" href="#__codelineno-10-37"></a>    <span class="n">needs_review</span> <span class="o">=</span> <span class="p">(</span>
+<a id="__codelineno-10-38" name="__codelineno-10-38" href="#__codelineno-10-38"></a>        <span class="n">classification</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;urgency&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;high&#39;</span><span class="p">,</span> <span class="s1">&#39;critical&#39;</span><span class="p">]</span> <span class="ow">or</span>
+<a id="__codelineno-10-39" name="__codelineno-10-39" href="#__codelineno-10-39"></a>        <span class="n">classification</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;intent&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;complex&#39;</span>
+<a id="__codelineno-10-40" name="__codelineno-10-40" href="#__codelineno-10-40"></a>    <span class="p">)</span>
+<a id="__codelineno-10-41" name="__codelineno-10-41" href="#__codelineno-10-41"></a>
+<a id="__codelineno-10-42" name="__codelineno-10-42" href="#__codelineno-10-42"></a>    <span class="c1"># Route to appropriate next node</span>
+<a id="__codelineno-10-43" name="__codelineno-10-43" href="#__codelineno-10-43"></a>    <span class="n">goto</span> <span class="o">=</span> <span class="s2">&quot;human_review&quot;</span> <span class="k">if</span> <span class="n">needs_review</span> <span class="k">else</span> <span class="s2">&quot;send_reply&quot;</span>
+<a id="__codelineno-10-44" name="__codelineno-10-44" href="#__codelineno-10-44"></a>
+<a id="__codelineno-10-45" name="__codelineno-10-45" href="#__codelineno-10-45"></a>    <span class="k">return</span> <span class="n">Command</span><span class="p">(</span>
+<a id="__codelineno-10-46" name="__codelineno-10-46" href="#__codelineno-10-46"></a>        <span class="n">update</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;draft_response&quot;</span><span class="p">:</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">},</span>  <span class="c1"># Store only the raw response</span>
+<a id="__codelineno-10-47" name="__codelineno-10-47" href="#__codelineno-10-47"></a>        <span class="n">goto</span><span class="o">=</span><span class="n">goto</span>
+<a id="__codelineno-10-48" name="__codelineno-10-48" href="#__codelineno-10-48"></a>    <span class="p">)</span>
+<a id="__codelineno-10-49" name="__codelineno-10-49" href="#__codelineno-10-49"></a>
+<a id="__codelineno-10-50" name="__codelineno-10-50" href="#__codelineno-10-50"></a><span class="k">def</span><span class="w"> </span><span class="nf">human_review</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">EmailAgentState</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Command</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;send_reply&quot;</span><span class="p">,</span> <span class="n">END</span><span class="p">]]:</span>
+<a id="__codelineno-10-51" name="__codelineno-10-51" href="#__codelineno-10-51"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Pause for human review using interrupt and route based on decision&quot;&quot;&quot;</span>
+<a id="__codelineno-10-52" name="__codelineno-10-52" href="#__codelineno-10-52"></a>
+<a id="__codelineno-10-53" name="__codelineno-10-53" href="#__codelineno-10-53"></a>    <span class="n">classification</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;classification&#39;</span><span class="p">,</span> <span class="p">{})</span>
+<a id="__codelineno-10-54" name="__codelineno-10-54" href="#__codelineno-10-54"></a>
+<a id="__codelineno-10-55" name="__codelineno-10-55" href="#__codelineno-10-55"></a>    <span class="c1"># interrupt() must come first - any code before it will re-run on resume</span>
+<a id="__codelineno-10-56" name="__codelineno-10-56" href="#__codelineno-10-56"></a>    <span class="n">human_decision</span> <span class="o">=</span> <span class="n">interrupt</span><span class="p">({</span>
+<a id="__codelineno-10-57" name="__codelineno-10-57" href="#__codelineno-10-57"></a>        <span class="s2">&quot;email_id&quot;</span><span class="p">:</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;email_id&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">),</span>
+<a id="__codelineno-10-58" name="__codelineno-10-58" href="#__codelineno-10-58"></a>        <span class="s2">&quot;original_email&quot;</span><span class="p">:</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;email_content&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">),</span>
+<a id="__codelineno-10-59" name="__codelineno-10-59" href="#__codelineno-10-59"></a>        <span class="s2">&quot;draft_response&quot;</span><span class="p">:</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;draft_response&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">),</span>
+<a id="__codelineno-10-60" name="__codelineno-10-60" href="#__codelineno-10-60"></a>        <span class="s2">&quot;urgency&quot;</span><span class="p">:</span> <span class="n">classification</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;urgency&#39;</span><span class="p">),</span>
+<a id="__codelineno-10-61" name="__codelineno-10-61" href="#__codelineno-10-61"></a>        <span class="s2">&quot;intent&quot;</span><span class="p">:</span> <span class="n">classification</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;intent&#39;</span><span class="p">),</span>
+<a id="__codelineno-10-62" name="__codelineno-10-62" href="#__codelineno-10-62"></a>        <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;Please review and approve/edit this response&quot;</span>
+<a id="__codelineno-10-63" name="__codelineno-10-63" href="#__codelineno-10-63"></a>    <span class="p">})</span>
+<a id="__codelineno-10-64" name="__codelineno-10-64" href="#__codelineno-10-64"></a>
+<a id="__codelineno-10-65" name="__codelineno-10-65" href="#__codelineno-10-65"></a>    <span class="c1"># Now process the human&#39;s decision</span>
+<a id="__codelineno-10-66" name="__codelineno-10-66" href="#__codelineno-10-66"></a>    <span class="k">if</span> <span class="n">human_decision</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;approved&quot;</span><span class="p">):</span>
+<a id="__codelineno-10-67" name="__codelineno-10-67" href="#__codelineno-10-67"></a>        <span class="k">return</span> <span class="n">Command</span><span class="p">(</span>
+<a id="__codelineno-10-68" name="__codelineno-10-68" href="#__codelineno-10-68"></a>            <span class="n">update</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;draft_response&quot;</span><span class="p">:</span> <span class="n">human_decision</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;edited_response&quot;</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;draft_response&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">))},</span>
+<a id="__codelineno-10-69" name="__codelineno-10-69" href="#__codelineno-10-69"></a>            <span class="n">goto</span><span class="o">=</span><span class="s2">&quot;send_reply&quot;</span>
+<a id="__codelineno-10-70" name="__codelineno-10-70" href="#__codelineno-10-70"></a>        <span class="p">)</span>
+<a id="__codelineno-10-71" name="__codelineno-10-71" href="#__codelineno-10-71"></a>    <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-10-72" name="__codelineno-10-72" href="#__codelineno-10-72"></a>        <span class="c1"># Rejection means human will handle directly</span>
+<a id="__codelineno-10-73" name="__codelineno-10-73" href="#__codelineno-10-73"></a>        <span class="k">return</span> <span class="n">Command</span><span class="p">(</span><span class="n">update</span><span class="o">=</span><span class="p">{},</span> <span class="n">goto</span><span class="o">=</span><span class="n">END</span><span class="p">)</span>
+<a id="__codelineno-10-74" name="__codelineno-10-74" href="#__codelineno-10-74"></a>
+<a id="__codelineno-10-75" name="__codelineno-10-75" href="#__codelineno-10-75"></a><span class="k">def</span><span class="w"> </span><span class="nf">send_reply</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">EmailAgentState</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<a id="__codelineno-10-76" name="__codelineno-10-76" href="#__codelineno-10-76"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Send the email response&quot;&quot;&quot;</span>
+<a id="__codelineno-10-77" name="__codelineno-10-77" href="#__codelineno-10-77"></a>    <span class="c1"># Integrate with email service</span>
+<a id="__codelineno-10-78" name="__codelineno-10-78" href="#__codelineno-10-78"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Sending reply: </span><span class="si">{</span><span class="n">state</span><span class="p">[</span><span class="s1">&#39;draft_response&#39;</span><span class="p">][:</span><span class="mi">100</span><span class="p">]</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
+<a id="__codelineno-10-79" name="__codelineno-10-79" href="#__codelineno-10-79"></a>    <span class="k">return</span> <span class="p">{}</span>
+</code></pre></div>
+</details>
+<h2 id="step-5-wire-it-together">Bước 5: Nối tất cả lại<a class="headerlink" href="#step-5-wire-it-together" title="Permanent link">&para;</a></h2>
+<p>Giờ ta kết nối các node của mình thành một graph hoạt động. Vì các node của ta tự xử lý quyết định định tuyến của mình, ta chỉ cần một vài cạnh (edge) thiết yếu.</p>
+<p>Để bật <a href="../interrupts/">human-in-the-loop</a> với <code>interrupt()</code>, ta cần compile với một <a href="../persistence/">checkpointer</a> để lưu state giữa các lần chạy:</p>
+<details class="note">
+<summary>Graph compilation code</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.checkpoint.memory</span><span class="w"> </span><span class="kn">import</span> <span class="n">MemorySaver</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">RetryPolicy</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="c1"># Create the graph</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="n">workflow</span> <span class="o">=</span> <span class="n">StateGraph</span><span class="p">(</span><span class="n">EmailAgentState</span><span class="p">)</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="c1"># Add nodes with appropriate error handling</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="n">workflow</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;read_email&quot;</span><span class="p">,</span> <span class="n">read_email</span><span class="p">)</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="n">workflow</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;classify_intent&quot;</span><span class="p">,</span> <span class="n">classify_intent</span><span class="p">)</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="c1"># Add retry policy for nodes that might have transient failures</span>
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="n">workflow</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span>
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a>    <span class="s2">&quot;search_documentation&quot;</span><span class="p">,</span>
+<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a>    <span class="n">search_documentation</span><span class="p">,</span>
+<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a>    <span class="n">retry_policy</span><span class="o">=</span><span class="n">RetryPolicy</span><span class="p">(</span><span class="n">max_attempts</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a><span class="p">)</span>
+<a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a><span class="n">workflow</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;bug_tracking&quot;</span><span class="p">,</span> <span class="n">bug_tracking</span><span class="p">)</span>
+<a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a><span class="n">workflow</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;draft_response&quot;</span><span class="p">,</span> <span class="n">draft_response</span><span class="p">)</span>
+<a id="__codelineno-11-19" name="__codelineno-11-19" href="#__codelineno-11-19"></a><span class="n">workflow</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;human_review&quot;</span><span class="p">,</span> <span class="n">human_review</span><span class="p">)</span>
+<a id="__codelineno-11-20" name="__codelineno-11-20" href="#__codelineno-11-20"></a><span class="n">workflow</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;send_reply&quot;</span><span class="p">,</span> <span class="n">send_reply</span><span class="p">)</span>
+<a id="__codelineno-11-21" name="__codelineno-11-21" href="#__codelineno-11-21"></a>
+<a id="__codelineno-11-22" name="__codelineno-11-22" href="#__codelineno-11-22"></a><span class="c1"># Add only the essential edges</span>
+<a id="__codelineno-11-23" name="__codelineno-11-23" href="#__codelineno-11-23"></a><span class="n">workflow</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">START</span><span class="p">,</span> <span class="s2">&quot;read_email&quot;</span><span class="p">)</span>
+<a id="__codelineno-11-24" name="__codelineno-11-24" href="#__codelineno-11-24"></a><span class="n">workflow</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;read_email&quot;</span><span class="p">,</span> <span class="s2">&quot;classify_intent&quot;</span><span class="p">)</span>
+<a id="__codelineno-11-25" name="__codelineno-11-25" href="#__codelineno-11-25"></a><span class="n">workflow</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;send_reply&quot;</span><span class="p">,</span> <span class="n">END</span><span class="p">)</span>
+<a id="__codelineno-11-26" name="__codelineno-11-26" href="#__codelineno-11-26"></a>
+<a id="__codelineno-11-27" name="__codelineno-11-27" href="#__codelineno-11-27"></a><span class="c1"># Compile with checkpointer for persistence, in case run graph with Local_Server --&gt; Please compile without checkpointer</span>
+<a id="__codelineno-11-28" name="__codelineno-11-28" href="#__codelineno-11-28"></a><span class="n">memory</span> <span class="o">=</span> <span class="n">MemorySaver</span><span class="p">()</span>
+<a id="__codelineno-11-29" name="__codelineno-11-29" href="#__codelineno-11-29"></a><span class="n">app</span> <span class="o">=</span> <span class="n">workflow</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">checkpointer</span><span class="o">=</span><span class="n">memory</span><span class="p">)</span>
+</code></pre></div>
+</details>
+<p>Cấu trúc graph này tối giản vì việc định tuyến diễn ra bên trong các node thông qua đối tượng <a href="https://reference.langchain.com/python/langgraph/types/Command"><code>Command</code></a>. Mỗi node khai báo nơi nó có thể đi tới bằng type hint như <code>Command[Literal["node1", "node2"]]</code>, giúp luồng thực thi rõ ràng và có thể truy vết.</p>
+<h3 id="thu-nghiem-agent-cua-ban">Thử nghiệm agent của bạn<a class="headerlink" href="#thu-nghiem-agent-cua-ban" title="Permanent link">&para;</a></h3>
+<p>Hãy chạy agent với một vấn đề thanh toán khẩn cấp cần con người xem xét:</p>
+<details class="note">
+<summary>Testing the agent</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypedDict</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.checkpoint.memory</span><span class="w"> </span><span class="kn">import</span> <span class="n">InMemorySaver</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.graph</span><span class="w"> </span><span class="kn">import</span> <span class="n">END</span><span class="p">,</span> <span class="n">START</span><span class="p">,</span> <span class="n">StateGraph</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">Command</span><span class="p">,</span> <span class="n">interrupt</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="k">class</span><span class="w"> </span><span class="nc">EmailState</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>    <span class="n">email_content</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>    <span class="n">response_text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a>
+<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a>
+<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a><span class="k">def</span><span class="w"> </span><span class="nf">human_review_node</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">EmailState</span><span class="p">):</span>
+<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a>    <span class="n">interrupt</span><span class="p">(</span>
+<a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a>        <span class="p">{</span>
+<a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a>            <span class="s2">&quot;approved&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+<a id="__codelineno-12-17" name="__codelineno-12-17" href="#__codelineno-12-17"></a>            <span class="s2">&quot;edited_response&quot;</span><span class="p">:</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;response_text&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+<a id="__codelineno-12-18" name="__codelineno-12-18" href="#__codelineno-12-18"></a>        <span class="p">}</span>
+<a id="__codelineno-12-19" name="__codelineno-12-19" href="#__codelineno-12-19"></a>    <span class="p">)</span>
+<a id="__codelineno-12-20" name="__codelineno-12-20" href="#__codelineno-12-20"></a>    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;response_text&quot;</span><span class="p">:</span> <span class="s2">&quot;placeholder&quot;</span><span class="p">}</span>
+<a id="__codelineno-12-21" name="__codelineno-12-21" href="#__codelineno-12-21"></a>
+<a id="__codelineno-12-22" name="__codelineno-12-22" href="#__codelineno-12-22"></a>
+<a id="__codelineno-12-23" name="__codelineno-12-23" href="#__codelineno-12-23"></a><span class="n">app</span> <span class="o">=</span> <span class="p">(</span>
+<a id="__codelineno-12-24" name="__codelineno-12-24" href="#__codelineno-12-24"></a>    <span class="n">StateGraph</span><span class="p">(</span><span class="n">EmailState</span><span class="p">)</span>
+<a id="__codelineno-12-25" name="__codelineno-12-25" href="#__codelineno-12-25"></a>    <span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;human_review&quot;</span><span class="p">,</span> <span class="n">human_review_node</span><span class="p">)</span>
+<a id="__codelineno-12-26" name="__codelineno-12-26" href="#__codelineno-12-26"></a>    <span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">START</span><span class="p">,</span> <span class="s2">&quot;human_review&quot;</span><span class="p">)</span>
+<a id="__codelineno-12-27" name="__codelineno-12-27" href="#__codelineno-12-27"></a>    <span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;human_review&quot;</span><span class="p">,</span> <span class="n">END</span><span class="p">)</span>
+<a id="__codelineno-12-28" name="__codelineno-12-28" href="#__codelineno-12-28"></a>    <span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">checkpointer</span><span class="o">=</span><span class="n">InMemorySaver</span><span class="p">())</span>
+<a id="__codelineno-12-29" name="__codelineno-12-29" href="#__codelineno-12-29"></a><span class="p">)</span>
+<a id="__codelineno-12-30" name="__codelineno-12-30" href="#__codelineno-12-30"></a>
+<a id="__codelineno-12-31" name="__codelineno-12-31" href="#__codelineno-12-31"></a><span class="n">initial_state</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-12-32" name="__codelineno-12-32" href="#__codelineno-12-32"></a>    <span class="s2">&quot;email_content&quot;</span><span class="p">:</span> <span class="s2">&quot;I was charged twice for my subscription! This is urgent!&quot;</span><span class="p">,</span>
+<a id="__codelineno-12-33" name="__codelineno-12-33" href="#__codelineno-12-33"></a>    <span class="s2">&quot;response_text&quot;</span><span class="p">:</span> <span class="s2">&quot;Draft response&quot;</span><span class="p">,</span>
+<a id="__codelineno-12-34" name="__codelineno-12-34" href="#__codelineno-12-34"></a><span class="p">}</span>
+<a id="__codelineno-12-35" name="__codelineno-12-35" href="#__codelineno-12-35"></a>
+<a id="__codelineno-12-36" name="__codelineno-12-36" href="#__codelineno-12-36"></a><span class="c1"># Run with a thread_id for persistence</span>
+<a id="__codelineno-12-37" name="__codelineno-12-37" href="#__codelineno-12-37"></a><span class="n">config</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;configurable&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;thread_id&quot;</span><span class="p">:</span> <span class="s2">&quot;customer_123&quot;</span><span class="p">}}</span>
+<a id="__codelineno-12-38" name="__codelineno-12-38" href="#__codelineno-12-38"></a><span class="n">stream</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">stream_events</span><span class="p">(</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v3&quot;</span><span class="p">)</span>
+<a id="__codelineno-12-39" name="__codelineno-12-39" href="#__codelineno-12-39"></a><span class="n">_</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">output</span>  <span class="c1"># drive the stream to completion</span>
+<a id="__codelineno-12-40" name="__codelineno-12-40" href="#__codelineno-12-40"></a><span class="c1"># The graph will pause at human_review</span>
+<a id="__codelineno-12-41" name="__codelineno-12-41" href="#__codelineno-12-41"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;human review interrupt:</span><span class="si">{</span><span class="n">stream</span><span class="o">.</span><span class="n">interrupts</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-12-42" name="__codelineno-12-42" href="#__codelineno-12-42"></a>
+<a id="__codelineno-12-43" name="__codelineno-12-43" href="#__codelineno-12-43"></a><span class="n">human_response</span> <span class="o">=</span> <span class="n">Command</span><span class="p">(</span>
+<a id="__codelineno-12-44" name="__codelineno-12-44" href="#__codelineno-12-44"></a>    <span class="n">resume</span><span class="o">=</span><span class="p">{</span>
+<a id="__codelineno-12-45" name="__codelineno-12-45" href="#__codelineno-12-45"></a>        <span class="s2">&quot;approved&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-12-46" name="__codelineno-12-46" href="#__codelineno-12-46"></a>        <span class="s2">&quot;edited_response&quot;</span><span class="p">:</span> <span class="s2">&quot;We sincerely apologize for the double charge. I&#39;ve initiated an immediate refund...&quot;</span><span class="p">,</span>
+<a id="__codelineno-12-47" name="__codelineno-12-47" href="#__codelineno-12-47"></a>    <span class="p">}</span>
+<a id="__codelineno-12-48" name="__codelineno-12-48" href="#__codelineno-12-48"></a><span class="p">)</span>
+<a id="__codelineno-12-49" name="__codelineno-12-49" href="#__codelineno-12-49"></a>
+<a id="__codelineno-12-50" name="__codelineno-12-50" href="#__codelineno-12-50"></a><span class="c1"># Resume execution</span>
+<a id="__codelineno-12-51" name="__codelineno-12-51" href="#__codelineno-12-51"></a><span class="n">resumed</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">stream_events</span><span class="p">(</span><span class="n">human_response</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v3&quot;</span><span class="p">)</span>
+<a id="__codelineno-12-52" name="__codelineno-12-52" href="#__codelineno-12-52"></a><span class="n">final_state</span> <span class="o">=</span> <span class="n">resumed</span><span class="o">.</span><span class="n">output</span>
+<a id="__codelineno-12-53" name="__codelineno-12-53" href="#__codelineno-12-53"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Email sent successfully!&quot;</span><span class="p">)</span>
+</code></pre></div>
+</details>
+<p>Graph tạm dừng khi gặp <code>interrupt()</code>, lưu mọi thứ vào checkpointer, và chờ. Nó có thể resume nhiều ngày sau, tiếp tục chính xác từ nơi nó dừng lại. <code>thread_id</code> đảm bảo toàn bộ state cho cuộc hội thoại này được lưu giữ cùng nhau.</p>
+<h2 id="tom-tat-va-buoc-tiep-theo">Tóm tắt và bước tiếp theo<a class="headerlink" href="#tom-tat-va-buoc-tiep-theo" title="Permanent link">&para;</a></h2>
+<h3 id="nhung-ieu-then-chot">Những điều then chốt<a class="headerlink" href="#nhung-ieu-then-chot" title="Permanent link">&para;</a></h3>
+<p>Xây dựng agent email này đã cho ta thấy cách tư duy của LangGraph:</p>
+<div class="grid cards">
+<ul>
+<li>
+<p><strong>:material-sitemap: Chia thành các bước rời rạc</strong></p>
+<p>Mỗi node làm tốt một việc. Sự phân rã này cho phép streaming tiến trình, thực thi bền vững (durable) có thể tạm dừng và resume, và debug rõ ràng vì bạn có thể kiểm tra state giữa các bước.</p>
+</li>
+<li>
+<p><strong>:material-database: State là bộ nhớ dùng chung</strong></p>
+<p>Lưu dữ liệu thô, không phải văn bản đã format. Điều này cho phép các node khác nhau dùng cùng thông tin theo những cách khác nhau.</p>
+</li>
+<li>
+<p><strong>:material-code-tags: Node là các hàm</strong></p>
+<p>Chúng nhận state, làm việc, và trả về cập nhật. Khi cần đưa ra quyết định định tuyến, chúng chỉ định cả cập nhật state lẫn đích tiếp theo.</p>
+</li>
+<li>
+<p><strong>:material-alert: Lỗi là một phần của luồng</strong></p>
+<p>Lỗi tạm thời được retry, lỗi LLM có thể khắc phục sẽ loop lại kèm ngữ cảnh, vấn đề người dùng có thể khắc phục tạm dừng để chờ input, và lỗi bất ngờ nổi lên để debug.</p>
+</li>
+<li>
+<p><strong>:material-account: Input của con người là hạng nhất</strong></p>
+<p>Hàm <code>interrupt()</code> tạm dừng thực thi vô thời hạn, lưu toàn bộ state, và resume chính xác từ nơi dừng lại khi bạn cung cấp input. Khi kết hợp với các thao tác khác trong một node, nó phải đứng đầu tiên. Xem <a href="../interrupts/">Interrupts</a>.</p>
+</li>
+<li>
+<p><strong>:material-sitemap: Cấu trúc graph hình thành tự nhiên</strong></p>
+<p>Bạn định nghĩa các kết nối thiết yếu, và các node của bạn tự xử lý logic định tuyến. Điều này giữ control flow rõ ràng và có thể truy vết, bạn luôn có thể hiểu agent sẽ làm gì tiếp theo bằng cách nhìn vào node hiện tại.</p>
+</li>
+</ul>
+</div>
+<h3 id="can-nhac-nang-cao">Cân nhắc nâng cao<a class="headerlink" href="#can-nhac-nang-cao" title="Permanent link">&para;</a></h3>
+<details class="note">
+<summary>Đánh đổi về độ chi tiết (granularity) của node</summary>
+<div class="admonition info">
+<p>Phần này khám phá sự đánh đổi trong thiết kế độ chi tiết của node. Hầu hết ứng dụng có thể bỏ qua phần này và dùng các pattern đã trình bày ở trên.</p>
+</div>
+<p>Bạn có thể tự hỏi: tại sao không gộp <code>Read Email</code> và <code>Classify Intent</code> thành một node?</p>
+<p>Hay tại sao tách Doc Search khỏi Draft Reply?</p>
+<p>Câu trả lời liên quan tới sự đánh đổi giữa khả năng phục hồi (resilience) và khả năng quan sát (observability).</p>
+<p><strong>Cân nhắc về khả năng phục hồi:</strong> <a href="../persistence/">Tầng persistence</a> của LangGraph tạo checkpoint tại ranh giới node. Khi một workflow resume sau một gián đoạn hoặc lỗi, nó bắt đầu từ đầu node nơi thực thi dừng lại. Node nhỏ hơn nghĩa là checkpoint thường xuyên hơn, nghĩa là ít công việc phải lặp lại hơn nếu có gì đó sai. Nếu bạn gộp nhiều thao tác vào một node lớn, một lỗi gần cuối nghĩa là phải thực thi lại mọi thứ từ đầu node đó.</p>
+<p>Tại sao ta chọn cách phân chia này cho agent email:</p>
+<ul>
+<li>
+<p><strong>Cô lập các dịch vụ bên ngoài:</strong> Doc Search và Bug Track là các node riêng biệt vì chúng gọi API bên ngoài. Nếu dịch vụ tìm kiếm chậm hoặc lỗi, ta muốn cô lập điều đó khỏi các lời gọi LLM. Ta có thể thêm retry policy cho các node cụ thể này mà không ảnh hưởng tới node khác.</p>
+</li>
+<li>
+<p><strong>Khả năng quan sát trung gian:</strong> Có <code>Classify Intent</code> là node riêng cho phép ta kiểm tra LLM đã quyết định gì trước khi hành động. Điều này có giá trị cho việc debug và giám sát, bạn có thể thấy chính xác khi nào và tại sao agent định tuyến tới human review.</p>
+</li>
+<li>
+<p><strong>Các chế độ lỗi khác nhau:</strong> Lời gọi LLM, tra cứu database, và gửi email có chiến lược retry khác nhau. Các node riêng cho phép bạn cấu hình chúng độc lập.</p>
+</li>
+<li>
+<p><strong>Khả năng tái sử dụng và kiểm thử:</strong> Node nhỏ hơn dễ kiểm thử độc lập hơn và tái sử dụng trong workflow khác.</p>
+</li>
+</ul>
+<p>Một cách tiếp cận hợp lệ khác: Bạn có thể gộp <code>Read Email</code> và <code>Classify Intent</code> thành một node duy nhất. Bạn sẽ mất khả năng kiểm tra email thô trước khi phân loại và sẽ phải lặp lại cả hai thao tác nếu có lỗi trong node đó. Với hầu hết ứng dụng, lợi ích về khả năng quan sát và debug của các node riêng biệt đáng để đánh đổi.</p>
+<p>Các vấn đề ở tầng ứng dụng: Việc bàn về caching ở Bước 2 (có nên cache kết quả tìm kiếm hay không) là một quyết định ở tầng ứng dụng, không phải một tính năng của framework LangGraph. Bạn triển khai caching bên trong hàm node của mình dựa trên yêu cầu cụ thể, LangGraph không quy định điều này.</p>
+<p>Cân nhắc về hiệu năng: Nhiều node hơn không có nghĩa là thực thi chậm hơn. Theo mặc định, LangGraph ghi checkpoint ở nền (<a href="../checkpointers/#durability-modes">async durability mode</a>), nên graph của bạn tiếp tục chạy mà không cần chờ checkpoint hoàn tất. Điều này nghĩa là bạn có checkpoint thường xuyên với tác động hiệu năng tối thiểu. Bạn có thể điều chỉnh hành vi này nếu cần, dùng chế độ <code>"exit"</code> để chỉ checkpoint khi hoàn tất, hoặc chế độ <code>"sync"</code> để chặn thực thi cho tới khi mỗi checkpoint được ghi xong.</p>
+</details>
+<h3 id="buoc-tiep-theo-tu-ay">Bước tiếp theo từ đây<a class="headerlink" href="#buoc-tiep-theo-tu-ay" title="Permanent link">&para;</a></h3>
+<p>Đây là phần giới thiệu về cách tư duy khi xây dựng agent với LangGraph. Bạn có thể mở rộng nền tảng này với:</p>
+<div class="grid cards">
+<ul>
+<li>
+<p><strong>:material-account-check: <a href="../interrupts/">Pattern human-in-the-loop</a></strong></p>
+<p>Học cách thêm phê duyệt tool trước khi thực thi, phê duyệt hàng loạt, và các pattern khác</p>
+</li>
+<li>
+<p><strong>:material-hierarchy: <a href="../use-subgraphs/">Subgraph</a></strong></p>
+<p>Tạo subgraph cho các thao tác nhiều bước phức tạp</p>
+</li>
+<li>
+<p><strong>:material-broadcast: <a href="../streaming/">Streaming</a></strong></p>
+<p>Thêm streaming để hiển thị tiến trình theo thời gian thực cho người dùng</p>
+</li>
+<li>
+<p><strong>:material-chart-line: <a href="../observability/">Observability</a></strong></p>
+<p>Thêm observability với LangSmith để debug và giám sát</p>
+</li>
+<li>
+<p><strong>:material-tools: <a href="../../langchain/tools/">Tích hợp Tool</a></strong></p>
+<p>Tích hợp thêm tool cho tìm kiếm web, truy vấn database, và lời gọi API</p>
+</li>
+<li>
+<p><strong>:material-rotate-3d: <a href="../use-graph-api/#add-retry-policies">Retry Logic</a></strong></p>
+<p>Triển khai retry logic với exponential backoff cho các thao tác thất bại</p>
+</li>
+</ul>
+</div>
+<hr />
+<div class="admonition info">
+<p class="admonition-title">Kết nối tài liệu này</p>
+<p><a href="https://docs.langchain.com/use-these-docs">Kết nối tài liệu này</a> với Claude, VSCode, và nhiều công cụ khác qua MCP để có câu trả lời theo thời gian thực.</p>
+</div>
+<div class="admonition info">
+<p class="admonition-title">Đóng góp</p>
+<p><a href="https://github.com/langchain-ai/docs/edit/main/src/oss/langgraph/thinking-in-langgraph.mdx">Chỉnh sửa trang này trên GitHub</a> hoặc <a href="https://github.com/langchain-ai/docs/issues/new/choose">báo lỗi</a>.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Trở lại mục lục
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "toc.follow", "content.code.copy", "content.code.annotate", "search.suggest", "search.highlight"], "search": "../../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u0110\u00e3 sao ch\u00e9p", "clipboard.copy": "Sao ch\u00e9p v\u00e0o b\u1ed9 nh\u1edb t\u1ea1m", "search.result.more.one": "1 t\u1eeb kh\u00e1c trong trang", "search.result.more.other": "# t\u1eeb kh\u00e1c trong trang", "search.result.none": "Kh\u00f4ng t\u00ecm th\u1ea5y t\u00e0i li\u1ec7u li\u00ean quan", "search.result.one": "1 t\u00e0i li\u1ec7u li\u00ean quan", "search.result.other": "# t\u00e0i li\u1ec7u li\u00ean quan", "search.result.placeholder": "Nh\u1eadp \u0111\u1ec3 b\u1eaft \u0111\u1ea7u t\u00ecm ki\u1ebfm", "search.result.term.missing": "Kh\u00f4ng", "select.version": "Ch\u1ecdn phi\u00ean b\u1ea3n"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

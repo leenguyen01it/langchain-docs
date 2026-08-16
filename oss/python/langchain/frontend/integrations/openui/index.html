@@ -1,0 +1,5898 @@
+
+<!doctype html>
+<html lang="vi" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Bản dịch tiếng Việt của tài liệu LangChain và LangGraph Python (mục langchain, langgraph), dịch từ docs.langchain.com">
+      
+      
+      
+        <link rel="canonical" href="https://docs.langchain.local/oss/python/langchain/frontend/integrations/openui/">
+      
+      
+        <link rel="prev" href="../ai-elements/">
+      
+      
+        <link rel="next" href="../../../test/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>OpenUI - Tài liệu LangChain (Bản dịch Tiếng Việt)</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#openui" class="md-skip">
+          Bỏ qua
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Đầu trang">
+    <a href="../../../../../.." title="Tài liệu LangChain (Bản dịch Tiếng Việt)" class="md-header__button md-logo" aria-label="Tài liệu LangChain (Bản dịch Tiếng Việt)" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Tài liệu LangChain (Bản dịch Tiếng Việt)
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              OpenUI
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="Chuyển sang giao diện tối"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Chuyển sang giao diện tối" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="Chuyển sang giao diện sáng"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Chuyển sang giao diện sáng" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Tìm kiếm" placeholder="Tìm kiếm" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Tìm kiếm">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Xoá" aria-label="Xoá" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Trang chủ
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../overview/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  LangChain (Python)
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../../langgraph/overview/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  LangGraph (Python)
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Thanh điều hướng" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../../.." title="Tài liệu LangChain (Bản dịch Tiếng Việt)" class="md-nav__button md-logo" aria-label="Tài liệu LangChain (Bản dịch Tiếng Việt)" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Tài liệu LangChain (Bản dịch Tiếng Việt)
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trang chủ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LangChain (Python)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    LangChain (Python)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tổng quan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../philosophy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Triết lý thiết kế
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../install/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cài đặt
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bắt đầu nhanh
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../component-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kiến trúc thành phần
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../context-engineering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Context Engineering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../academy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Học viện (Academy)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../deep-agent-from-scratch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Xây dựng Deep Agent từ đầu
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../get-help/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nhận trợ giúp
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../changelog-py/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog Python
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../changelog-js/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog JS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_12" id="__nav_2_12_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cốt lõi
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Cốt lõi
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../agents/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agents
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../messages/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Messages
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../structured-output/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Structured Output
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../streaming/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Streaming
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../event-streaming/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Event Streaming
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../runtime/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Runtime
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../short-term-memory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Short-term Memory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../long-term-memory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Long-term Memory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../human-in-the-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Human-in-the-loop
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../guardrails/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guardrails
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../retrieval/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Retrieval
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../knowledge-base/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Knowledge Base
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mcp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../deploy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../studio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Studio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    UI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../voice-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Voice Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../sql-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SQL Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_13" id="__nav_2_13_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Middleware
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Middleware
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../middleware/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tổng quan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../middleware/built-in/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Middleware có sẵn
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../middleware/custom/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Middleware tuỳ chỉnh
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_14" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../multi-agent/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multi-agent
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_14" id="__nav_2_14_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Multi-agent
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../multi-agent/handoffs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handoffs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../multi-agent/handoffs-customer-support/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handoffs - Customer Support
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../multi-agent/router/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Router
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../multi-agent/router-knowledge-base/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Router - Knowledge Base
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../multi-agent/skills/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Skills
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../multi-agent/skills-sql-assistant/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Skills - SQL Assistant
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../multi-agent/subagents/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Subagents
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../multi-agent/subagents-personal-assistant/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Subagents - Personal Assistant
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../multi-agent/custom-workflow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Custom Workflow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_15" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_15" id="__nav_2_15_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frontend
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_15_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Frontend
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tổng quan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../generative-ui-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Generative UI - Tổng quan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../declarative-generative-ui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Declarative Generative UI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../controlled-generative-ui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controlled Generative UI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../open-ended-generative-ui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Open-ended Generative UI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../headless-tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headless Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tool-calling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tool Calling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../human-in-the-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Human-in-the-loop
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../structured-output/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Structured Output
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reasoning-tokens/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Streaming Reasoning Tokens
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../markdown-messages/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Markdown Messages
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../message-queues/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Message Queues
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../branching-chat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Branching Chat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../join-rejoin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Join / Rejoin
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../time-travel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Time Travel
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_15_16" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_15_16" id="__nav_2_15_16_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tích hợp
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_15_16_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_15_16">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tích hợp
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tổng quan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../assistant-ui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Assistant UI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../copilotkit/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CopilotKit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ai-elements/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Elements
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenUI
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenUI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Mục lục">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Mục lục
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#cach-hoat-ong" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cách hoạt động
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cai-at" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cài đặt
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#import-style-cua-component" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Import style của component
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tao-system-prompt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tạo system prompt
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chen-system-prompt-qua-usestream" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chèn system prompt qua useStream
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#render-bang-renderer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Render bằng Renderer
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inh-dang-openui-lang" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Định dạng openui-lang
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cac-tien-ich-render-tang-dan-progressive-rendering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Các tiện ích render tăng dần (progressive rendering)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#truy-van-tiep-noi-follow-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Truy vấn tiếp nối (follow-up)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#xay-dung-mot-dashboard-song-song-voi-deep-agents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Xây dựng một dashboard song song với Deep Agents
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Xây dựng một dashboard song song với Deep Agents">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dung-chung-mot-thu-vien-openui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dùng chung một thư viện OpenUI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inh-nghia-bo-ieu-phoi-va-cac-agent-panel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Định nghĩa bộ điều phối và các agent panel
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ang-ky-graph" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Đăng ký graph
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kham-pha-va-render-cac-panel-tren-frontend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Khám phá và render các panel trên frontend
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#thuc-hanh-tot-nhat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Thực hành tốt nhất
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_16" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../test/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kiểm thử (Test)
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_16" id="__nav_2_16_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_16_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_16">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Kiểm thử (Test)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../test/unit-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Unit Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../test/integration-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integration Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../test/evals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Evals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_17" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_17" id="__nav_2_17_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mã lỗi (Errors)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_17_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_17">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Mã lỗi (Errors)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../errors/INVALID_PROMPT_INPUT/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    INVALID_PROMPT_INPUT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../errors/INVALID_TOOL_RESULTS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    INVALID_TOOL_RESULTS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../errors/MESSAGE_COERCION_FAILURE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MESSAGE_COERCION_FAILURE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../errors/MODEL_AUTHENTICATION/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MODEL_AUTHENTICATION
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../errors/MODEL_NOT_FOUND/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MODEL_NOT_FOUND
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../errors/MODEL_RATE_LIMIT/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MODEL_RATE_LIMIT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../errors/OUTPUT_PARSING_FAILURE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OUTPUT_PARSING_FAILURE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LangGraph (Python)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    LangGraph (Python)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tổng quan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/install/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cài đặt
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bắt đầu nhanh
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/thinking-in-langgraph/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tư duy LangGraph
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/choosing-apis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    So sánh Graph API và Functional API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/workflows-agents/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workflows và Agents
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/case-studies/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Case studies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/changelog-py/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog Python
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/changelog-js/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog JS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_10" id="__nav_3_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cốt lõi
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Cốt lõi
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/graph-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/use-graph-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sử dụng Graph API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/functional-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Functional API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/use-functional-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sử dụng Functional API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/use-subgraphs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Subgraphs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/pregel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LangGraph runtime (Pregel)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/streaming/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Streaming
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/event-streaming/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Event Streaming
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/persistence/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Persistence
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/checkpointers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Checkpointers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/stores/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stores
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/add-memory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Memory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/interrupts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interrupts (Human-in-the-loop)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/use-time-travel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Time Travel
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/fault-tolerance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fault Tolerance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/application-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cấu trúc ứng dụng
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/backward-compatibility/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tương thích ngược
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_11" id="__nav_3_11_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Xây dựng agent
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Xây dựng agent
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/agentic-rag/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Custom RAG Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/sql-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Custom SQL Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_12" id="__nav_3_12_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frontend
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Frontend
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/frontend/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tổng quan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/frontend/graph-execution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph Execution
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/frontend/custom-stream-channels/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Custom Stream Channels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_13" id="__nav_3_13_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy & Vận hành
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Deploy & Vận hành
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/deploy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/local-server/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chạy local server
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LangSmith Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/studio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LangSmith Studio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/ui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent Chat UI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/test/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_14" id="__nav_3_14_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mã lỗi (Errors)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Mã lỗi (Errors)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/errors/GRAPH_RECURSION_LIMIT/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GRAPH_RECURSION_LIMIT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/errors/INVALID_CHAT_HISTORY/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    INVALID_CHAT_HISTORY
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/errors/INVALID_CONCURRENT_GRAPH_UPDATE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    INVALID_CONCURRENT_GRAPH_UPDATE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/errors/INVALID_GRAPH_NODE_RETURN_VALUE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    INVALID_GRAPH_NODE_RETURN_VALUE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/errors/MISSING_CHECKPOINTER/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MISSING_CHECKPOINTER
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../langgraph/errors/MULTIPLE_SUBGRAPHS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MULTIPLE_SUBGRAPHS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Mục lục">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Mục lục
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#cach-hoat-ong" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cách hoạt động
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cai-at" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cài đặt
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#import-style-cua-component" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Import style của component
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tao-system-prompt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tạo system prompt
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chen-system-prompt-qua-usestream" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chèn system prompt qua useStream
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#render-bang-renderer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Render bằng Renderer
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inh-dang-openui-lang" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Định dạng openui-lang
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cac-tien-ich-render-tang-dan-progressive-rendering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Các tiện ích render tăng dần (progressive rendering)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#truy-van-tiep-noi-follow-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Truy vấn tiếp nối (follow-up)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#xay-dung-mot-dashboard-song-song-voi-deep-agents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Xây dựng một dashboard song song với Deep Agents
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Xây dựng một dashboard song song với Deep Agents">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dung-chung-mot-thu-vien-openui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dùng chung một thư viện OpenUI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inh-nghia-bo-ieu-phoi-va-cac-agent-panel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Định nghĩa bộ điều phối và các agent panel
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ang-ky-graph" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Đăng ký graph
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kham-pha-va-render-cac-panel-tren-frontend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Khám phá và render các panel trên frontend
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#thuc-hanh-tot-nhat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Thực hành tốt nhất
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="openui">OpenUI<a class="headerlink" href="#openui" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>Tạo ra các dashboard và báo cáo hoàn chỉnh, có tính tương tác bằng thư viện component OpenUI và openui-lang</p>
+</blockquote>
+<p><a href="https://github.com/thesysdev/openui">OpenUI</a> là một thư viện generative UI cho phép một language model tạo ra các UI hoàn chỉnh, có tính tương tác theo một định dạng khai báo (declarative) gọi là <strong>openui-lang</strong>. Thay vì trả về một tin nhắn chat, agent trả về một cây component (component tree) gồm card, biểu đồ, bảng, tab, và form mà <code>Renderer</code> sẽ biến thành một UI React thật sự.</p>
+<p>Kiểu tích hợp này rất phù hợp với các output giàu dữ liệu như báo cáo, dashboard, và công cụ khám phá dữ liệu, nơi model vừa đóng vai trò nhà phân tích dữ liệu vừa là người thiết kế UI.</p>
+<h2 id="cach-hoat-ong">Cách hoạt động<a class="headerlink" href="#cach-hoat-ong" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>Tạo system prompt:</strong> gọi <code>openuiLibrary.prompt()</code> một lần khi khởi động; nó tạo ra một tài liệu tham chiếu openui-lang hoàn chỉnh mà model dùng để viết ra các cây component hợp lệ</li>
+<li><strong>Chèn vào tin nhắn đầu tiên:</strong> gửi system prompt như tin nhắn hệ thống mở đầu khi một hội thoại mới bắt đầu</li>
+<li><strong>Model viết openui-lang:</strong> model phản hồi bằng một chương trình như <code>root = Stack([header, kpis, chart])</code> thay vì văn xuôi</li>
+<li><strong>Render bằng <code>Renderer</code>:</strong> truyền văn bản đó vào <code>Renderer</code> của OpenUI cùng với thư viện component; nó sẽ phân tích (parse) và render cây đó</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>%%{
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  init: {
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    &quot;fontFamily&quot;: &quot;monospace&quot;,
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    &quot;flowchart&quot;: {
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>      &quot;curve&quot;: &quot;curve&quot;
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    }
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>  }
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>}%%
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>graph LR
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>  PROMPT[&quot;openuiLibrary.prompt()&quot;]
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>  AGENT[&quot;createAgent()&quot;]
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>  STREAM[&quot;useStream()&quot;]
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>  RENDERER[&quot;Renderer&quot;]
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>  PROMPT --&quot;system message&quot;--&gt; AGENT
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>  AGENT --&quot;openui-lang text&quot;--&gt; STREAM
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>  STREAM --&quot;ai message content&quot;--&gt; RENDERER
+</code></pre></div>
+<h2 id="cai-at">Cài đặt<a class="headerlink" href="#cai-at" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>npm<span class="w"> </span>install<span class="w"> </span>@langchain/react<span class="w"> </span>@openuidev/react-ui<span class="w"> </span>@openuidev/react-headless<span class="w"> </span>@openuidev/react-lang
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Mẹo</p>
+<p>OpenUI yêu cầu React 19+ và <a href="https://www.npmjs.com/package/zustand"><code>zustand</code></a>. Code frontend chỉ dành cho React; backend agent LangGraph có thể viết bằng TypeScript hoặc Python.</p>
+</div>
+<h2 id="import-style-cua-component">Import style của component<a class="headerlink" href="#import-style-cua-component" title="Permanent link">&para;</a></h2>
+<p>Import các style đóng gói sẵn của OpenUI trong entry point CSS của bạn hoặc trực tiếp trong component gốc:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">@</span><span class="k">import</span><span class="w"> </span><span class="s2">&quot;@openuidev/react-ui/components.css&quot;</span><span class="p">;</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="p">@</span><span class="k">import</span><span class="w"> </span><span class="s2">&quot;@openuidev/react-ui/styles/index.css&quot;</span><span class="p">;</span>
+</code></pre></div>
+<h2 id="tao-system-prompt">Tạo system prompt<a class="headerlink" href="#tao-system-prompt" title="Permanent link">&para;</a></h2>
+<p>OpenUI cung cấp một hàm <code>openuiLibrary.prompt()</code> tạo ra tài liệu tham chiếu openui-lang hoàn chỉnh, bao gồm mọi chữ ký component, quy tắc cú pháp, mẹo streaming, và ví dụ. Gọi nó một lần tại thời điểm module được nạp:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">openuiLibrary</span><span class="p">,</span><span class="w"> </span><span class="nx">openuiPromptOptions</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;@openuidev/react-ui/genui-lib&quot;</span><span class="p">;</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1">// Tạo toàn bộ system prompt openui-lang. Gọi hàm này một lần khi khởi động,</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1">// không phải bên trong một component, để tránh tính toán lại ở mỗi lần render.</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="kd">const</span><span class="w"> </span><span class="nx">SYSTEM_PROMPT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">openuiLibrary</span><span class="p">.</span><span class="nx">prompt</span><span class="p">({</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span><span class="p">...</span><span class="nx">openuiPromptOptions</span><span class="p">,</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span><span class="nx">preamble</span><span class="o">:</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">    </span><span class="s2">&quot;You are a report generator. When asked for a report, produce a detailed, &quot;</span><span class="w"> </span><span class="o">+</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">    </span><span class="s2">&quot;data-rich report using openui-lang: executive summary, KPI cards, charts, &quot;</span><span class="w"> </span><span class="o">+</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">    </span><span class="s2">&quot;tables, and multiple sections. Your ENTIRE response must be raw openui-lang &quot;</span><span class="w"> </span><span class="o">+</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">    </span><span class="s2">&quot;— no code fences, no markdown, no prose.&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="p">});</span>
+</code></pre></div>
+<p><code>preamble</code> ghi đè nhân vật (persona) mặc định. Thêm <code>additionalRules</code> để chèn các ràng buộc riêng cho tác vụ:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">SYSTEM_PROMPT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">openuiLibrary</span><span class="p">.</span><span class="nx">prompt</span><span class="p">({</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="p">...</span><span class="nx">openuiPromptOptions</span><span class="p">,</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="nx">preamble</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;You are a report generator...&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="nx">additionalRules</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="p">...(</span><span class="nx">openuiPromptOptions</span><span class="p">.</span><span class="nx">additionalRules</span><span class="w"> </span><span class="o">??</span><span class="w"> </span><span class="p">[]),</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="s2">&quot;Always end the report with 3–4 follow-up query buttons using &quot;</span><span class="w"> </span><span class="o">+</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="s2">&quot;Button({ type: &#39;continue_conversation&#39; }, &#39;secondary&#39;) inside a &quot;</span><span class="w"> </span><span class="o">+</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">    </span><span class="s2">&quot;Card([CardHeader(&#39;Explore Further&#39;), Buttons([...])], &#39;sunk&#39;).&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">  </span><span class="p">],</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="p">});</span>
+</code></pre></div>
+<h2 id="chen-system-prompt-qua-usestream">Chèn system prompt qua useStream<a class="headerlink" href="#chen-system-prompt-qua-usestream" title="Permanent link">&para;</a></h2>
+<p>Gửi system prompt như tin nhắn đầu tiên của mỗi thread mới. Kiểm tra <code>stream.messages.length === 0</code> để phát hiện một thread mới và thêm một tin nhắn <code>system</code> vào đầu:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">useCallback</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;react&quot;</span><span class="p">;</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">useStream</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;@langchain/react&quot;</span><span class="p">;</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="kd">const</span><span class="w"> </span><span class="nx">SYSTEM_PROMPT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">openuiLibrary</span><span class="p">.</span><span class="nx">prompt</span><span class="p">({</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">});</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="k">export</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">App</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">useStream</span><span class="p">({</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">    </span><span class="nx">apiUrl</span><span class="o">:</span><span class="w"> </span><span class="kt">import.meta.env.VITE_LANGGRAPH_API_URL</span><span class="w"> </span><span class="o">??</span><span class="w"> </span><span class="s2">&quot;http://localhost:2024&quot;</span><span class="p">,</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">    </span><span class="nx">assistantId</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;openui&quot;</span><span class="p">,</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">  </span><span class="p">});</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">handleSubmit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">useCallback</span><span class="p">(</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="w">    </span><span class="p">(</span><span class="nx">text</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="w">      </span><span class="c1">// Chỉ chèn system prompt vào tin nhắn đầu tiên của một thread mới.</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="w">      </span><span class="c1">// Các tin nhắn sau đã có nó trong lịch sử được lưu trữ.</span>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="w">      </span><span class="kd">const</span><span class="w"> </span><span class="nx">isNewThread</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">stream</span><span class="p">.</span><span class="nx">messages</span><span class="p">.</span><span class="nx">length</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="w">      </span><span class="nx">stream</span><span class="p">.</span><span class="nx">submit</span><span class="p">({</span>
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="w">        </span><span class="nx">messages</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="w">          </span><span class="p">...(</span><span class="nx">isNewThread</span>
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="w">            </span><span class="o">?</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="kr">type</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;system&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">content</span><span class="o">:</span><span class="w"> </span><span class="kt">SYSTEM_PROMPT</span><span class="w"> </span><span class="p">}]</span>
+<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a><span class="w">            </span><span class="o">:</span><span class="w"> </span><span class="p">[]),</span>
+<a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a><span class="w">          </span><span class="p">{</span><span class="w"> </span><span class="kr">type</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;human&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">content</span><span class="o">:</span><span class="w"> </span><span class="kt">text</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a><span class="w">        </span><span class="p">],</span>
+<a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a><span class="w">      </span><span class="p">});</span>
+<a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a><span class="w">    </span><span class="p">},</span>
+<a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a><span class="w">    </span><span class="p">[</span><span class="nx">stream</span><span class="p">],</span>
+<a id="__codelineno-5-27" name="__codelineno-5-27" href="#__codelineno-5-27"></a><span class="w">  </span><span class="p">);</span>
+<a id="__codelineno-5-28" name="__codelineno-5-28" href="#__codelineno-5-28"></a>
+<a id="__codelineno-5-29" name="__codelineno-5-29" href="#__codelineno-5-29"></a><span class="w">  </span><span class="c1">// ...</span>
+<a id="__codelineno-5-30" name="__codelineno-5-30" href="#__codelineno-5-30"></a><span class="p">}</span>
+</code></pre></div>
+<h2 id="render-bang-renderer">Render bằng Renderer<a class="headerlink" href="#render-bang-renderer" title="Permanent link">&para;</a></h2>
+<p>Truyền trực tiếp nội dung văn bản của tin nhắn AI vào <code>Renderer</code> cùng với <code>openuiLibrary</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Renderer</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;@openuidev/react-lang&quot;</span><span class="p">;</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">openuiLibrary</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;@openuidev/react-ui/genui-lib&quot;</span><span class="p">;</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">AIMessage</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;langchain&quot;</span><span class="p">;</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="kd">function</span><span class="w"> </span><span class="nx">MessageList</span><span class="p">({</span><span class="w"> </span><span class="nx">messages</span><span class="p">,</span><span class="w"> </span><span class="nx">isLoading</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">lastAiIdx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">messages</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">    </span><span class="p">(</span><span class="nx">acc</span><span class="p">,</span><span class="w"> </span><span class="nx">msg</span><span class="p">,</span><span class="w"> </span><span class="nx">i</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">(</span><span class="nx">AIMessage</span><span class="p">.</span><span class="nx">isInstance</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">acc</span><span class="p">),</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">    </span><span class="o">-</span><span class="mf">1</span><span class="p">,</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">  </span><span class="p">);</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">messages</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">msg</span><span class="p">,</span><span class="w"> </span><span class="nx">i</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">AIMessage</span><span class="p">.</span><span class="nx">isInstance</span><span class="p">(</span><span class="nx">msg</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="w">      </span><span class="kd">const</span><span class="w"> </span><span class="nx">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">msg</span><span class="p">.</span><span class="nx">text</span><span class="p">;</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="w">        </span><span class="p">&lt;</span><span class="nt">Renderer</span>
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="w">          </span><span class="na">key</span><span class="o">=</span><span class="p">{</span><span class="nx">msg</span><span class="p">.</span><span class="nx">id</span><span class="w"> </span><span class="o">??</span><span class="w"> </span><span class="nx">i</span><span class="p">}</span>
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="w">          </span><span class="na">response</span><span class="o">=</span><span class="p">{</span><span class="nx">text</span><span class="p">}</span>
+<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a><span class="w">          </span><span class="na">library</span><span class="o">=</span><span class="p">{</span><span class="nx">openuiLibrary</span><span class="p">}</span>
+<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a><span class="w">          </span><span class="na">isStreaming</span><span class="o">=</span><span class="p">{</span><span class="nx">isLoading</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="nx">lastAiIdx</span><span class="p">}</span>
+<a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a><span class="w">        </span><span class="p">/&gt;</span>
+<a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a><span class="w">      </span><span class="p">);</span>
+<a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a><span class="w">    </span><span class="c1">// ... bong bóng tin nhắn của người dùng</span>
+<a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a><span class="w">  </span><span class="p">});</span>
+<a id="__codelineno-6-25" name="__codelineno-6-25" href="#__codelineno-6-25"></a><span class="p">}</span>
+</code></pre></div>
+<p>Truyền <code>isStreaming={true}</code> trong lúc stream đang diễn ra để Renderer xử lý các tham chiếu chưa được giải quyết (unresolved references) một cách hợp lý khi các định nghĩa lần lượt tới.</p>
+<h2 id="inh-dang-openui-lang">Định dạng openui-lang<a class="headerlink" href="#inh-dang-openui-lang" title="Permanent link">&para;</a></h2>
+<p>Model viết ra một chương trình chứ không phải một đặc tả JSON. Mỗi statement là một phép gán; <code>root</code> là điểm vào (entry point). Prompt chính thức dạy model định dạng này, bao gồm cả kỹ thuật hoisting, viết <code>root</code> trước tiên để phần khung UI xuất hiện ngay lập tức:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>root = Stack([header, execSummary, kpis, marketSection])
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>header    = CardHeader(&quot;State of AI in 2025&quot;, &quot;Comprehensive Analysis&quot;)
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>execSummary = MarkDownRenderer(&quot;## Executive Summary\n\nThe AI market reached...&quot;)
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>kpi1 = Card([CardHeader(&quot;$826B&quot;, &quot;Global Market&quot;), TextContent(&quot;42% YoY&quot;, &quot;small&quot;)], &quot;sunk&quot;)
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>kpi2 = Card([CardHeader(&quot;78%&quot;,   &quot;Adoption&quot;),       TextContent(&quot;Fortune 500&quot;,  &quot;small&quot;)], &quot;sunk&quot;)
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>kpis = Stack([kpi1, kpi2], &quot;row&quot;, &quot;m&quot;, &quot;stretch&quot;, &quot;start&quot;, true)
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>col1 = Col(&quot;Segment&quot;, &quot;string&quot;)
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>col2 = Col(&quot;Revenue ($B)&quot;, &quot;number&quot;)
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>tbl  = Table([col1, col2], [[&quot;Generative AI&quot;, 286], [&quot;ML Infra&quot;, 198]])
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>s1   = Series(&quot;Revenue&quot;, [286, 198, 147])
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>ch1  = BarChart([&quot;Gen AI&quot;, &quot;ML Infra&quot;, &quot;Vision&quot;], [s1])
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>marketSection = Card([CardHeader(&quot;Market Breakdown&quot;), tbl, ch1])
+</code></pre></div>
+<p>Khi bật hoisting (được khuyến nghị), dòng <code>root</code> được viết trước tiên để cấu trúc trang xuất hiện ngay lập tức và từng phần được lấp đầy dần khi model định nghĩa nó.</p>
+<h2 id="cac-tien-ich-render-tang-dan-progressive-rendering">Các tiện ích render tăng dần (progressive rendering)<a class="headerlink" href="#cac-tien-ich-render-tang-dan-progressive-rendering" title="Permanent link">&para;</a></h2>
+<p>Kết nối <a href="https://reference.langchain.com/javascript/langchain-react/index/useStream"><code>useStream</code></a> trực tiếp với <code>Renderer</code> khiến kết quả bị render lại ở mỗi token streaming và tạo ra hàng trăm lượt phân tích lại (re-parse) vô ích cho mỗi phản hồi. Điều này khiến các component biểu đồ bị crash khi dữ liệu của chúng chưa tới. Các tiện ích dưới đây giải quyết những vấn đề này:</p>
+<table>
+<thead>
+<tr>
+<th>Vấn đề</th>
+<th>Giải pháp</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Chuỗi ký tự (string) chưa hoàn chỉnh</strong></td>
+<td><code>truncateAtOpenString</code> / <code>closeOrTruncateOpenString</code>: loại bỏ hoặc đóng các chuỗi chưa hoàn chỉnh trước khi phân tích</td>
+</tr>
+<tr>
+<td><strong>Nhiễu loạn giữa các token (mid-token churn)</strong></td>
+<td><code>useStableText</code>: chỉ cho phép Renderer cập nhật tại các ranh giới statement hoàn chỉnh (<code>name = Expr(…)</code>) thay vì ở mỗi token</td>
+</tr>
+<tr>
+<td><strong>Biểu đồ crash do dữ liệu null</strong></td>
+<td><code>chartDataRefsResolved</code>: xác minh mảng <code>Series</code> và nhãn của một biểu đồ đã được định nghĩa trước khi đưa nó vào snapshot</td>
+</tr>
+<tr>
+<td><strong>Chưa có <code>root</code> / dự phòng</strong></td>
+<td><code>buildProgressiveRoot</code>: tổng hợp một <code>root = Stack([…])</code> từ các biến ở cấp cao nhất khi model chưa viết ra một root</td>
+</tr>
+<tr>
+<td><strong>Định danh (identifier) dạng snake_case</strong></td>
+<td><code>sanitizeIdentifiers</code>: parser chỉ chấp nhận camelCase; chuyển đổi mọi tên <code>snake_case</code> mà model phát ra</td>
+</tr>
+</tbody>
+</table>
+<p>Sao chép toàn bộ khối này vào dự án của bạn và truyền <code>stable</code> vào <code>&lt;Renderer&gt;</code>:</p>
+<p>````tsx expandable
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import {
+  type ActionEvent,
+  BuiltinActionType,
+  Renderer,
+} from "@openuidev/react-lang";
+import { openuiLibrary } from "@openuidev/react-ui/genui-lib";</p>
+<p>/<em><em> Loại bỏ mọi markdown code fence mà model có thể đã phát ra. </em>/
+function stripCodeFence(text: string): string {
+  return text
+    .replace(/^<code>[a-z]*\r?\n?/i, "")
+    .replace(/\n?</code>\s</em>$/i, "")
+    .trim();
+}</p>
+<p>/*<em>
+ * Parser openui-lang chỉ chấp nhận identifier dạng camelCase.
+ * Chuyển đổi mọi tên biến snake_case mà model phát ra; nội dung chuỗi không bị đụng tới.
+ </em>/
+function sanitizeIdentifiers(text: string): string {
+  const toCamel = (s: string) =&gt;
+    s.replace(/<em>([a-zA-Z0-9])/g, (</em>, c: string) =&gt; c.toUpperCase());</p>
+<p>const snakeVars: string[] = [];
+  for (const m of text.matchAll(/^([a-zA-Z][a-zA-Z0-9]<em>(?:_[a-zA-Z0-9]+)+)\s</em>=/gm)) {
+    if (!snakeVars.includes(m[1])) snakeVars.push(m[1]);
+  }
+  if (snakeVars.length === 0) return text;</p>
+<p>let result = "";
+  let inStr = false;
+  let i = 0;
+  while (i &lt; text.length) {
+    if (text[i] === "\" &amp;&amp; inStr) { result += text[i] + (text[i + 1] ?? ""); i += 2; continue; }
+    if (text[i] === '"') { inStr = !inStr; result += text[i++]; continue; }
+    if (!inStr) {
+      let replaced = false;
+      for (const v of snakeVars) {
+        if (text.startsWith(v, i) &amp;&amp; !/[a-zA-Z0-9_]/.test(text[i + v.length] ?? "")) {
+          result += toCamel(v); i += v.length; replaced = true; break;
+        }
+      }
+      if (!replaced) result += text[i++];
+    } else {
+      result += text[i++];
+    }
+  }
+  return result;
+}</p>
+<p>/*<em>
+ * Duyệt qua văn bản và theo dõi các chuỗi đang mở. Nếu văn bản kết thúc giữa
+ * chừng một chuỗi, cắt bớt về dấu xuống dòng an toàn cuối cùng, điều này ngăn
+ * một string literal chưa hoàn chỉnh chiếm mất bất kỳ dòng <code>root = Stack(…)</code>
+ * nào mà ta tổng hợp sau đó.
+ </em>/
+function truncateAtOpenString(text: string): string {
+  let inStr = false;
+  let lastSafeNewline = 0;
+  for (let i = 0; i &lt; text.length; i++) {
+    const ch = text[i];
+    if (ch === "\" &amp;&amp; inStr) { i++; continue; }
+    if (ch === '"') { inStr = !inStr; continue; }
+    if (ch === "\n" &amp;&amp; !inStr) lastSafeNewline = i;
+  }
+  return inStr ? text.slice(0, lastSafeNewline) : text;
+}</p>
+<p>/*<em>
+ * Tương tự truncateAtOpenString, nhưng tổng hợp thêm một dấu đóng <code>")</code> khi
+ * dòng chưa hoàn chỉnh là một statement TextContent. Điều này cho phép văn bản
+ * render từng token một trong khi mọi dòng chuỗi chưa hoàn chỉnh khác vẫn bị cắt bớt.
+ </em>/
+function closeOrTruncateOpenString(text: string): string {
+  let inStr = false;
+  let lastSafeNewline = 0;
+  for (let i = 0; i &lt; text.length; i++) {
+    const ch = text[i];
+    if (ch === "\" &amp;&amp; inStr) { i++; continue; }
+    if (ch === '"') { inStr = !inStr; continue; }
+    if (ch === "\n" &amp;&amp; !inStr) lastSafeNewline = i;
+  }
+  if (!inStr) return text;</p>
+<p>const safeText = lastSafeNewline &gt; 0 ? text.slice(0, lastSafeNewline) : "";
+  const partialLine = text.slice(lastSafeNewline &gt; 0 ? lastSafeNewline + 1 : 0);</p>
+<p>if (/^[a-zA-Z][a-zA-Z0-9]<em>\s</em>=\s*TextContent(/.test(partialLine)) {
+    return (lastSafeNewline &gt; 0 ? safeText + "\n" : "") + partialLine + '")';
+  }
+  return safeText;
+}</p>
+<p>/*<em> Đếm số dòng tạo thành một phép gán hoàn chỉnh kết thúc bằng <code>)</code> hoặc <code>]</code>. </em>/
+function countCompleteStatements(text: string): number {
+  let count = 0;
+  for (const line of text.split("\n")) {
+    const t = line.trimEnd();
+    if ((t.endsWith(")") || t.endsWith("]")) &amp;&amp; /^[a-zA-Z]/.test(t)) count++;
+  }
+  return count;
+}</p>
+<p>const CHART_TYPES = new Set([
+  "BarChart", "LineChart", "AreaChart", "RadarChart",
+  "HorizontalBarChart", "PieChart", "RadialChart",
+  "SingleStackedBarChart", "ScatterChart",
+]);</p>
+<p>const OPENUI_KEYWORDS = new Set([
+  "true", "false", "null", "grouped", "stacked", "linear", "natural", "step",
+  "pie", "donut", "string", "number", "action", "row", "column", "card", "sunk",
+  "clear", "info", "warning", "error", "success", "neutral", "danger", "start",
+  "end", "center", "between", "around", "evenly", "stretch", "baseline",
+  "small", "default", "large", "none", "xs", "s", "m", "l", "xl",
+  "horizontal", "vertical",
+]);</p>
+<p>/<em><em>
+ * Các component biểu đồ (recharts) bị crash với lỗi <code>.map() on null</code> khi prop
+ * labels hoặc series của chúng chưa được giải quyết. Trước khi chốt một
+ * snapshot ổn định, xác minh rằng mọi biểu đồ trong văn bản đã có đủ các biến
+ * dữ liệu được định nghĩa.
+ </em>/
+function chartDataRefsResolved(text: string): boolean {
+  const lines = text.split("\n");
+  const complete = new Set<string>();
+  for (const line of lines) {
+    const t = line.trimEnd();
+    const m = t.match(/^([a-zA-Z][a-zA-Z0-9]</em>)\s<em>=/);
+    if (m &amp;&amp; (t.endsWith(")") || t.endsWith("]"))) complete.add(m[1]);
+  }
+  for (const line of lines) {
+    const t = line.trimEnd();
+    const m = t.match(/^([a-zA-Z][a-zA-Z0-9]</em>)\s<em>=\s</em>([A-Z][a-zA-Z0-9]<em>)(/);
+    if (!m || !CHART_TYPES.has(m[2]) || !t.endsWith(")")) continue;
+    const rhs = t.slice(t.indexOf("=") + 1).replace(/"(?:[^"\]|\.)</em>"/g, '""');
+    for (const [, name] of rhs.matchAll(/\b([a-zA-Z][a-zA-Z0-9]*)\b/g)) {
+      if (/^[a-z]/.test(name) &amp;&amp; !OPENUI_KEYWORDS.has(name) &amp;&amp; !complete.has(name))
+        return false;
+    }
+  }
+  return true;
+}</p>
+<p>/<em><em>
+ * Nếu model chưa viết ra một <code>root = Stack(…)</code>, tổng hợp một root từ các biến
+ * ở cấp cao nhất (những biến được định nghĩa nhưng chưa được tham chiếu bên
+ * trong bất kỳ biểu thức nào khác). Điều này cho phép render tăng dần ngay cả
+ * khi model viết root sau cùng.
+ </em>/
+function buildProgressiveRoot(text: string): string {
+  if (!text) return text;
+  const safe = truncateAtOpenString(text);
+  if (/^root\s</em>=/m.test(safe)) return safe;</p>
+<p>const defs: string[] = [];
+  const seen = new Set<string>();
+  for (const m of safe.matchAll(/^([a-zA-Z_][a-zA-Z0-9_]<em>)\s</em>=/gm)) {
+    if (!seen.has(m[1])) { defs.push(m[1]); seen.add(m[1]); }
+  }
+  if (defs.length === 0) return safe;</p>
+<p>const referenced = new Set<string>();
+  for (const line of safe.split("\n")) {
+    const thisVar = line.match(/^([a-zA-Z_][a-zA-Z0-9_]<em>)\s</em>=/)?.[1];
+    const stripped = line.replace(/"(?:[^"\]|\.)*"/g, '""');
+    for (const v of defs) {
+      if (v !== thisVar &amp;&amp; new RegExp(<code>\\b${v}\\b</code>).test(stripped)) referenced.add(v);
+    }
+  }</p>
+<p>const topLevel = defs.filter((v) =&gt; !referenced.has(v));
+  const rootVars = topLevel.length &gt; 0 ? topLevel : defs;
+  return <code>${safe.trimEnd()}\nroot = Stack([${rootVars.join(", ")}], "column", "l")</code>;
+}</p>
+<p>/<em><em>
+ * Chỉ cho phép Renderer cập nhật vào những thời điểm khi có ít nhất một
+ * statement </em>hoàn chỉnh</em> mới xuất hiện. Điều này loại bỏ hàng trăm lượt
+ * re-parse vô ích trong lúc streaming.
+ *
+ * Trường hợp đặc biệt: các dòng TextContent cập nhật từng token một (thông
+ * qua closeOrTruncate) để văn bản render dần dần mà không cần chờ toàn bộ
+ * dòng hoàn tất.
+ */
+function useStableText(raw: string, isStreaming: boolean): string {
+  const [stable, setStable] = useState<string>("");
+  const lastCount = useRef(0);</p>
+<p>useEffect(() =&gt; {
+    const safe = truncateAtOpenString(raw);         // nghiêm ngặt, chỉ để đếm
+    const enhanced = closeOrTruncateOpenString(raw); // hiển thị, đóng TextContent chưa hoàn chỉnh</p>
+<div class="highlight"><pre><span></span><code>if (!isStreaming) { setStable(enhanced); return; }
+
+const count = countCompleteStatements(safe);
+const newComplete = count &gt; lastCount.current &amp;&amp; chartDataRefsResolved(safe);
+const partialTextContent = enhanced !== safe;
+
+if (newComplete || partialTextContent) {
+  if (newComplete) lastCount.current = count;
+  setStable(enhanced);
+}
+</code></pre></div>
+<p>}, [raw, isStreaming]);</p>
+<p>return stable;
+}</p>
+<p>function AIMessageView({
+  raw,
+  isStreaming,
+  onSubmit,
+}: {
+  raw: string;
+  isStreaming: boolean;
+  onSubmit: (text: string) =&gt; void;
+}) {
+  const stable = useStableText(raw, isStreaming);
+  const processed = useMemo(() =&gt; buildProgressiveRoot(stable), [stable]);</p>
+<p>const handleAction = useCallback(
+    (event: ActionEvent) =&gt; {
+      if (event.type === BuiltinActionType.ContinueConversation) {
+        onSubmit(event.humanFriendlyMessage);
+      }
+    },
+    [onSubmit],
+  );</p>
+<p>if (!processed) return null;</p>
+<p>return (
+    <Renderer
+      response={processed}
+      library={openuiLibrary}
+      isStreaming={isStreaming}
+      onAction={handleAction}
+    />
+  );
+}</p>
+<p>export function MessageList({ messages, isLoading, onSubmit }) {
+  const lastAiIdx = messages.reduce(
+    (acc, msg, i) =&gt; (msg.getType() === "ai" ? i : acc),
+    -1,
+  );</p>
+<p>return messages.map((msg, i) =&gt; {
+    if (msg.getType() === "human") {
+      return (
+        <div key={msg.id ?? i} className="flex justify-end">
+          <div className="user-bubble">
+            {msg.text}
+          </div>
+        </div>
+      );
+    }</p>
+<div class="highlight"><pre><span></span><code>if (msg.getType() === &quot;ai&quot;) {
+  const raw = sanitizeIdentifiers(
+    stripCodeFence(msg.text),
+  );
+  if (!raw) return null;
+  return (
+    &lt;div key={msg.id ?? i}&gt;
+      &lt;AIMessageView
+        raw={raw}
+        isStreaming={isLoading &amp;&amp; i === lastAiIdx}
+        onSubmit={onSubmit}
+      /&gt;
+    &lt;/div&gt;
+  );
+}
+
+return null;
+</code></pre></div>
+<p>});
+}
+````</p>
+<h2 id="truy-van-tiep-noi-follow-up">Truy vấn tiếp nối (follow-up)<a class="headerlink" href="#truy-van-tiep-noi-follow-up" title="Permanent link">&para;</a></h2>
+<p>Component <code>Button</code> của OpenUI hỗ trợ kiểu action <code>continue_conversation</code>. Khi người dùng bấm vào một nút follow-up, <code>Renderer</code> phát ra <code>onAction</code> và <code>AIMessageView</code> ở trên sẽ gửi nhãn của nút đó như tin nhắn tiếp theo của người dùng, chính xác cùng đường code như khi gõ vào ô input.</p>
+<p>Thêm một mục "Explore Further" vào mỗi báo cáo thông qua <code>additionalRules</code> trong system prompt:</p>
+<p><code>followUp1 = Button("Compare AI leaders 2024 vs 2025", { type: "continue_conversation" }, "secondary")
+followUp2 = Button("Global AI investment breakdown",  { type: "continue_conversation" }, "secondary")
+followUpBtns = Buttons([followUp1, followUp2], "row")
+followUpCard  = Card([CardHeader("Explore Further"), followUpBtns], "sunk")
+root = Stack([..., followUpCard])</code></p>
+<h2 id="xay-dung-mot-dashboard-song-song-voi-deep-agents">Xây dựng một dashboard song song với Deep Agents<a class="headerlink" href="#xay-dung-mot-dashboard-song-song-voi-deep-agents" title="Permanent link">&para;</a></h2>
+<p>Luồng ở trên render một chương trình OpenUI vào một bề mặt duy nhất. Với các ứng dụng phong phú hơn, một bộ điều phối <a href="https://docs.langchain.com/oss/python/deepagents/overview">Deep Agents</a> có thể ủy quyền cho nhiều agent chuyên biệt, mỗi agent stream panel OpenUI riêng của nó một cách đồng thời, tất cả qua một kết nối <a href="https://reference.langchain.com/javascript/langchain-react/index/useStream"><code>useStream</code></a> duy nhất. <a href="https://github.com/langchain-ai/streaming-cookbook/tree/main/typescript/openui">Ví dụ dashboard song song OpenUI</a> biến một bản tóm tắt yêu cầu dashboard thành các panel Stripe, PostHog, GitHub, và Calendar stream độc lập, mà không cần graph tuỳ chỉnh hay code phân kênh (demultiplexing) stream.</p>
+<p>```mermaid
+%%{
+  init: {
+    "fontFamily": "monospace",
+    "flowchart": {
+      "curve": "curve"
+    }
+  }
+}%%
+graph LR
+  BRIEF["User brief"]
+  COORD["Deep Agents coordinator"]
+  PANELS["Stripe / PostHog / GitHub / Calendar panel agents"]
+  SUBAGENTS["stream.subagents"]
+  RENDERER["Renderer per panel"]</p>
+<p>BRIEF --&gt; COORD
+  COORD --"parallel task() calls"--&gt; PANELS
+  PANELS --"namespaced events"--&gt; SUBAGENTS
+  SUBAGENTS --"useMessages(stream, snapshot)"--&gt; RENDERER
+```</p>
+<h3 id="dung-chung-mot-thu-vien-openui">Dùng chung một thư viện OpenUI<a class="headerlink" href="#dung-chung-mot-thu-vien-openui" title="Permanent link">&para;</a></h3>
+<p>Dùng cùng một đối tượng thư viện ở phía server (để tạo prompt cho panel) và phía client (như prop <code>Renderer</code>) để các component mà model được cho biết luôn khớp với các component mà renderer có thể vẽ ra:</p>
+<p>```ts library.ts
+import { openuiChatLibrary, openuiChatPromptOptions } from "@openuidev/react-ui";</p>
+<p>export const library = openuiChatLibrary;
+export const promptOptions = openuiChatPromptOptions;
+```</p>
+<h3 id="inh-nghia-bo-ieu-phoi-va-cac-agent-panel">Định nghĩa bộ điều phối và các agent panel<a class="headerlink" href="#inh-nghia-bo-ieu-phoi-va-cac-agent-panel" title="Permanent link">&para;</a></h3>
+<p><a href="https://reference.langchain.com/javascript/deepagents/agent/createDeepAgent"><code>createDeepAgent</code></a> xây dựng một bộ điều phối mà công việc duy nhất là định tuyến: nó chọn ra các chuyên gia mà một bản tóm tắt yêu cầu cần và phát ra tất cả các lệnh gọi <code>task()</code> của chúng trong một tin nhắn duy nhất để các panel chạy đồng thời. Mỗi subagent panel dùng chung một system prompt OpenUI được tạo sẵn và chỉ nhận các tool cho lĩnh vực dữ liệu của riêng nó.</p>
+<p>```ts expandable agent.ts
+import { createDeepAgent, type SubAgent } from "deepagents";</p>
+<p>import { library, promptOptions } from "./library.js";
+import { calendarTools, githubTools, posthogTools, stripeTools } from "./tools.js";</p>
+<p>// Bộ điều phối chỉ định tuyến, nên một model nhanh có thể xử lý nó; các panel
+// tạo ra openui-lang nghiêm ngặt và giữ nguyên model frontier.
+const COORDINATOR_MODEL = "openai:gpt-5.4-mini";
+const PANEL_MODEL = "openai:gpt-5.5";</p>
+<p>// Tạo prompt panel dùng chung một lần khi module được nạp để tiền tố (prefix)
+// của model luôn ổn định, phục vụ việc caching prompt của provider.
+const PANEL_SYSTEM_PROMPT = library.prompt({
+  ...promptOptions,
+  preamble:
+    "Build one panel of a live executive dashboard. Follow the coordinator's " +
+    "task exactly and stay within the data available from your tools.",
+  additionalRules: [
+    ...(promptOptions.additionalRules ?? []),
+    "Use your available data tools before writing the panel.",
+    "Return the complete openui-lang program and nothing else.",
+    "Emit the <code>root</code> statement on the first line so rendering can start immediately.",
+  ],
+});</p>
+<p>const subagents: SubAgent[] = [
+  {
+    name: "stripe-panel",
+    model: PANEL_MODEL,
+    description: "Builds the revenue and payments panel from Stripe data.",
+    systemPrompt: PANEL_SYSTEM_PROMPT,
+    tools: stripeTools,
+  },
+  // posthog-panel, github-panel, và calendar-panel theo cùng một cấu trúc.
+];</p>
+<p>const COORDINATOR_PROMPT = `You orchestrate a live executive dashboard.</p>
+<ol>
+<li>Delegate immediately. Never write openui-lang yourself.</li>
+<li>Launch all selected specialists in a SINGLE message, one task call per
+   panel, so they run concurrently.</li>
+<li>Give each task a distinct, self-contained description.</li>
+<li>After the tasks complete, reply with one short plain-text summary.`;</li>
+</ol>
+<p>export const dashboard = createDeepAgent({
+  model: COORDINATOR_MODEL,
+  systemPrompt: COORDINATOR_PROMPT,
+  subagents,
+});
+```</p>
+<p>Bộ điều phối không bao giờ tự viết openui-lang. Mỗi agent panel gọi tool của nó, sau đó trả về một chương trình hoàn chỉnh bắt đầu bằng <code>root</code> để renderer của nó có thể vẽ trước khi model hoàn tất các statement còn lại.</p>
+<h3 id="ang-ky-graph">Đăng ký graph<a class="headerlink" href="#ang-ky-graph" title="Permanent link">&para;</a></h3>
+<p>Trỏ <code>langgraph.json</code> tới bộ điều phối đã export:</p>
+<p><code>json langgraph.json
+{
+  "node_version": "22",
+  "graphs": {
+    "dashboard": "./src/agent.ts:dashboard"
+  },
+  "env": "../../.env"
+}</code></p>
+<h3 id="kham-pha-va-render-cac-panel-tren-frontend">Khám phá và render các panel trên frontend<a class="headerlink" href="#kham-pha-va-render-cac-panel-tren-frontend" title="Permanent link">&para;</a></h3>
+<p>Một kết nối <code>useStream</code> duy nhất mang cả bộ điều phối lẫn mọi panel. Các panel không được hardcode: mỗi lệnh gọi <code>task()</code> song song hiện ra như một snapshot <code>stream.subagents</code>. Với mỗi snapshot, tạo phạm vi (scope) cho một phép chiếu (projection) <code>useMessages(stream, snapshot)</code> để một panel chỉ nhận tin nhắn của đúng subagent của nó, sau đó đưa chương trình OpenUI của nó vào một <code>Renderer</code> biệt lập:</p>
+<p>```tsx expandable App.tsx
+import { memo } from "react";</p>
+<p>import type { SubagentDiscoverySnapshot } from "@langchain/langgraph-sdk/stream";
+import { useMessages, useStream } from "@langchain/react";
+import { Renderer, type ActionEvent } from "@openuidev/react-lang";</p>
+<p>import { library } from "./library";</p>
+<p>// Một panel, gắn phạm vi với một subagent. Được memo hoá để các lần render
+// lại của khung ứng dụng không bao giờ chạm tới Renderer này; token của
+// riêng panel đến qua useMessages.
+const Panel = memo(function Panel({
+  stream,
+  snapshot,
+  isStreaming,
+  onAction,
+}: {
+  stream: ReturnType<typeof useStream>;
+  snapshot: SubagentDiscoverySnapshot;
+  isStreaming: boolean;
+  onAction: (event: ActionEvent) =&gt; void;
+}) {
+  const messages = useMessages(stream, snapshot);
+  // Chương trình là tin nhắn AI cuối cùng có văn bản bắt đầu bằng <code>root =</code>.
+  const program = programFromMessages(messages);</p>
+<p>if (program === "") return <PanelSkeleton name={snapshot.name} />;</p>
+<p>return (
+    <Renderer
+      response={program}
+      library={library}
+      isStreaming={isStreaming}
+      onAction={onAction}
+    />
+  );
+});</p>
+<p>export function Dashboard() {
+  const stream = useStream({
+    assistantId: "dashboard",
+    apiUrl: import.meta.env.VITE_LANGGRAPH_API_URL ?? "http://localhost:2024",
+  });</p>
+<p>// Khám phá các panel cấp cao nhất từ stream; layout thích ứng theo bất kỳ
+  // chuyên gia nào mà bộ điều phối đã ủy quyền.
+  const panels = [...stream.subagents.values()].filter(
+    (snapshot) =&gt; snapshot.parentId === null,
+  );</p>
+<p>return (
+    <main>
+      {panels.map((snapshot) =&gt; (
+        <Panel
+          key={snapshot.id}
+          stream={stream}
+          snapshot={snapshot}
+          isStreaming={snapshot.status === "running" && stream.isLoading}
+          onAction={(event) => {
+            // Xử lý action continue_conversation và open_url.
+          }}
+        /&gt;
+      ))}
+    </main>
+  );
+}
+```</p>
+<p>Vì SDK giữ các sự kiện token của subagent tách khỏi store gốc và mỗi <code>Panel</code> được memo hoá theo danh tính snapshot của nó, token từ một panel không bao giờ khiến panel khác render lại.</p>
+<h2 id="thuc-hanh-tot-nhat">Thực hành tốt nhất<a class="headerlink" href="#thuc-hanh-tot-nhat" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Tạo system prompt khi module được nạp:</strong> không phải bên trong một component React; prompt nặng vài kilobyte và chỉ nên được tính toán một lần</li>
+<li><strong>Chỉ chèn system prompt vào các thread mới:</strong> kiểm tra <code>stream.messages.length === 0</code> và bỏ qua việc chèn ở các lượt sau để tránh lặp lại prompt trong lịch sử thread</li>
+<li><strong>Dùng thứ tự hoisting:</strong> viết <code>root = Stack([...])</code> trước tiên; khung UI xuất hiện ngay lập tức và các phần được lấp đầy dần khi model định nghĩa từng phần</li>
+<li><strong>Chỉ cập nhật khi statement hoàn chỉnh:</strong> tránh render lại Renderer ở mỗi token; chỉ cập nhật khi một statement đầy đủ (<code>name = ComponentCall(...)</code>) đã tới</li>
+<li><strong>Xác minh dữ liệu biểu đồ trước khi render:</strong> các component biểu đồ cần mảng <code>Series</code> và nhãn được định nghĩa trước khi chúng được đưa vào snapshot ổn định</li>
+<li><strong>Giữ tên biến dạng camelCase:</strong> parser openui-lang chỉ chấp nhận identifier camelCase; củng cố điều này trong <code>additionalRules</code> của system prompt</li>
+<li><strong>Ủy quyền các panel trong một tin nhắn:</strong> khi phân phát cho các chuyên gia Deep Agents, phát ra mọi lệnh gọi <code>task()</code> trong một tin nhắn điều phối duy nhất để các panel stream đồng thời thay vì lần lượt từng cái</li>
+<li><strong>Gắn phạm vi từng panel với subagent của nó:</strong> khám phá các panel từ <code>stream.subagents</code> và truyền mỗi snapshot vào <code>useMessages(stream, snapshot)</code> để một panel chỉ render output của đúng subagent của nó</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Trở lại mục lục
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "toc.follow", "content.code.copy", "content.code.annotate", "search.suggest", "search.highlight"], "search": "../../../../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u0110\u00e3 sao ch\u00e9p", "clipboard.copy": "Sao ch\u00e9p v\u00e0o b\u1ed9 nh\u1edb t\u1ea1m", "search.result.more.one": "1 t\u1eeb kh\u00e1c trong trang", "search.result.more.other": "# t\u1eeb kh\u00e1c trong trang", "search.result.none": "Kh\u00f4ng t\u00ecm th\u1ea5y t\u00e0i li\u1ec7u li\u00ean quan", "search.result.one": "1 t\u00e0i li\u1ec7u li\u00ean quan", "search.result.other": "# t\u00e0i li\u1ec7u li\u00ean quan", "search.result.placeholder": "Nh\u1eadp \u0111\u1ec3 b\u1eaft \u0111\u1ea7u t\u00ecm ki\u1ebfm", "search.result.term.missing": "Kh\u00f4ng", "select.version": "Ch\u1ecdn phi\u00ean b\u1ea3n"}, "version": null}</script>
+    
+    
+      <script src="../../../../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
