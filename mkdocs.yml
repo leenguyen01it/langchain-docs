@@ -33,7 +33,13 @@ theme:
 markdown_extensions:
   - admonition
   - pymdownx.details
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tasklist:
+      custom_checkbox: true
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.highlight:
@@ -49,6 +55,67 @@ markdown_extensions:
 
 nav:
   - Trang chủ: index.md
+  - Lộ trình học:
+      - Lộ trình AI Engineer: roadmap/index.md
+      - Nền tảng kỹ thuật:
+          - Tổng quan: roadmap/nen-tang-ky-thuat/index.md
+          - "Bài 1: Python hiện đại cho AI": roadmap/nen-tang-ky-thuat/01-python-hien-dai.md
+          - "Bài 2: FastAPI và streaming": roadmap/nen-tang-ky-thuat/02-fastapi-streaming.md
+          - "Bài 3: Database, cache và hàng đợi": roadmap/nen-tang-ky-thuat/03-du-lieu-hang-doi.md
+          - "Bài 4: Test, Docker và CI": roadmap/nen-tang-ky-thuat/04-test-docker-ci.md
+      - Hiểu LLM:
+          - Tổng quan: roadmap/hieu-llm/index.md
+          - "Bài 1: LLM hoạt động thế nào": roadmap/hieu-llm/01-transformer-token.md
+          - "Bài 2: Sampling, reasoning và context": roadmap/hieu-llm/02-sampling-reasoning.md
+          - "Bài 3: Claude API chuyên sâu": roadmap/hieu-llm/03-claude-api.md
+          - "Bài 4: Tool use từ con số 0": roadmap/hieu-llm/04-tool-use.md
+          - "Bài 5: Chọn model": roadmap/hieu-llm/05-chon-model.md
+      - Prompt & Context Engineering:
+          - Tổng quan: roadmap/prompt-context/index.md
+          - "Bài 1: Nguyên tắc viết prompt": roadmap/prompt-context/01-nguyen-tac-prompt.md
+          - "Bài 2: Kỹ thuật nâng cao": roadmap/prompt-context/02-ky-thuat-nang-cao.md
+          - "Bài 3: Context engineering": roadmap/prompt-context/03-context-engineering.md
+          - "Bài 4: Quản lý prompt như code": roadmap/prompt-context/04-quan-ly-prompt.md
+      - RAG:
+          - Tổng quan: roadmap/rag/index.md
+          - "Bài 0: Nền tảng": roadmap/rag/00-nen-tang.md
+          - "Bài 1: Naive RAG": roadmap/rag/01-naive-rag.md
+          - "Bài 2: Ingestion và Chunking": roadmap/rag/02-ingestion-chunking.md
+          - "Bài 3: Embeddings và Vector DB": roadmap/rag/03-embeddings-vector-db.md
+          - "Bài 4: Retrieval nâng cao": roadmap/rag/04-retrieval-nang-cao.md
+          - "Bài 5: Generation có căn cứ": roadmap/rag/05-generation.md
+          - "Bài 6: Evaluation": roadmap/rag/06-evaluation.md
+          - "Bài 7: Agentic RAG": roadmap/rag/07-agentic-rag.md
+          - "Bài 8: Production": roadmap/rag/08-production.md
+          - "Bài 9: Chủ đề nâng cao": roadmap/rag/09-nang-cao.md
+      - Agents:
+          - Tổng quan: roadmap/agents/index.md
+          - "Bài 1: Tư duy agent": roadmap/agents/01-agent-loop.md
+          - "Bài 2: Agent với LangChain": roadmap/agents/02-langchain-agents.md
+          - "Bài 3: Workflow với LangGraph": roadmap/agents/03-langgraph.md
+          - "Bài 4: MCP": roadmap/agents/04-mcp.md
+          - "Bài 5: Hệ thống nhiều agent": roadmap/agents/05-multi-agent.md
+      - Evaluation:
+          - Tổng quan: roadmap/evaluation/index.md
+          - "Bài 1: Tư duy eval và phân tích lỗi": roadmap/evaluation/01-tu-duy-eval.md
+          - "Bài 2: Chấm điểm và LLM-as-a-judge": roadmap/evaluation/02-llm-judge.md
+          - "Bài 3: Đánh giá agent": roadmap/evaluation/03-eval-agent.md
+          - "Bài 4: Eval online, A/B test, red teaming": roadmap/evaluation/04-online-eval.md
+      - LLMOps:
+          - Tổng quan: roadmap/llmops/index.md
+          - "Bài 1: Observability": roadmap/llmops/01-observability.md
+          - "Bài 2: Độ tin cậy": roadmap/llmops/02-do-tin-cay.md
+          - "Bài 3: Chi phí và độ trễ": roadmap/llmops/03-chi-phi-do-tre.md
+          - "Bài 4: Bảo mật": roadmap/llmops/04-bao-mat.md
+          - "Bài 5: Triển khai và vận hành": roadmap/llmops/05-trien-khai.md
+      - ML nền tảng & Fine-tuning:
+          - Tổng quan: roadmap/ml-nen-tang/index.md
+          - "Bài 1: Toán cần thiết": roadmap/ml-nen-tang/01-toan-can-thiet.md
+          - "Bài 2: ML cổ điển": roadmap/ml-nen-tang/02-ml-co-dien.md
+          - "Bài 3: Deep learning với PyTorch": roadmap/ml-nen-tang/03-pytorch.md
+          - "Bài 4: Transformer và Hugging Face": roadmap/ml-nen-tang/04-transformers-hf.md
+          - "Bài 5: Fine-tuning với LoRA": roadmap/ml-nen-tang/05-fine-tuning.md
+          - "Bài 6: Chạy model local": roadmap/ml-nen-tang/06-chay-model-local.md
   - LangChain (Python):
       - Tổng quan: oss/python/langchain/overview.md
       - Triết lý thiết kế: oss/python/langchain/philosophy.md

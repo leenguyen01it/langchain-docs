@@ -8,6 +8,7 @@ Dùng thanh điều hướng bên trái để duyệt qua hai mục lớn:
 
 - **LangChain (Python)**: Cốt lõi, Middleware, Multi-agent, Frontend, Kiểm thử, Mã lỗi.
 - **LangGraph (Python)**: Cốt lõi (Graph API, Functional API, Persistence, Streaming...), Xây dựng agent, Frontend, Deploy & Vận hành, Mã lỗi.
+- **Lộ trình học**: nội dung biên soạn thêm (không phải bản dịch), [Lộ trình trở thành AI Engineer](roadmap/index.md) gồm 8 track, 43 bài học: Nền tảng kỹ thuật, Hiểu LLM, Prompt & Context Engineering, RAG, Agents, Evaluation, LLMOps, ML nền tảng & Fine-tuning.
 
 !!! note "Ghi chú"
     Đây là tài liệu dịch phục vụ mục đích tham khảo nội bộ, không phải trang chính thức của LangChain. Vui lòng đối chiếu bản gốc tại docs.langchain.com khi cần độ chính xác tuyệt đối, đặc biệt với các đoạn code.
