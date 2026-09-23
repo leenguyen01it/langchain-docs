@@ -29,12 +29,14 @@ flowchart TB
     D["RAG"]
     E["Agents"]
   end
-  subgraph G3["Giai đoạn 3: Làm sản phẩm thật (tháng 6 đến 7)"]
+  subgraph G3["Giai đoạn 3: Làm sản phẩm thật (tháng 6 đến 8)"]
     F["Evaluation"]
     G["LLMOps"]
+    P["Thiết kế sản phẩm & UX"]
   end
+  CS["Case study<br/>thiết kế hệ thống"]
   H["ML nền tảng & Fine-tuning<br/>(học song song, theo nhu cầu)"]
-  G1 --> G2 --> G3
+  G1 --> G2 --> G3 --> CS
   H -.-> G2
   H -.-> G3
 ```
@@ -49,8 +51,10 @@ flowchart TB
 | [Evaluation](evaluation/index.md) | Phân tích lỗi, LLM-as-a-judge, eval agent, đánh giá online, red teaming | 4 | 2 đến 3 tuần |
 | [LLMOps](llmops/index.md) | Observability, độ tin cậy, chi phí và độ trễ, bảo mật, triển khai | 5 | 3 đến 4 tuần |
 | [ML nền tảng & Fine-tuning](ml-nen-tang/index.md) | Toán cần thiết, ML cổ điển, PyTorch, Transformers, fine-tune LoRA, chạy model local | 6 | 6 đến 8 tuần |
+| [Thiết kế sản phẩm & UX](thiet-ke-san-pham/index.md) | Chọn bài toán, mức tự động hóa, UX khi AI sai, generative UI, trách nhiệm, tài liệu thiết kế | 4 | 2 đến 3 tuần |
+| [Case study thiết kế hệ thống](case-study/index.md) | Khung thiết kế 7 bước, 5 case: sinh mô tả, chatbot cửa hàng, trợ lý merchant, phân tích đánh giá, tìm kiếm | 5 | 3 đến 4 tuần |
 
-Tổng cộng khoảng **6 đến 8 tháng** nếu học 10 đến 15 giờ mỗi tuần. Track RAG dài nhất vì nó là "bài toán kinh điển" chứa gần như mọi kỹ năng của AI Engineer.
+Tổng cộng khoảng **7 đến 9 tháng** nếu học 10 đến 15 giờ mỗi tuần. Track RAG dài nhất vì nó là "bài toán kinh điển" chứa gần như mọi kỹ năng của AI Engineer.
 
 ## Nên học theo thứ tự nào?
 
@@ -63,7 +67,8 @@ Tổng cộng khoảng **6 đến 8 tháng** nếu học 10 đến 15 giờ mỗ
     3. [RAG](rag/index.md), đặc biệt Bài 4 đến Bài 6.
     4. [Agents](agents/index.md).
     5. [Evaluation](evaluation/index.md) và [LLMOps](llmops/index.md).
-    6. [ML nền tảng](ml-nen-tang/index.md) khi cần fine-tune hoặc tự host model.
+    6. [Thiết kế sản phẩm & UX](thiet-ke-san-pham/index.md), rồi luyện [Case study](case-study/index.md).
+    7. [ML nền tảng](ml-nen-tang/index.md) khi cần fine-tune hoặc tự host model.
 
 === "Mới bắt đầu lập trình"
 
@@ -72,7 +77,8 @@ Tổng cộng khoảng **6 đến 8 tháng** nếu học 10 đến 15 giờ mỗ
     3. [Hiểu LLM](hieu-llm/index.md), rồi [Prompt & Context](prompt-context/index.md).
     4. [RAG](rag/index.md) Bài 0 đến Bài 5, sau đó [Evaluation](evaluation/index.md) Bài 1, rồi quay lại RAG Bài 6 đến Bài 8.
     5. [Agents](agents/index.md), [LLMOps](llmops/index.md).
-    6. [ML nền tảng](ml-nen-tang/index.md) học rải rác song song, mỗi tuần vài giờ.
+    6. [Thiết kế sản phẩm & UX](thiet-ke-san-pham/index.md) và [Case study](case-study/index.md), khi đã làm xong ít nhất một dự án.
+    7. [ML nền tảng](ml-nen-tang/index.md) học rải rác song song, mỗi tuần vài giờ.
 
 === "Đến từ Data Science / ML"
 
@@ -83,6 +89,7 @@ Tổng cộng khoảng **6 đến 8 tháng** nếu học 10 đến 15 giờ mỗ
     3. [Prompt & Context](prompt-context/index.md), [RAG](rag/index.md), [Agents](agents/index.md).
     4. [Evaluation](evaluation/index.md) sẽ quen thuộc, nhưng chú ý sự khác biệt khi đánh giá output dạng văn bản tự do.
     5. [LLMOps](llmops/index.md).
+    6. [Thiết kế sản phẩm & UX](thiet-ke-san-pham/index.md), [Case study](case-study/index.md): chú ý phần UX và ước lượng chi phí.
 
 ## Ma trận kỹ năng theo cấp độ
 
@@ -97,6 +104,7 @@ Dùng bảng này để tự đánh giá và định hướng.
 | Evaluation | Chạy bộ test có sẵn | Xây dataset, giám khảo LLM đã kiểm định, eval trong CI | Chiến lược đánh giá cho cả sản phẩm, A/B test, đo tác động kinh doanh |
 | Production | Deploy được một API | Observability, bảo mật, giới hạn chi phí | Độ tin cậy, khả năng mở rộng, quy trình phát hành an toàn |
 | ML | Hiểu khái niệm embedding, token | Fine-tune model nhỏ bằng LoRA, chạy model local | Quyết định build hay buy, tối ưu serving |
+| Sản phẩm và thiết kế hệ thống | Làm đúng tính năng được giao, UX cơ bản (streaming, xử lý lỗi) | Đặc tả bằng ví dụ, chọn mức tự động hóa, ước lượng chi phí, viết tài liệu thiết kế | Chọn bài toán đáng làm, thiết kế hệ thống đa tenant quy mô lớn, trình bày đánh đổi cho lãnh đạo |
 
 ## Dự án portfolio
 

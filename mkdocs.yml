@@ -108,6 +108,19 @@ nav:
           - "Bài 3: Chi phí và độ trễ": roadmap/llmops/03-chi-phi-do-tre.md
           - "Bài 4: Bảo mật": roadmap/llmops/04-bao-mat.md
           - "Bài 5: Triển khai và vận hành": roadmap/llmops/05-trien-khai.md
+      - Thiết kế sản phẩm & UX:
+          - Tổng quan: roadmap/thiet-ke-san-pham/index.md
+          - "Bài 1: Tư duy sản phẩm AI": roadmap/thiet-ke-san-pham/01-tu-duy-san-pham.md
+          - "Bài 2: UX cho sản phẩm AI": roadmap/thiet-ke-san-pham/02-ux-cho-ai.md
+          - "Bài 3: Generative UI": roadmap/thiet-ke-san-pham/03-generative-ui.md
+          - "Bài 4: Trách nhiệm và giao tiếp": roadmap/thiet-ke-san-pham/04-trach-nhiem-giao-tiep.md
+      - Case study thiết kế hệ thống:
+          - Tổng quan và khung thiết kế: roadmap/case-study/index.md
+          - "Case 1: Sinh mô tả sản phẩm": roadmap/case-study/01-sinh-mo-ta-san-pham.md
+          - "Case 2: Chatbot chăm sóc khách hàng": roadmap/case-study/02-chatbot-cua-hang.md
+          - "Case 3: Trợ lý cho merchant": roadmap/case-study/03-tro-ly-merchant.md
+          - "Case 4: Phân tích đánh giá hàng loạt": roadmap/case-study/04-phan-tich-danh-gia.md
+          - "Case 5: Tìm kiếm sản phẩm tiếng Việt": roadmap/case-study/05-tim-kiem-san-pham.md
       - ML nền tảng & Fine-tuning:
           - Tổng quan: roadmap/ml-nen-tang/index.md
           - "Bài 1: Toán cần thiết": roadmap/ml-nen-tang/01-toan-can-thiet.md
